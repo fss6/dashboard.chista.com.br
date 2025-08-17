@@ -125,7 +125,7 @@ export default function Home() {
                   <BarChart3 className="w-5 h-5 text-[#174A8B] mr-2" />
                   Ver Insights
                 </h3>
-                <p className="text-gray-600 mb-4">Explore análises e métricas do seu negócio</p>
+                <p className="text-gray-600 mb-4">Explore insights extraídos dos seus áudios de negócio</p>
                 <button 
                   onClick={() => window.location.href = '/insights'}
                   className="bg-[#174A8B] hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"

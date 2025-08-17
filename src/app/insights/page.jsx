@@ -166,7 +166,6 @@ export default function InsightsPage() {
       <header className="w-full h-20 bg-white border-b border-blue-100 flex items-center justify-between px-4 md:px-8 shadow-sm sticky top-0 z-40">
         <div className="flex items-center gap-4">
           <Image src="/logo.png" alt="Logo Chista" width={88} height={48} priority />
-          <span className="text-[#174A8B] font-bold text-xl">Insights</span>
         </div>
         {isAuthenticated && user && (
           <div className="flex items-center gap-4">
@@ -202,7 +201,7 @@ export default function InsightsPage() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 mb-2">Insights</h1>
-              <p className="text-gray-600">Análises e métricas do seu negócio</p>
+              <p className="text-gray-600">Transforme seus áudios em insights valiosos para o seu negócio</p>
             </div>
             {insights && (
               <div className="text-sm text-gray-500">
