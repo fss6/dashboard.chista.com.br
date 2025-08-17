@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
-import { ArrowLeft, Calendar, TrendingUp, BarChart3, Filter, Info, Upload, Cloud, FileText, Heart, Brain, Clock, HardDrive, Play, Pause, Volume2, Download } from "lucide-react";
+import { ArrowLeft, Calendar, TrendingUp, BarChart3, Filter, Info, Upload, Cloud, FileText, Heart, Brain, Clock, HardDrive, Play, Pause, Volume2, Download, GraduationCap, CheckCircle, AlertCircle, Target } from "lucide-react";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import LocalizedDate from "../../../components/LocalizedDate";
 import UploadModal from "../../../components/UploadModal";
@@ -25,6 +25,7 @@ export default function InsightDetailsPage() {
       'Resumo da conversa',
       'Pontos-chave', 
       'Pontos chave',
+      'Lições Aprendidas',
       'Sentimento geral',
       'Próximos passos',
       'Sugestão prática'
@@ -44,12 +45,47 @@ export default function InsightDetailsPage() {
       // Verifica se é um subtítulo numerado (ex: "1. Ações imediatas", "2. Ações de curto prazo")
       const isNumberedSubtitle = /^\d+\.\s+[A-Z]/.test(trimmedLine);
       
+      // Verifica se é uma subseção de Lições Aprendidas
+      const learningSubsections = [
+        'pontos fortes identificados na conversa',
+        'oportunidades de melhoria', 
+        'práticas que funcionaram bem',
+        'aspectos que poderiam ser aprimorados'
+      ];
+      const isLearningSubsection = learningSubsections.some(pattern => 
+        trimmedLine.toLowerCase().includes(pattern.toLowerCase())
+      );
+      
       if (isMainTitle) {
         formattedElements.push(
           <div key={index} className="font-bold text-gray-900 text-lg mt-6 mb-3 first:mt-0">
             {trimmedLine}
           </div>
         );
+      } else if (isLearningSubsection) {
+        // Pequena ênfase para subseções de Lições Aprendidas - negrito apenas antes dos dois pontos
+        const colonIndex = trimmedLine.indexOf(':');
+        if (colonIndex > 0) {
+          const beforeColon = trimmedLine.substring(0, colonIndex);
+          const afterColon = trimmedLine.substring(colonIndex);
+          // Capitaliza a primeira letra
+          const capitalizedBefore = beforeColon.charAt(0).toUpperCase() + beforeColon.slice(1);
+          
+          formattedElements.push(
+            <div key={index} className="mt-4 mb-2">
+              <span className="font-semibold text-gray-800">{capitalizedBefore}</span>
+              <span className="text-gray-700">{afterColon}</span>
+            </div>
+          );
+        } else {
+          // Caso não tenha dois pontos, aplica formatação padrão
+          const capitalized = trimmedLine.charAt(0).toUpperCase() + trimmedLine.slice(1);
+          formattedElements.push(
+            <div key={index} className="font-semibold text-gray-800 mt-4 mb-2">
+              {capitalized}
+            </div>
+          );
+        }
       } else if (isNumberedSubtitle) {
         formattedElements.push(
           <div key={index} className="font-semibold text-gray-800 mt-4 mb-2">
