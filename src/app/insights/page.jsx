@@ -6,6 +6,7 @@ import { Eye, TrendingUp, BarChart3, Calendar, Filter, Upload } from "lucide-rea
 import LoadingSpinner from "../../components/LoadingSpinner";
 import LocalizedDate from "../../components/LocalizedDate";
 import UploadModal from "../../components/UploadModal";
+import NavMenu from "../../components/NavMenu";
 import { useAuth } from "../../contexts/AuthContext";
 import { fetchInsights, useLoadingState, uploadFile, clearApiCache } from "../../lib/api";
 
@@ -124,30 +125,14 @@ export default function InsightsPage() {
     return (
       <div className="min-h-screen bg-gray-50">
         {/* Header */}
-        <header className="w-full h-20 bg-white border-b border-blue-100 flex items-center justify-between px-4 md:px-8 shadow-sm sticky top-0 z-40">
-          <div className="flex items-center gap-4">
-            <Image src="/logo.png" alt="Logo Chista" width={88} height={48} priority />
-            <span className="text-[#174A8B] font-bold text-xl">Insights</span>
-          </div>
-          {isAuthenticated && user && (
-            <div className="flex items-center gap-4">
-              <span className="text-sm font-medium text-[#174A8B] max-w-[10rem] truncate">{user.name || user.email}</span>
-              <Image
-                src={user.picture || "/logo.png"}
-                alt={user.name || "Avatar"}
-                width={40}
-                height={40}
-                className="rounded-full border border-blue-200"
-              />
-              <button
-                className="ml-2 px-4 py-2 bg-[#174A8B] text-white rounded hover:bg-blue-900 transition text-sm font-semibold"
-                onClick={() => logout({ returnTo: window.location.origin })}
-              >
-                Logout
-              </button>
-            </div>
-          )}
-        </header>
+        <NavMenu 
+          currentPage="insights" 
+          user={user}
+          isAuthenticated={isAuthenticated}
+          logout={logout}
+          showUploadButton={true}
+          onUploadClick={() => setUploadModalOpen(true)}
+        />
 
         <div className="flex flex-col items-center justify-center min-h-[calc(100vh-5rem)] text-red-600">
           <div className="text-center p-8">
@@ -163,36 +148,14 @@ export default function InsightsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="w-full h-20 bg-white border-b border-blue-100 flex items-center justify-between px-4 md:px-8 shadow-sm sticky top-0 z-40">
-        <div className="flex items-center gap-4">
-          <Image src="/logo.png" alt="Logo Chista" width={88} height={48} priority />
-        </div>
-        {isAuthenticated && user && (
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => setUploadModalOpen(true)}
-              className="flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-medium transition-colors shadow-sm"
-            >
-              <Upload className="w-4 h-4 mr-2" />
-              Upload
-            </button>
-            <span className="text-sm font-medium text-[#174A8B] max-w-[10rem] truncate">{user.name || user.email}</span>
-            <Image
-              src={user.picture || "/logo.png"}
-              alt={user.name || "Avatar"}
-              width={40}
-              height={40}
-              className="rounded-full border border-blue-200"
-            />
-            <button
-              className="ml-2 px-4 py-2 bg-[#174A8B] text-white rounded hover:bg-blue-900 transition text-sm font-semibold"
-              onClick={() => logout({ returnTo: window.location.origin })}
-            >
-              Logout
-            </button>
-          </div>
-        )}
-      </header>
+      <NavMenu 
+        currentPage="insights" 
+        user={user}
+        isAuthenticated={isAuthenticated}
+        logout={logout}
+        showUploadButton={true}
+        onUploadClick={() => setUploadModalOpen(true)}
+      />
 
       {/* Main content */}
       <main className="w-full max-w-7xl mx-auto px-4 py-8">

@@ -4,6 +4,7 @@ import React from "react";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { useAuth } from "../contexts/AuthContext";
 import { ArrowRight, Shield, Zap, BarChart3, Users } from "lucide-react";
+import NavMenu from "../components/NavMenu";
 
 export default function Home() {
   const { user, isLoading, error, loginWithRedirect, logout, isAuthenticated, chistaApiToken } = useAuth();
@@ -24,30 +25,22 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
       {/* Header */}
-      <header className="w-full bg-white/80 backdrop-blur-sm border-b border-blue-100 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className={`flex items-center py-4 ${isAuthenticated ? 'justify-between' : 'justify-center'}`}>
-            <div className="flex items-center">
-              <Image src="/logo.png" alt="Logo Chista" width={150} height={75} priority />
+      {isAuthenticated ? (
+        <NavMenu 
+          currentPage="home" 
+          user={user}
+          isAuthenticated={isAuthenticated}
+          logout={logout}
+        />
+      ) : (
+        <header className="w-full bg-white/80 backdrop-blur-sm border-b border-blue-100 sticky top-0 z-10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="py-4 flex justify-center">
+              <Image src="/logo.png" alt="Logo Chista" width={88} height={48} priority />
             </div>
-            {isAuthenticated && user && (
-              <div className="flex items-center space-x-4">
-                <div className="text-right hidden sm:block">
-                  <p className="text-sm font-medium text-gray-900">{user.name || user.email}</p>
-                  <p className="text-xs text-gray-500">Usuário autenticado</p>
-                </div>
-                <Image
-                  src={user.picture || "/logo.png"}
-                  alt={user.name || "Avatar"}
-                  width={40}
-                  height={40}
-                  className="rounded-full border-2 border-blue-200"
-                />
-              </div>
-            )}
           </div>
-        </div>
-      </header>
+        </header>
+      )}
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -119,7 +112,7 @@ export default function Home() {
             </div>
 
             {/* Quick Actions */}
-            <div className="grid md:grid-cols-2 gap-6 mb-8">
+            <div className="grid md:grid-cols-3 gap-6 mb-8">
               <div className="bg-white p-6 rounded-xl shadow-sm border border-blue-100 hover:shadow-md transition-all duration-300 hover:border-blue-300">
                 <h3 className="text-lg font-semibold text-gray-900 mb-2 flex items-center">
                   <BarChart3 className="w-5 h-5 text-[#174A8B] mr-2" />
@@ -131,6 +124,20 @@ export default function Home() {
                   className="bg-[#174A8B] hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                 >
                   Acessar Insights
+                </button>
+              </div>
+
+              <div className="bg-white p-6 rounded-xl shadow-sm border border-blue-100 hover:shadow-md transition-all duration-300 hover:border-blue-300">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2 flex items-center">
+                  <BarChart3 className="w-5 h-5 text-green-600 mr-2" />
+                  Dashboard NPS
+                </h3>
+                <p className="text-gray-600 mb-4">Acompanhe indicadores de satisfação dos clientes</p>
+                <button 
+                  onClick={() => window.location.href = '/dashboard'}
+                  className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                >
+                  Ver Dashboard
                 </button>
               </div>
               

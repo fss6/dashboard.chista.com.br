@@ -52,7 +52,8 @@ const WordCloudClean: React.FC<WordCloudProps> = ({
     'ser', 'estar', 'ter', 'haver', 'ir', 'vir', 'ver', 'dar', 'saber', 'poder', 'querer',
     'fazer', 'dizer', 'falar', 'muito', 'pouco', 'mais', 'menos', 'tanto', 'quanto', 'bem',
     'mal', 'melhor', 'pior', 'maior', 'menor', 'grande', 'pequeno', 'novo', 'velho', 'jovem',
-    'primeiro', 'último', 'outro', 'mesmo', 'próprio', 'importante', 'necessário'
+    'primeiro', 'último', 'outro', 'mesmo', 'próprio', 'importante', 'necessário', 'não', 'você', 
+    'sim', 'vezes', 'foi', 'até', 'pra'
   ]);
 
   // Paleta de cores vibrantes como nos exemplos
@@ -92,7 +93,7 @@ const WordCloudClean: React.FC<WordCloudProps> = ({
     const maxValue = Math.max(...wordArray.map(w => w.value));
     const minValue = Math.min(...wordArray.map(w => w.value));
     
-    return wordArray.map((word, index) => {
+    return wordArray.map((word) => {
       const normalizedValue = (word.value - minValue) / (maxValue - minValue || 1);
       // Mais variação de tamanho como nos exemplos
       const fontSize = Math.max(14, Math.min(48, 14 + normalizedValue * 34));
