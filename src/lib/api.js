@@ -326,4 +326,34 @@ export function useLoadingState(authLoading, dataLoading, hasData, hasError) {
     message: getLoadingMessage(),
     subtitle: getLoadingSubtitle()
   };
+}
+
+/**
+ * Upload text for analysis
+ * @param {string} text - Text content to analyze
+ * @param {string} description - Description of the text
+ * @param {string} token - Authorization token
+ * @returns {Promise<Object>} - Response with analysis results
+ */
+export async function uploadText(text, description, token) {
+  const response = await fetch(buildApiUrl('/texts'), {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      text: {
+        content: text,
+        description: description
+      }
+    })
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Erro ao enviar texto: ${response.status} - ${errorText}`);
+  }
+
+  return response.json();
 } 

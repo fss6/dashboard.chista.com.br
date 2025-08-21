@@ -130,7 +130,7 @@ export default function Home() {
               <div className="bg-white p-6 rounded-xl shadow-sm border border-blue-100 hover:shadow-md transition-all duration-300 hover:border-blue-300">
                 <h3 className="text-lg font-semibold text-gray-900 mb-2 flex items-center">
                   <BarChart3 className="w-5 h-5 text-green-600 mr-2" />
-                  Dashboard NPS
+                  Dashboard
                 </h3>
                 <p className="text-gray-600 mb-4">Acompanhe indicadores de satisfação dos clientes</p>
                 <button 

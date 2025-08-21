@@ -20,14 +20,14 @@ const NavMenu = ({
       path: '/' 
     },
     { 
+      id: 'dashboard', 
+      label: 'Dashboard', 
+      path: '/dashboard' 
+    },
+    { 
       id: 'insights', 
       label: 'Insights', 
       path: '/insights' 
-    },
-    { 
-      id: 'dashboard', 
-      label: 'Dashboard NPS', 
-      path: '/dashboard' 
     }
   ];
 
