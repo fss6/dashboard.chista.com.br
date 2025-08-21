@@ -9,6 +9,7 @@ import UploadModal from "../../../components/UploadModal";
 import WordCloudLibrary from "../../../components/WordCloudLibrary";
 import AudioPlayer from "../../../components/AudioPlayer";
 import TranscriptionSection from "../../../components/TranscriptionSection";
+import NavMenu from "../../../components/NavMenu";
 import { useAuth } from "../../../contexts/AuthContext";
 import { fetchInsightById, fetchInsightFileUrl, useLoadingState, uploadFile, clearApiCache } from "../../../lib/api";
 
@@ -16,6 +17,7 @@ export default function InsightDetailsPage() {
   const { user, isAuthenticated, isLoading, loginWithRedirect, logout, chistaApiToken } = useAuth();
   const [insight, setInsight] = useState(null);
   const [error, setError] = useState(null);
+
 
   // Função para formatar o texto do resumo com títulos em negrito
   const formatResumeText = (text) => {
@@ -110,7 +112,6 @@ export default function InsightDetailsPage() {
     return formattedElements;
   };
   const [dataLoading, setDataLoading] = useState(false);
-  const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [audioUrl, setAudioUrl] = useState(null);
   const [audioLoading, setAudioLoading] = useState(false);
   const params = useParams();
@@ -219,72 +220,37 @@ export default function InsightDetailsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            {/* Logo e Navegação */}
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => router.push('/insights')}
-                className="text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                <ArrowLeft className="w-5 h-5" />
-              </button>
-              <div className="flex items-center space-x-3">
-                <Image
-                  src="/logo.png"
-                  alt="Chista Logo"
-                  width={32}
-                  height={32}
-                  className="rounded"
-                />
-                <h1 className="text-xl font-semibold text-gray-900">
-                  Insight {insight?.id || insightId}
-                </h1>
-              </div>
-            </div>
-
-            {/* Ações do Header */}
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => setUploadModalOpen(true)}
-                className="bg-[#174A8B] hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
-              >
-                <Upload className="w-4 h-4" />
-                Upload
-              </button>
-              
-              <div className="flex items-center space-x-3">
-                <span className="text-sm text-gray-600">
-                  Olá, <span className="font-medium">{user?.name || user?.email}</span>
-                </span>
-                <button
-                  onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
-                  className="text-sm text-gray-600 hover:text-gray-900 font-medium"
-                >
-                  Logout
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      <NavMenu 
+        currentPage="insights" 
+        user={user}
+        isAuthenticated={isAuthenticated}
+        logout={logout}
+      />
 
       {/* Conteúdo Principal */}
       <div className="max-w-7xl mx-auto">
         {insight ? (
-          <div className="bg-white shadow-lg rounded-lg mx-4 my-6">
+          <div className="px-4 py-6">
+            <div className="bg-white shadow-lg rounded-lg">
             {/* Header do Insight */}
             <div className="border-b border-gray-200">
               <div className="p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <div className="flex items-center space-x-3 mb-3">
+                    {/* Botão voltar no topo do card */}
+                    <div className="flex items-center mb-4">
+                      <button
+                        onClick={() => router.push('/insights')}
+                        className="bg-[#174A8B] hover:bg-blue-700 text-white p-2 rounded-lg transition-all duration-200 hover:scale-105 mr-3 shadow-sm"
+                        title="Voltar para lista de insights"
+                      >
+                        <ArrowLeft className="w-4 h-4" />
+                      </button>
                       <h2 className="text-2xl font-bold text-gray-900">
                         Insight #{insight.id}
                       </h2>
                       {insight.status && (
-                        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(insight.status)}`}>
+                        <span className={`inline-flex mx-3 px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(insight.status)}`}>
                           {getStatusTranslation(insight.status)}
                         </span>
                       )}
@@ -445,32 +411,32 @@ export default function InsightDetailsPage() {
                 />
               </div>
             </div>
+            </div>
           </div>
         ) : error ? (
-          <div className="p-6">
-            <div className="text-center text-red-600">
-              <p>Erro: {error}</p>
-              <button 
-                onClick={() => window.location.reload()} 
-                className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
-              >
-                Tentar Novamente
-              </button>
+          <div className="px-4 py-6">
+            <div className="bg-white shadow-lg rounded-lg p-6">
+              <div className="text-center text-red-600">
+                <p>Erro: {error}</p>
+                <button 
+                  onClick={() => window.location.reload()} 
+                  className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                >
+                  Tentar Novamente
+                </button>
+              </div>
             </div>
           </div>
         ) : (
-          <div className="p-6">
-            <LoadingSpinner />
+          <div className="px-4 py-6">
+            <div className="bg-white shadow-lg rounded-lg p-6">
+              <LoadingSpinner />
+            </div>
           </div>
         )}
       </div>
 
-      {/* Upload Modal */}
-      <UploadModal 
-        isOpen={uploadModalOpen} 
-        onClose={() => setUploadModalOpen(false)}
-        onUpload={handleUpload}
-      />
+
     </div>
   );
 }

@@ -153,8 +153,6 @@ export default function InsightsPage() {
         user={user}
         isAuthenticated={isAuthenticated}
         logout={logout}
-        showUploadButton={true}
-        onUploadClick={() => setUploadModalOpen(true)}
       />
 
       {/* Main content */}
@@ -166,11 +164,20 @@ export default function InsightsPage() {
               <h1 className="text-3xl font-bold text-gray-900 mb-2">Insights</h1>
               <p className="text-gray-600">Transforme seus áudios em insights valiosos para o seu negócio</p>
             </div>
-            {insights && (
-              <div className="text-sm text-gray-500">
-                {insights.length} insight{insights.length !== 1 ? 's' : ''} encontrado{insights.length !== 1 ? 's' : ''}
-              </div>
-            )}
+            <div className="flex items-center gap-4">
+              {insights && (
+                <div className="text-sm text-gray-500">
+                  {insights.length} insight{insights.length !== 1 ? 's' : ''} encontrado{insights.length !== 1 ? 's' : ''}
+                </div>
+              )}
+              <button
+                onClick={() => setUploadModalOpen(true)}
+                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm flex items-center gap-2"
+              >
+                <Upload className="w-4 h-4" />
+                Upload
+              </button>
+            </div>
           </div>
         </div>
 
