@@ -203,7 +203,7 @@ export default function InsightsPage() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 mb-2">Insights</h1>
-              <p className="text-gray-600">Transforme seus áudios em insights valiosos para o seu negócio</p>
+              <p className="text-gray-600">Transforme suas interações em insights valiosos para o seu negócio</p>
             </div>
             <div className="flex items-center gap-4">
               {insights && (
