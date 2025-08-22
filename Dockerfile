@@ -5,13 +5,10 @@ WORKDIR /app
 
 # Instalar dependências primeiro (para cache de layer)
 COPY package.json package-lock.json* ./
-RUN npm ci --only=production=false
+RUN npm install --legacy-peer-deps
 
 # Copiar código fonte
 COPY . .
-
-# Limpar cache e reinstalar se necessário
-RUN npm install
 
 EXPOSE 3000
 
