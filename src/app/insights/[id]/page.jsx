@@ -1,18 +1,17 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import Image from "next/image";
-import { ArrowLeft, Calendar, TrendingUp, BarChart3, Filter, Info, Upload, Cloud, FileText, Heart, Brain, Clock, HardDrive, Play, Pause, Volume2, Download, GraduationCap, CheckCircle, AlertCircle, Target } from "lucide-react";
+import { ArrowLeft, Calendar, Brain, HardDrive, Volume2, Target } from "lucide-react";
+import PDFDownloadButton from "../../../components/PDFDownloadButton";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import LocalizedDate from "../../../components/LocalizedDate";
-import UploadModal from "../../../components/UploadModal";
 import WordCloudLibrary from "../../../components/WordCloudLibrary";
 import AudioPlayer from "../../../components/AudioPlayer";
 import TranscriptionSection from "../../../components/TranscriptionSection";
 import NavMenu from "../../../components/NavMenu";
 import SatisfactionIndicators from "../../../components/SatisfactionIndicators";
 import { useAuth } from "../../../contexts/AuthContext";
-import { fetchInsightById, fetchInsightFileUrl, useLoadingState, uploadFile, clearApiCache } from "../../../lib/api";
+import { fetchInsightById, fetchInsightFileUrl, uploadFile, clearApiCache } from "../../../lib/api";
 
 export default function InsightDetailsPage() {
   const { user, isAuthenticated, isLoading, loginWithRedirect, logout, chistaApiToken } = useAuth();
@@ -388,6 +387,22 @@ export default function InsightDetailsPage() {
                 <TranscriptionSection insight={insight} />
               </div>
 
+               {/* 5. Indicadores de Satisfação */}
+               <div id="indicadores-satisfacao">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+                    <Target className="w-5 h-5 mr-2 text-[#174A8B]" />
+                    Indicadores de Satisfação
+                  </h3>
+                  <PDFDownloadButton insight={insight} insightId={insightId} />
+                </div>
+                <div className="bg-white border border-gray-200 rounded-lg p-6">
+                  <SatisfactionIndicators 
+                    indicators={insight?.insight?.sentiment_analysis?.indicadores_satisfacao}
+                  />
+                </div>
+              </div>
+
               {/* 4. Resumo e Insights */}
               <div id="resumo-ia">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
@@ -408,19 +423,6 @@ export default function InsightDetailsPage() {
                       <p className="text-sm mt-2">O resumo estruturado será gerado automaticamente após o processamento</p>
                     </div>
                   )}
-                </div>
-              </div>
-
-                {/* 5. Indicadores de Satisfação */}
-                <div id="indicadores-satisfacao">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                  <Target className="w-5 h-5 mr-2 text-[#174A8B]" />
-                  Indicadores de Satisfação
-                </h3>
-                <div className="bg-white border border-gray-200 rounded-lg p-6">
-                  <SatisfactionIndicators 
-                    indicators={insight?.insight?.sentiment_analysis?.indicadores_satisfacao}
-                  />
                 </div>
               </div>
 

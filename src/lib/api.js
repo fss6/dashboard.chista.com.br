@@ -9,7 +9,7 @@ const CACHE_DURATION = 2 * 60 * 1000; // 2 minutos
  * @returns {string} - Base URL for the API
  */
 export function getApiBaseUrl() {
-  return process.env.NEXT_PUBLIC_CHISTA_API_BASE_URL || 'https://api.chista.com.br';
+  return process.env.NEXT_PUBLIC_CHISTA_API_BASE_URL || 'http://localhost:3001';
 }
 
 /**
