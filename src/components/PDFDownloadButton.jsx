@@ -18,7 +18,7 @@ const PDFDownloadButton = ({ insight, insightId, className = "" }) => {
       // Criar link de download
       const link = document.createElement('a');
       link.href = url;
-      link.download = `relatorio-comercial-insight-${insightId}-${new Date().toISOString().split('T')[0]}.pdf`;
+      link.download = `relatorio-insight-${insightId}-${new Date().toISOString().split('T')[0]}.pdf`;
       
       // Simular clique no link
       document.body.appendChild(link);
