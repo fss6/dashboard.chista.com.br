@@ -1,8 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { Eye, TrendingUp, BarChart3, Calendar, Filter, Upload, Search, ChevronDown, ArrowUpDown, Zap, FileText } from "lucide-react";
+import { Eye, TrendingUp, BarChart3, Calendar, Filter, Upload, Search, ArrowUpDown, Zap, FileText, Heart } from "lucide-react";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import LocalizedDate from "../../components/LocalizedDate";
 import UploadModal from "../../components/UploadModal";
@@ -19,7 +18,7 @@ export default function InsightsPage() {
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [textModalOpen, setTextModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState('recent'); // recent, nps_high, nps_low, ces_high, ces_low
+  const [sortBy, setSortBy] = useState('recent'); // recent, nps_high, nps_low, ces_high, ces_low, csat_high, csat_low
   const router = useRouter();
 
   useEffect(() => {
@@ -76,10 +75,12 @@ export default function InsightsPage() {
     switch (status) {
       case 'awaiting_upload':
         return 'Aguardando Upload';
-      case 'ready':
-        return 'Pronto';
-      case 'sent':
-        return 'Enviado';
+      case 'ready_to_process':
+        return 'Aguardando Processamento';
+      case 'sent_to_process':
+        return 'Processando';
+      case 'analyzed':
+        return 'Analizado';
       case 'error':
         return 'Erro';
       default:
@@ -91,9 +92,11 @@ export default function InsightsPage() {
     switch (status) {
       case 'awaiting_upload':
         return 'bg-yellow-100 text-yellow-800';
-      case 'ready':
+      case 'ready_to_process':
         return 'bg-green-100 text-green-800';
-      case 'sent':
+      case 'sent_to_process':
+        return 'bg-blue-100 text-blue-800';
+      case 'analyzed':
         return 'bg-blue-100 text-blue-800';
       case 'error':
         return 'bg-red-100 text-red-800';
@@ -141,13 +144,17 @@ export default function InsightsPage() {
       case 'recent':
         return new Date(b.created_at || 0) - new Date(a.created_at || 0);
       case 'nps_high':
-        return (b.insight?.nps_score || 0) - (a.insight?.nps_score || 0);
+        return (b.insight?.nps || 0) - (a.insight?.nps || 0);
       case 'nps_low':
-        return (a.insight?.nps_score || 0) - (b.insight?.nps_score || 0);
+        return (a.insight?.nps || 0) - (b.insight?.nps || 0);
       case 'ces_high':
-        return (b.insight?.ces_score || 0) - (a.insight?.ces_score || 0);
+        return (b.insight?.ces || 0) - (a.insight?.ces || 0);
       case 'ces_low':
-        return (a.insight?.ces_score || 0) - (b.insight?.ces_score || 0);
+        return (a.insight?.ces || 0) - (b.insight?.ces || 0);
+      case 'csat_high':
+        return (b.insight?.csat || 0) - (a.insight?.csat || 0);
+      case 'csat_low':
+        return (a.insight?.csat || 0) - (b.insight?.csat || 0);
       default:
         return 0;
     }
@@ -275,7 +282,7 @@ export default function InsightsPage() {
               onClick={() => setSortBy('nps_high')}
               className={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors flex items-center gap-1 ${
                 sortBy === 'nps_high'
-                  ? 'bg-green-600 text-white'
+                  ? 'bg-[#174A8B] text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -287,7 +294,7 @@ export default function InsightsPage() {
               onClick={() => setSortBy('nps_low')}
               className={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors flex items-center gap-1 ${
                 sortBy === 'nps_low'
-                  ? 'bg-red-600 text-white'
+                  ? 'bg-[#174A8B] text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -299,7 +306,7 @@ export default function InsightsPage() {
               onClick={() => setSortBy('ces_high')}
               className={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors flex items-center gap-1 ${
                 sortBy === 'ces_high'
-                  ? 'bg-orange-600 text-white'
+                  ? 'bg-[#174A8B] text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -311,108 +318,146 @@ export default function InsightsPage() {
               onClick={() => setSortBy('ces_low')}
               className={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors flex items-center gap-1 ${
                 sortBy === 'ces_low'
-                  ? 'bg-purple-600 text-white'
+                  ? 'bg-[#174A8B] text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
               <Zap className="w-3 h-3" />
               Menor CES
             </button>
+            
+            <button
+              onClick={() => setSortBy('csat_high')}
+              className={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors flex items-center gap-1 ${
+                sortBy === 'csat_high'
+                  ? 'bg-[#174A8B] text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              <Heart className="w-3 h-3" />
+              Maior CSAT
+            </button>
+            
+            <button
+              onClick={() => setSortBy('csat_low')}
+              className={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors flex items-center gap-1 ${
+                sortBy === 'csat_low'
+                  ? 'bg-[#174A8B] text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              <Heart className="w-3 h-3" />
+              Menor CSAT
+            </button>
           </div>
         </div>
 
         {/* Content */}
         {insights && Array.isArray(insights) && insights.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {sortedInsights.map((insight) => (
-              <div
-                key={insight.id}
-                className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200 overflow-hidden"
-              >
-                {/* Header do Card */}
-                <div className="p-6 pb-4">
-                                  <div className="flex items-start justify-between mb-3">
-                  <div className="flex items-center space-x-2">
-                    {getInsightTypeIcon(insight.type)}
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getInsightTypeColor(insight.type)}`}>
-                      {insight.type || 'Insight'}
-                    </span>
-                  </div>
-                  {insight.created_at && (
-                    <div className="text-xs text-gray-400">
-                      <Calendar className="w-3 h-3 inline mr-1" />
-                      <LocalizedDate date={insight.created_at} />
-                    </div>
-                  )}
-                </div>
-
-                {/* Status */}
-                {insight.status && (
-                  <div className="mb-3">
-                    <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(insight.status)}`}>
-                      {getStatusTranslation(insight.status)}
-                    </span>
-                  </div>
-                )}
-
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
-                    {insight.title || insight.name || `Insight #${insight.id}`}
-                  </h3>
-                  
-                  {insight.description && (
-                    <p className="text-sm text-gray-600 line-clamp-3">
-                      {insight.description}
-                    </p>
-                  )}
-
-                  {/* Scores NPS e CES */}
-                  {(insight.insight?.nps_score !== undefined || insight.insight?.ces_score !== undefined) && (
-                    <div className="mt-3 flex gap-3">
-                      {insight.insight?.nps_score !== undefined && (
-                        <div className="flex items-center gap-1">
-                          <TrendingUp className="w-3 h-3 text-green-600" />
-                          <span className="text-xs font-medium text-gray-700">
-                            NPS: <span className="text-green-600">{insight.insight.nps_score}</span>
-                          </span>
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Insight
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      NPS Score
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      CES Score
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      CSAT Score
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Data
+                    </th>
+                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Ações
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {sortedInsights.map((insight) => (
+                    <tr key={insight.id} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="flex-shrink-0">
+                            {getInsightTypeIcon(insight.type)}
+                          </div>
+                          <div className="ml-4">
+                            <div className="text-sm font-medium text-gray-900">
+                              {insight.title || insight.name || `Insight #${insight.id}`}
+                            </div>
+                            {insight.description && (
+                              <div className="text-sm text-gray-500 truncate max-w-xs">
+                                {insight.description}
+                              </div>
+                            )}
+                          </div>
                         </div>
-                      )}
-                      {insight.insight?.ces_score !== undefined && (
-                        <div className="flex items-center gap-1">
-                          <Zap className="w-3 h-3 text-orange-600" />
-                          <span className="text-xs font-medium text-gray-700">
-                            CES: <span className="text-orange-600">{insight.insight.ces_score}</span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {insight.status && (
+                          <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(insight.status)}`}>
+                            {getStatusTranslation(insight.status)}
                           </span>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                {/* Métricas ou Valores */}
-                {(insight.value || insight.metric || insight.score) && (
-                  <div className="px-6 pb-4">
-                    <div className="bg-gray-50 rounded-lg p-3">
-                      <div className="text-sm text-gray-500 mb-1">Valor</div>
-                      <div className="text-xl font-bold text-[#174A8B]">
-                        {insight.value || insight.metric || insight.score}
-                        {insight.unit && <span className="text-sm text-gray-500 ml-1">{insight.unit}</span>}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Footer com ações */}
-                <div className="px-6 py-4 bg-gray-50 border-t border-gray-100">
-                  <button
-                    onClick={() => router.push(`/insights/${insight.id}`)}
-                    className="w-full inline-flex items-center justify-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-[#174A8B] hover:bg-[#0f3a6b] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#174A8B] transition-colors"
-                  >
-                    <Eye className="w-4 h-4 mr-2" />
-                    Ver Detalhes
-                  </button>
-                </div>
-              </div>
-            ))}
+                        )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {insight.insight?.nps !== undefined ? (
+                          <span className="text-sm font-medium text-gray-900">
+                            {insight.insight.nps}/10
+                          </span>
+                        ) : (
+                          <span className="text-sm text-gray-400">-</span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {insight.insight?.ces !== undefined ? (
+                          <span className="text-sm font-medium text-gray-900">
+                            {insight.insight.ces}/7
+                          </span>
+                        ) : (
+                          <span className="text-sm text-gray-400">-</span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {insight.insight?.csat !== undefined ? (
+                          <span className="text-sm font-medium text-gray-900">
+                            {insight.insight.csat}/5
+                          </span>
+                        ) : (
+                          <span className="text-sm text-gray-400">-</span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {insight.created_at && (
+                          <div className="flex items-center">
+                            <Calendar className="w-4 h-4 mr-2" />
+                            <LocalizedDate date={insight.created_at} />
+                          </div>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button
+                          onClick={() => router.push(`/insights/${insight.id}`)}
+                          className="inline-flex items-center px-2 py-1 border border-transparent text-xs font-medium rounded text-white bg-[#174A8B] hover:bg-[#0f3a6b] focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-[#174A8B] transition-colors"
+                        >
+                          <Eye className="w-3 h-3 mr-1" />
+                          Ver
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         ) : searchTerm && filteredInsights.length === 0 ? (
           <div className="text-center py-12">
