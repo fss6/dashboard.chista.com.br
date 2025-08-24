@@ -204,3 +204,108 @@ const CACHE_DURATION = 2 * 60 * 1000; // 2 minutos
 - **message**: Mensagem principal do loading
 - **subtitle**: Subtítulo explicativo
 - **Lógica**: `authLoading || dataLoading || (!hasData && !hasError)` 
+
+# Lib Utils - Sistema Centralizado de Status
+
+## Status de Insights
+
+### Constantes Disponíveis
+
+```javascript
+import { INSIGHT_STATUSES } from '../lib/utils';
+
+// Status disponíveis:
+INSIGHT_STATUSES.AWAITING_UPLOAD    // 'awaiting_upload'
+INSIGHT_STATUSES.READY_TO_PROCESS   // 'ready_to_process'
+INSIGHT_STATUSES.READY_TO_ANALYZE   // 'ready_to_analyze'
+INSIGHT_STATUSES.SENT_TO_PROCESS    // 'sent_to_process'
+INSIGHT_STATUSES.ANALYZED           // 'analyzed'
+INSIGHT_STATUSES.ERROR              // 'error'
+```
+
+### Funções Utilitárias
+
+#### `getStatusTranslation(status)`
+Retorna a tradução em português do status.
+
+```javascript
+import { getStatusTranslation } from '../lib/utils';
+
+getStatusTranslation('awaiting_upload')     // 'Aguardando Upload'
+getStatusTranslation('ready_to_process')    // 'Aguardando Processamento'
+getStatusTranslation('ready_to_analyze')    // 'Pronto para análise'
+getStatusTranslation('sent_to_process')     // 'Processando'
+getStatusTranslation('analyzed')            // 'Analizado'
+getStatusTranslation('error')               // 'Erro'
+```
+
+#### `getStatusColor(status)`
+Retorna as classes CSS do Tailwind para estilização do status.
+
+```javascript
+import { getStatusColor } from '../lib/utils';
+
+getStatusColor('awaiting_upload')     // 'bg-gray-100 text-gray-800'
+getStatusColor('ready_to_process')    // 'bg-green-100 text-green-800'
+getStatusColor('ready_to_analyze')    // 'bg-yellow-100 text-yellow-800'
+getStatusColor('sent_to_process')     // 'bg-blue-100 text-blue-800'
+getStatusColor('analyzed')            // 'bg-purple-100 text-purple-800'
+getStatusColor('error')               // 'bg-red-100 text-red-800'
+```
+
+### Exemplo de Uso
+
+```javascript
+import { getStatusTranslation, getStatusColor } from '../lib/utils';
+
+// Em um componente React
+<span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(insight.status)}`}>
+  {getStatusTranslation(insight.status)}
+</span>
+```
+
+### Benefícios
+
+1. **Centralização**: Todas as definições de status em um só lugar
+2. **Consistência**: Mesmas traduções e cores em toda a aplicação
+3. **Manutenibilidade**: Mudanças em um só lugar refletem em toda a app
+4. **Type Safety**: Constantes predefinidas evitam erros de digitação
+5. **Reutilização**: Funções podem ser usadas em qualquer componente
+
+### Adicionando Novos Status
+
+Para adicionar um novo status:
+
+1. Adicione a constante em `INSIGHT_STATUSES`
+2. Adicione a tradução em `getStatusTranslation()`
+3. Adicione as cores em `getStatusColor()`
+
+```javascript
+// 1. Adicionar constante
+export const INSIGHT_STATUSES = {
+  // ... status existentes
+  NEW_STATUS: 'new_status'
+};
+
+// 2. Adicionar tradução
+export const getStatusTranslation = (status) => {
+  switch (status) {
+    // ... casos existentes
+    case INSIGHT_STATUSES.NEW_STATUS:
+      return 'Novo Status';
+    default:
+      return status || 'Desconhecido';
+  }
+};
+
+// 3. Adicionar cores
+export const getStatusColor = (status) => {
+  switch (status) {
+    // ... casos existentes
+    case INSIGHT_STATUSES.NEW_STATUS:
+      return 'bg-orange-100 text-orange-800';
+    default:
+      return 'bg-gray-100 text-gray-800';
+  }
+};
+``` 

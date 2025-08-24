@@ -9,6 +9,7 @@ import TextModal from "../../components/TextModal";
 import NavMenu from "../../components/NavMenu";
 import { useAuth } from "../../contexts/AuthContext";
 import { fetchInsights, useLoadingState, uploadFile, clearApiCache } from "../../lib/api";
+import { getStatusTranslation, getStatusColor } from "../../lib/utils";
 
 export default function InsightsPage() {
   const { user, isAuthenticated, isLoading, loginWithRedirect, logout, chistaApiToken } = useAuth();
@@ -71,43 +72,7 @@ export default function InsightsPage() {
     }
   };
 
-  const getStatusTranslation = (status) => {
-    switch (status) {
-      case 'awaiting_upload':
-        return 'Aguardando Upload';
-      case 'ready_to_process':
-        return 'Aguardando Processamento';
-      case 'ready_to_analyze':
-        return 'Pronto para análise';
-      case 'sent_to_process':
-        return 'Processando';
-      case 'analyzed':
-        return 'Analizado';
-      case 'error':
-        return 'Erro';
-      default:
-        return status || 'Desconhecido';
-    }
-  };
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'awaiting_upload':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'ready_to_process':
-        return 'bg-green-100 text-green-800';
-      case 'ready_to_analyze':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'sent_to_process':
-        return 'bg-blue-100 text-blue-800';
-      case 'analyzed':
-        return 'bg-blue-100 text-blue-800';
-      case 'error':
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
 
   const handleFileUpload = async (file, description, onProgress) => {
     try {

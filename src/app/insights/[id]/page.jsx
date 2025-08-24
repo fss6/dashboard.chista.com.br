@@ -12,6 +12,7 @@ import NavMenu from "../../../components/NavMenu";
 import SatisfactionIndicators from "../../../components/SatisfactionIndicators";
 import { useAuth } from "../../../contexts/AuthContext";
 import { fetchInsightById, fetchInsightFileUrl, uploadFile, clearApiCache } from "../../../lib/api";
+import { getStatusTranslation, getStatusColor } from "../../../lib/utils";
 
 export default function InsightDetailsPage() {
   const { user, isAuthenticated, isLoading, loginWithRedirect, logout, chistaApiToken } = useAuth();
@@ -167,26 +168,9 @@ export default function InsightDetailsPage() {
   const router = useRouter();
   const insightId = params?.id;
 
-  // Mock data - removido após implementação real
-  const getStatusTranslation = (status) => {
-    switch (status) {
-      case 'awaiting_upload': return 'Aguardando Upload';
-      case 'ready': return 'Pronto';
-      case 'sent': return 'Enviado';
-      case 'error': return 'Erro';
-      default: return status || 'Desconhecido';
-    }
-  };
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'awaiting_upload': return 'bg-yellow-100 text-yellow-800';
-      case 'ready': return 'bg-green-100 text-green-800';
-      case 'sent': return 'bg-blue-100 text-blue-800';
-      case 'error': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
+
+
 
   const handleUpload = async (file, description, onProgress) => {
     if (!chistaApiToken) {
