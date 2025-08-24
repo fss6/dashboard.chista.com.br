@@ -10,6 +10,7 @@ import WordCloudLibrary from "../../../components/WordCloudLibrary";
 import AudioPlayer from "../../../components/AudioPlayer";
 import TranscriptionSection from "../../../components/TranscriptionSection";
 import NavMenu from "../../../components/NavMenu";
+import SatisfactionIndicators from "../../../components/SatisfactionIndicators";
 import { useAuth } from "../../../contexts/AuthContext";
 import { fetchInsightById, fetchInsightFileUrl, useLoadingState, uploadFile, clearApiCache } from "../../../lib/api";
 
@@ -19,10 +20,25 @@ export default function InsightDetailsPage() {
   const [error, setError] = useState(null);
 
 
-  // Função para formatar o texto do resumo com títulos em negrito
-  const formatResumeText = (text) => {
-    if (!text) return null;
+  // Função para formatar o resumo - suporta tanto texto simples quanto JSON estruturado
+  const formatResumeText = (resumeData) => {
+    if (!resumeData) return null;
     
+    // Se for uma string (formato antigo), processa como texto simples
+    if (typeof resumeData === 'string') {
+      return formatSimpleText(resumeData);
+    }
+    
+    // Se for um objeto (formato novo), processa como JSON estruturado
+    if (typeof resumeData === 'object') {
+      return formatStructuredData(resumeData);
+    }
+    
+    return null;
+  };
+
+  // Função para formatar texto simples (formato antigo)
+  const formatSimpleText = (text) => {
     const titlePatterns = [
       'Resumo da conversa',
       'Pontos-chave', 
@@ -110,6 +126,148 @@ export default function InsightDetailsPage() {
     });
     
     return formattedElements;
+  };
+
+  // Função para formatar dados estruturados (formato novo)
+  const formatStructuredData = (data) => {
+    const elements = [];
+    let elementIndex = 0;
+
+    // Resumo da conversa
+    if (data.resume) {
+      elements.push(
+        <div key={elementIndex++} className="font-bold text-gray-900 text-lg mt-6 mb-3 first:mt-0">
+          Resumo da conversa
+        </div>
+      );
+      elements.push(
+        <div key={elementIndex++} className="mb-1 leading-relaxed">
+          {data.resume}
+        </div>
+      );
+    }
+
+    // Análise de Sentimento
+    if (data.sentiment_analysis) {
+      const sentiment = data.sentiment_analysis;
+      
+      // Sentimento geral
+      if (sentiment.sentimento) {
+        elements.push(
+          <div key={elementIndex++} className="font-bold text-gray-900 text-lg mt-6 mb-3">
+            Sentimento geral
+          </div>
+        );
+        elements.push(
+          <div key={elementIndex++} className="mb-1 leading-relaxed">
+            <span className="font-semibold text-gray-800">Sentimento: </span>
+            <span className="text-gray-700">{sentiment.sentimento}</span>
+          </div>
+        );
+        if (sentiment.justificativa) {
+          elements.push(
+            <div key={elementIndex++} className="mb-1 leading-relaxed">
+              <span className="font-semibold text-gray-800">Justificativa: </span>
+              <span className="text-gray-700">{sentiment.justificativa}</span>
+            </div>
+          );
+        }
+      }
+
+      // Pontos-chave
+      if (sentiment.pontos_chave && sentiment.pontos_chave.length > 0) {
+        elements.push(
+          <div key={elementIndex++} className="font-bold text-gray-900 text-lg mt-6 mb-3">
+            Pontos-chave
+          </div>
+        );
+        sentiment.pontos_chave.forEach((ponto, index) => {
+          elements.push(
+            <div key={elementIndex++} className="mb-1 leading-relaxed">
+              • {ponto}
+            </div>
+          );
+        });
+      }
+
+      // Lições Aprendidas
+      if (sentiment.licoes_aprendidas) {
+        const licoes = sentiment.licoes_aprendidas;
+        elements.push(
+          <div key={elementIndex++} className="font-bold text-gray-900 text-lg mt-6 mb-3">
+            Lições Aprendidas
+          </div>
+        );
+
+        // Pontos fortes
+        if (licoes.pontos_fortes && licoes.pontos_fortes.length > 0) {
+          elements.push(
+            <div key={elementIndex++} className="mt-4 mb-2">
+              <span className="font-semibold text-gray-800">Pontos fortes identificados na conversa:</span>
+            </div>
+          );
+          licoes.pontos_fortes.forEach((ponto, index) => {
+            elements.push(
+              <div key={elementIndex++} className="mb-1 leading-relaxed ml-4">
+                • {ponto}
+              </div>
+            );
+          });
+        }
+
+        // Oportunidades de melhoria
+        if (licoes.oportunidades_melhoria && licoes.oportunidades_melhoria.length > 0) {
+          elements.push(
+            <div key={elementIndex++} className="mt-4 mb-2">
+              <span className="font-semibold text-gray-800">Oportunidades de melhoria:</span>
+            </div>
+          );
+          licoes.oportunidades_melhoria.forEach((oportunidade, index) => {
+            elements.push(
+              <div key={elementIndex++} className="mb-1 leading-relaxed ml-4">
+                • {oportunidade}
+              </div>
+            );
+          });
+        }
+
+        // Práticas que funcionaram bem
+        if (licoes.praticas_funcionaram && licoes.praticas_funcionaram.length > 0) {
+          elements.push(
+            <div key={elementIndex++} className="mt-4 mb-2">
+              <span className="font-semibold text-gray-800">Práticas que funcionaram bem:</span>
+            </div>
+          );
+          licoes.praticas_funcionaram.forEach((pratica, index) => {
+            elements.push(
+              <div key={elementIndex++} className="mb-1 leading-relaxed ml-4">
+                • {pratica}
+              </div>
+            );
+          });
+        }
+
+        // Aspectos que poderiam ser aprimorados
+        if (licoes.aspectos_aprimorar && licoes.aspectos_aprimorar.length > 0) {
+          elements.push(
+            <div key={elementIndex++} className="mt-4 mb-2">
+              <span className="font-semibold text-gray-800">Aspectos que poderiam ser aprimorados:</span>
+            </div>
+          );
+          licoes.aspectos_aprimorar.forEach((aspecto, index) => {
+            elements.push(
+              <div key={elementIndex++} className="mb-1 leading-relaxed ml-4">
+                • {aspecto}
+              </div>
+            );
+          });
+        }
+      }
+    }
+
+
+
+    return elements;
   };
   const [dataLoading, setDataLoading] = useState(false);
   const [audioUrl, setAudioUrl] = useState(null);
@@ -266,13 +424,7 @@ export default function InsightDetailsPage() {
                           <Calendar className="w-4 h-4" />
                           <span>Criado em <LocalizedDate date={insight.created_at} /></span>
                         </div>
-                      )}
-                      {insight.updated_at && (
-                        <div className="flex items-center space-x-1">
-                          <Clock className="w-4 h-4" />
-                          <span>Atualizado em <LocalizedDate date={insight.updated_at} /></span>
-                        </div>
-                      )}
+                      )}  
                     </div>
                   </div>
                 </div>
@@ -281,42 +433,6 @@ export default function InsightDetailsPage() {
 
             {/* Conteúdo Principal */}
             <div className="p-6 space-y-8">
-              {/* Navegação Rápida */}
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <h4 className="text-sm font-semibold text-gray-900 mb-3">Navegação Rápida</h4>
-                <div className="flex flex-wrap gap-2">
-                  <a 
-                    href="#upload-stats" 
-                    className="inline-flex items-center px-3 py-1 text-xs bg-white text-blue-700 rounded-full border border-blue-300 hover:bg-blue-100 transition-colors"
-                  >
-                    💽 Estatísticas de Upload
-                  </a>
-                  <a 
-                    href="#audio-player" 
-                    className="inline-flex items-center px-3 py-1 text-xs bg-white text-blue-700 rounded-full border border-blue-300 hover:bg-blue-100 transition-colors"
-                  >
-                    🎵 Áudio Original
-                  </a>
-                  <a 
-                    href="#transcricao" 
-                    className="inline-flex items-center px-3 py-1 text-xs bg-white text-blue-700 rounded-full border border-blue-300 hover:bg-blue-100 transition-colors"
-                  >
-                    📝 Transcrição
-                  </a>
-                  <a 
-                    href="#resumo-ia" 
-                    className="inline-flex items-center px-3 py-1 text-xs bg-white text-blue-700 rounded-full border border-blue-300 hover:bg-blue-100 transition-colors"
-                  >
-                    🧠 Resumo e Insights
-                  </a>
-                  <a 
-                    href="#nuvem-palavras" 
-                    className="inline-flex items-center px-3 py-1 text-xs bg-white text-blue-700 rounded-full border border-blue-300 hover:bg-blue-100 transition-colors"
-                  >
-                    ☁️ Nuvem de Palavras
-                  </a>
-                </div>
-              </div>
               {/* 1. Estatísticas de Upload */}
               <div id="upload-stats">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
@@ -387,10 +503,10 @@ export default function InsightDetailsPage() {
                   Resumo e Insights
                 </h3>
                 <div className="bg-white border border-gray-200 rounded-lg p-6">
-                  {insight?.insight?.resume ? (
+                  {insight?.insight?.resume || insight?.insight?.as_structured_json ? (
                     <div className="prose max-w-none">
                       <div className="text-gray-700 leading-relaxed">
-                        {formatResumeText(insight.insight.resume.replace(/\\n/g, '\n'))}
+                        {formatResumeText(insight.insight.as_structured_json || insight.insight.resume.replace(/\\n/g, '\n'))}
                       </div>
                     </div>
                   ) : (
@@ -403,7 +519,20 @@ export default function InsightDetailsPage() {
                 </div>
               </div>
 
-              {/* 5. Nuvem de Palavras */}
+                              {/* 5. Indicadores de Satisfação */}
+                <div id="indicadores-satisfacao">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                  <Target className="w-5 h-5 mr-2 text-[#174A8B]" />
+                  Indicadores de Satisfação
+                </h3>
+                <div className="bg-white border border-gray-200 rounded-lg p-6">
+                  <SatisfactionIndicators 
+                    indicators={insight?.insight?.sentiment_analysis?.indicadores_satisfacao}
+                  />
+                </div>
+              </div>
+
+              {/* 6. Nuvem de Palavras */}
               <div id="nuvem-palavras">
                 <WordCloudLibrary 
                   text={insight?.insight?.transcription} 
