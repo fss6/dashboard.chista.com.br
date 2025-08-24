@@ -77,6 +77,8 @@ export default function InsightsPage() {
         return 'Aguardando Upload';
       case 'ready_to_process':
         return 'Aguardando Processamento';
+      case 'ready_to_analyze':
+        return 'Pronto para análise';
       case 'sent_to_process':
         return 'Processando';
       case 'analyzed':
@@ -94,6 +96,8 @@ export default function InsightsPage() {
         return 'bg-yellow-100 text-yellow-800';
       case 'ready_to_process':
         return 'bg-green-100 text-green-800';
+      case 'ready_to_analyze':
+        return 'bg-yellow-100 text-yellow-800';
       case 'sent_to_process':
         return 'bg-blue-100 text-blue-800';
       case 'analyzed':
@@ -410,7 +414,7 @@ export default function InsightsPage() {
                         )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {insight.insight?.nps !== undefined ? (
+                        {insight.insight?.nps !== null ? (
                           <span className="text-sm font-medium text-gray-900">
                             {insight.insight.nps}/10
                           </span>
@@ -419,7 +423,7 @@ export default function InsightsPage() {
                         )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {insight.insight?.ces !== undefined ? (
+                        {insight.insight?.ces !== null ? (
                           <span className="text-sm font-medium text-gray-900">
                             {insight.insight.ces}/7
                           </span>
@@ -428,7 +432,7 @@ export default function InsightsPage() {
                         )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {insight.insight?.csat !== undefined ? (
+                        {insight.insight?.csat !== null ? (
                           <span className="text-sm font-medium text-gray-900">
                             {insight.insight.csat}/5
                           </span>
