@@ -20,115 +20,7 @@ export default function InsightDetailsPage() {
   const [error, setError] = useState(null);
 
 
-  // Função para formatar o resumo - suporta tanto texto simples quanto JSON estruturado
-  const formatResumeText = (resumeData) => {
-    if (!resumeData) return null;
-    
-    // Se for uma string (formato antigo), processa como texto simples
-    if (typeof resumeData === 'string') {
-      return formatSimpleText(resumeData);
-    }
-    
-    // Se for um objeto (formato novo), processa como JSON estruturado
-    if (typeof resumeData === 'object') {
-      return formatStructuredData(resumeData);
-    }
-    
-    return null;
-  };
-
-  // Função para formatar texto simples (formato antigo)
-  const formatSimpleText = (text) => {
-    const titlePatterns = [
-      'Resumo da conversa',
-      'Pontos-chave', 
-      'Pontos chave',
-      'Lições Aprendidas',
-      'Sentimento geral',
-      'Próximos passos',
-      'Sugestão prática'
-    ];
-    
-    const lines = text.split('\n');
-    const formattedElements = [];
-    
-    lines.forEach((line, index) => {
-      const trimmedLine = line.trim();
-      
-      // Verifica se a linha é um dos títulos principais
-      const isMainTitle = titlePatterns.some(pattern => 
-        trimmedLine.startsWith(pattern) || trimmedLine === pattern
-      );
-      
-      // Verifica se é um subtítulo numerado (ex: "1. Ações imediatas", "2. Ações de curto prazo")
-      const isNumberedSubtitle = /^\d+\.\s+[A-Z]/.test(trimmedLine);
-      
-      // Verifica se é uma subseção de Lições Aprendidas
-      const learningSubsections = [
-        'pontos fortes identificados na conversa',
-        'oportunidades de melhoria', 
-        'práticas que funcionaram bem',
-        'aspectos que poderiam ser aprimorados'
-      ];
-      const isLearningSubsection = learningSubsections.some(pattern => 
-        trimmedLine.toLowerCase().includes(pattern.toLowerCase())
-      );
-      
-      if (isMainTitle) {
-        formattedElements.push(
-          <div key={index} className="font-bold text-gray-900 text-lg mt-6 mb-3 first:mt-0">
-            {trimmedLine}
-          </div>
-        );
-      } else if (isLearningSubsection) {
-        // Pequena ênfase para subseções de Lições Aprendidas - negrito apenas antes dos dois pontos
-        const colonIndex = trimmedLine.indexOf(':');
-        if (colonIndex > 0) {
-          const beforeColon = trimmedLine.substring(0, colonIndex);
-          const afterColon = trimmedLine.substring(colonIndex);
-          // Capitaliza a primeira letra
-          const capitalizedBefore = beforeColon.charAt(0).toUpperCase() + beforeColon.slice(1);
-          
-          formattedElements.push(
-            <div key={index} className="mt-4 mb-2">
-              <span className="font-semibold text-gray-800">{capitalizedBefore}</span>
-              <span className="text-gray-700">{afterColon}</span>
-            </div>
-          );
-        } else {
-          // Caso não tenha dois pontos, aplica formatação padrão
-          const capitalized = trimmedLine.charAt(0).toUpperCase() + trimmedLine.slice(1);
-          formattedElements.push(
-            <div key={index} className="font-semibold text-gray-800 mt-4 mb-2">
-              {capitalized}
-            </div>
-          );
-        }
-      } else if (isNumberedSubtitle) {
-        formattedElements.push(
-          <div key={index} className="font-semibold text-gray-800 mt-4 mb-2">
-            {trimmedLine}
-          </div>
-        );
-      } else if (trimmedLine) {
-        // Linha com conteúdo normal
-        formattedElements.push(
-          <div key={index} className="mb-1 leading-relaxed">
-            {line}
-          </div>
-        );
-      } else {
-        // Linha vazia - adiciona espaçamento
-        formattedElements.push(
-          <div key={index} className="h-3"></div>
-        );
-      }
-    });
-    
-    return formattedElements;
-  };
-
-  // Função para formatar dados estruturados (formato novo)
+  // Função para formatar dados estruturados
   const formatStructuredData = (data) => {
     const elements = [];
     let elementIndex = 0;
@@ -503,23 +395,23 @@ export default function InsightDetailsPage() {
                   Resumo e Insights
                 </h3>
                 <div className="bg-white border border-gray-200 rounded-lg p-6">
-                  {insight?.insight?.resume || insight?.insight?.as_structured_json ? (
+                  {insight?.insight?.as_structured_json ? (
                     <div className="prose max-w-none">
                       <div className="text-gray-700 leading-relaxed">
-                        {formatResumeText(insight.insight.as_structured_json || insight.insight.resume.replace(/\\n/g, '\n'))}
+                        {formatStructuredData(insight.insight.as_structured_json)}
                       </div>
                     </div>
                   ) : (
                     <div className="text-center text-gray-500 py-8">
                       <Brain className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-                      <p>Nenhum resumo disponível</p>
-                      <p className="text-sm mt-2">O resumo será gerado automaticamente após o processamento</p>
+                      <p>Nenhum resumo estruturado disponível</p>
+                      <p className="text-sm mt-2">O resumo estruturado será gerado automaticamente após o processamento</p>
                     </div>
                   )}
                 </div>
               </div>
 
-                              {/* 5. Indicadores de Satisfação */}
+                {/* 5. Indicadores de Satisfação */}
                 <div id="indicadores-satisfacao">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
                   <Target className="w-5 h-5 mr-2 text-[#174A8B]" />
