@@ -1,7 +1,30 @@
 "use client";
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Line } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler
+} from 'chart.js';
 import { TrendingUp } from 'lucide-react';
+
+// Registrar componentes do Chart.js
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler
+);
 
 // Dados fake para o gráfico de pizza (NPS)
 const npsData = [
@@ -35,6 +58,104 @@ const calculateNPS = () => {
 
 export default function NPSIndicator() {
   const npsScore = calculateNPS();
+
+  // Configuração do gráfico de linha
+  const lineChartData = {
+    labels: timelineData.map(item => item.month),
+    datasets: [
+      {
+        label: 'Detratores',
+        data: timelineData.map(item => item.detratores),
+        borderColor: '#EF4444',
+        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+        borderWidth: 2,
+        fill: false,
+        tension: 0.4,
+        pointBackgroundColor: '#EF4444',
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+      },
+      {
+        label: 'Promotores',
+        data: timelineData.map(item => item.promotores),
+        borderColor: '#10B981',
+        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+        borderWidth: 3,
+        fill: false,
+        tension: 0.4,
+        pointBackgroundColor: '#10B981',
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+      }
+    ]
+  };
+
+  const lineChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top',
+        labels: {
+          usePointStyle: true,
+          padding: 20,
+          font: {
+            size: 12,
+            weight: '500'
+          }
+        }
+      },
+      tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        titleColor: '#fff',
+        bodyColor: '#fff',
+        borderColor: 'rgba(255, 255, 255, 0.1)',
+        borderWidth: 1,
+        cornerRadius: 8,
+        displayColors: true,
+        padding: 12,
+      }
+    },
+    scales: {
+      x: {
+        grid: {
+          display: true,
+          color: 'rgba(0, 0, 0, 0.1)',
+          drawBorder: false,
+        },
+        ticks: {
+          color: '#6B7280',
+          font: {
+            size: 11
+          }
+        }
+      },
+      y: {
+        grid: {
+          display: true,
+          color: 'rgba(0, 0, 0, 0.1)',
+          drawBorder: false,
+        },
+        ticks: {
+          color: '#6B7280',
+          font: {
+            size: 11
+          },
+          callback: function(value) {
+            return value + '%';
+          }
+        }
+      }
+    },
+    interaction: {
+      intersect: false,
+      mode: 'index'
+    }
+  };
 
   return (
     <>
@@ -95,75 +216,32 @@ export default function NPSIndicator() {
                 </div>
               </div>
               
-              {/* Legenda do gráfico CSS */}
-              <div className="flex gap-4 text-sm">
-                <div className="flex items-center">
-                  <div className="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
-                  <span>Promotores</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>
-                  <span>Neutros</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
-                  <span>Detratores</span>
-                </div>
+              {/* Legenda com estatísticas */}
+              <div className="mt-4 grid grid-cols-3 gap-4">
+                {npsData.map((item) => (
+                  <div key={item.name} className="text-center">
+                    <div className="flex items-center justify-center mb-1">
+                      <div 
+                        className="w-3 h-3 rounded-full mr-2" 
+                        style={{ backgroundColor: item.color }}
+                      ></div>
+                      <span className="text-sm font-medium text-gray-700">{item.name}</span>
+                    </div>
+                    <div className="text-xl font-bold" style={{ color: item.color }}>
+                      {item.value}%
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-          </div>
-          
-          {/* Legenda com estatísticas */}
-          <div className="mt-4 grid grid-cols-3 gap-4">
-            {npsData.map((item) => (
-              <div key={item.name} className="text-center">
-                <div className="flex items-center justify-center mb-1">
-                  <div 
-                    className="w-3 h-3 rounded-full mr-2" 
-                    style={{ backgroundColor: item.color }}
-                  ></div>
-                  <span className="text-sm font-medium text-gray-700">{item.name}</span>
-                </div>
-                <div className="text-xl font-bold" style={{ color: item.color }}>
-                  {item.value}%
-                </div>
-              </div>
-            ))}
           </div>
         </div>
 
         {/* Gráfico de Linha */}
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-6">Evolução Mensal</h3>
-          <div className="h-80 flex items-center justify-center">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart 
-                width={500}
-                height={300}
-                data={timelineData}
-                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Line 
-                  type="monotone" 
-                  dataKey="detratores" 
-                  stroke="#EF4444" 
-                  strokeWidth={2}
-                  name="Detratores"
-                />
-                <Line 
-                  type="monotone" 
-                  dataKey="promotores" 
-                  stroke="#10B981" 
-                  strokeWidth={3}
-                  name="Promotores"
-                />
-              </LineChart>
-            </ResponsiveContainer>
+          <div className="h-80">
+            <Line data={lineChartData} options={lineChartOptions} />
           </div>
         </div>
       </div>
