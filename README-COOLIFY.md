@@ -27,7 +27,7 @@ http://localhost:8000
 
 ### 4. **Configurar Aplicação**
 - **Build Command:** `npm run build`
-- **Start Command:** `npm start`
+- **Start Command:** `node .next/standalone/server.js`
 - **Port:** `3000`
 - **Docker Compose File:** `docker-compose.coolify.yml`
 

@@ -14,7 +14,7 @@ services:
     volumes:
       - coolify_web_data:/app/.next
       - coolify_public_data:/app/public
-    command: npm start
+    command: node .next/standalone/server.js
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]

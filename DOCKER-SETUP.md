@@ -31,7 +31,7 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["npm", "start"]
+CMD ["node", ".next/standalone/server.js"]
 ```
 
 #### **docker-compose.coolify.yml**
@@ -53,7 +53,7 @@ services:
     volumes:
       - coolify_web_data:/app/.next
       - coolify_public_data:/app/public
-    command: npm start
+    command: node .next/standalone/server.js
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
@@ -111,7 +111,7 @@ services:
 | Aspecto | Desenvolvimento | Produção |
 |---------|----------------|----------|
 | **Build** | Não faz build | `npm run build` |
-| **Comando** | `npm run dev` | `npm start` |
+| **Comando** | `npm run dev` | `node .next/standalone/server.js` |
 | **Volumes** | Hot reload | Build otimizado |
 | **Environment** | Development | Production |
 | **Telemetry** | Habilitada | Desabilitada |
@@ -156,7 +156,7 @@ const nextConfig: NextConfig = {
 1. Instala dependências
 2. Copia código fonte
 3. **Executa `npm run build`**
-4. Roda com `npm start`
+4. Roda com `node .next/standalone/server.js`
 
 ## ✅ Benefícios
 
