@@ -1,0 +1,54 @@
+{
+  "name": "dashboard-chista",
+  "type": "application",
+  "framework": "nextjs",
+  "port": 3000,
+  "healthcheck": "/api/health",
+  "buildCommand": "npm run build",
+  "startCommand": "npm start",
+  "installCommand": "npm install",
+  "environment": {
+    "NODE_ENV": "production",
+    "NEXT_TELEMETRY_DISABLED": "1",
+    "PORT": "3000"
+  },
+  "volumes": [
+    {
+      "name": "coolify_web_data",
+      "path": "/app/.next",
+      "type": "persistent"
+    },
+    {
+      "name": "coolify_public_data", 
+      "path": "/app/public",
+      "type": "persistent"
+    }
+  ],
+  "networks": [
+    "coolify_network"
+  ],
+  "labels": {
+    "coolify.managed": "true",
+    "coolify.type": "application",
+    "coolify.framework": "nextjs",
+    "coolify.port": "3000",
+    "coolify.healthcheck": "/api/health"
+  },
+  "resources": {
+    "limits": {
+      "cpu": "1.0",
+      "memory": "1G"
+    },
+    "reservations": {
+      "cpu": "0.5", 
+      "memory": "512M"
+    }
+  },
+  "domains": [
+    "dashboard.chista.com.br"
+  ],
+  "ssl": {
+    "enabled": true,
+    "provider": "letsencrypt"
+  }
+}

@@ -1,15 +1,26 @@
-# Dockerfile para Next.js (desenvolvimento)
+# Dockerfile para Next.js (produção)
 FROM node:20-alpine
+
+# Instalar dependências necessárias
+RUN apk add --no-cache libc6-compat curl
 
 WORKDIR /app
 
-# Instalar dependências primeiro (para cache de layer)
+# Copiar arquivos de dependências
 COPY package.json package-lock.json* ./
-RUN npm install --legacy-peer-deps
+
+# Instalar dependências
+RUN npm ci --legacy-peer-deps
 
 # Copiar código fonte
 COPY . .
 
+# Build da aplicação
+RUN npm run build
+
 EXPOSE 3000
 
-CMD ["npm", "run", "dev"] 
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+CMD ["npm", "start"] 

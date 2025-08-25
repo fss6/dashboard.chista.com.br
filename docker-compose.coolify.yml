@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  web:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1
+      - PORT=3000
+    volumes:
+      - coolify_web_data:/app/.next
+      - coolify_public_data:/app/public
+    command: npm start
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - coolify_network
+
+networks:
+  coolify_network:
+    external: true
+
+volumes:
+  coolify_web_data:
+    driver: local
+  coolify_public_data:
+    driver: local
