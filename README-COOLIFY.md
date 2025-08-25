@@ -29,7 +29,7 @@ http://localhost:8000
 - **Build Command:** `npm run build`
 - **Start Command:** `node .next/standalone/server.js`
 - **Port:** `3000`
-- **Docker Compose File:** `docker-compose.coolify.yml`
+- **Docker Compose File:** `docker-compose.coolify.yml` (configuração otimizada)
 
 ### 5. **Configurar Domínio**
 - **Domain:** `dashboard.chista.com.br`
@@ -54,7 +54,7 @@ Clicar em **"Deploy"** 🚀
 
 ## 📦 Arquivos de Configuração
 
-- **`docker-compose.coolify.yml`** - Docker Compose otimizado
+- **`docker-compose.coolify.yml`** - Docker Compose otimizado (sem volumes)
 - **`coolify.json`** - Configuração da aplicação
 - **`src/app/api/health/route.js`** - Health check endpoint
 

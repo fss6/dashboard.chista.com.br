@@ -11,8 +11,6 @@ services:
       - NODE_ENV=production
       - NEXT_TELEMETRY_DISABLED=1
       - PORT=3000
-    volumes:
-      - coolify_web_data:/app/.next
     command: node .next/standalone/server.js
     restart: unless-stopped
     healthcheck:
@@ -23,6 +21,4 @@ services:
       start_period: 40s
 
 
-volumes:
-  coolify_web_data:
-    driver: local
+
