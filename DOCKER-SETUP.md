@@ -52,7 +52,6 @@ services:
       - PORT=3000
     volumes:
       - coolify_web_data:/app/.next
-      - coolify_public_data:/app/public
     command: node .next/standalone/server.js
     restart: unless-stopped
     healthcheck:
