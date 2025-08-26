@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Eye, TrendingUp, BarChart3, Calendar, Filter, Upload, Search, ArrowUpDown, Zap, FileText, Heart } from "lucide-react";
+import { Eye, TrendingUp, BarChart3, Calendar, Filter, Upload, Search, ArrowUpDown, Zap, FileText, Heart, RefreshCw, Pause, Play } from "lucide-react";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import LocalizedDate from "../../components/LocalizedDate";
 import UploadModal from "../../components/UploadModal";
@@ -20,6 +20,10 @@ export default function InsightsPage() {
   const [textModalOpen, setTextModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('recent'); // recent, nps_high, nps_low, ces_high, ces_low, csat_high, csat_low
+  const [autoRefresh, setAutoRefresh] = useState(true); // Auto refresh enabled by default
+  const [lastRefresh, setLastRefresh] = useState(null);
+  const [showUpdateNotification, setShowUpdateNotification] = useState(false);
+  const [previousInsightCount, setPreviousInsightCount] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
@@ -28,15 +32,47 @@ export default function InsightsPage() {
     }
   }, [isLoading, isAuthenticated, loginWithRedirect]);
 
-  useEffect(() => {
+  // Função para carregar insights
+  const loadInsights = async () => {
     if (isAuthenticated && chistaApiToken) {
       setDataLoading(true);
-      fetchInsights(chistaApiToken)
-        .then(setInsights)
-        .catch((err) => setError(err.message))
-        .finally(() => setDataLoading(false));
+      try {
+        const data = await fetchInsights(chistaApiToken);
+        
+        // Verificar se há novos insights
+        if (insights && data.length > insights.length) {
+          setShowUpdateNotification(true);
+          setTimeout(() => setShowUpdateNotification(false), 3000); // Esconder após 3 segundos
+        }
+        
+        setPreviousInsightCount(insights?.length || 0);
+        setInsights(data);
+        setLastRefresh(new Date());
+        setError(null);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setDataLoading(false);
+      }
     }
+  };
+
+  // Carregamento inicial
+  useEffect(() => {
+    loadInsights();
   }, [isAuthenticated, chistaApiToken]);
+
+  // Auto refresh a cada 30 segundos
+  useEffect(() => {
+    if (!autoRefresh || !isAuthenticated || !chistaApiToken) return;
+
+    const interval = setInterval(() => {
+      console.log('Auto refreshing insights...');
+      loadInsights();
+    }, 30000); // 30 segundos
+
+    return () => clearInterval(interval);
+  }, [autoRefresh, isAuthenticated, chistaApiToken]);
 
   // Usa o hook otimizado para gerenciar o estado de loading
   const { shouldShowLoading, message, subtitle } = useLoadingState(
@@ -79,10 +115,7 @@ export default function InsightsPage() {
       await uploadFile(file, description, chistaApiToken, onProgress);
       // Clear cache and reload insights after successful upload
       clearApiCache();
-      setDataLoading(true);
-      const newInsights = await fetchInsights(chistaApiToken);
-      setInsights(newInsights);
-      setDataLoading(false);
+      await loadInsights();
     } catch (error) {
       throw error; // Re-throw to let modal handle the error display
     }
@@ -176,36 +209,81 @@ export default function InsightsPage() {
       <main className="w-full max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Insights</h1>
-              <p className="text-gray-600">Transforme suas interações em insights valiosos para o seu negócio</p>
-            </div>
-            <div className="flex items-center gap-4">
-              {insights && (
-                <div className="text-sm text-gray-500">
-                  {insights.length} insight{insights.length !== 1 ? 's' : ''} encontrado{insights.length !== 1 ? 's' : ''}
+          {/* Title and Description */}
+          <div className="mb-6">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Insights</h1>
+            <p className="text-gray-600">Transforme suas interações em insights valiosos para o seu negócio</p>
+          </div>
+
+          {/* Stats and Controls Row */}
+          <div className="flex items-center gap-4">
+            {/* Auto Refresh Controls */}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setAutoRefresh(!autoRefresh)}
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm flex items-center gap-2 ${
+                  autoRefresh 
+                    ? 'bg-green-100 text-green-700 hover:bg-green-200' 
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+                title={autoRefresh ? 'Desativar auto refresh' : 'Ativar auto refresh'}
+              >
+                {autoRefresh ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                    <Pause className="w-4 h-4" />
+                  </>
+                ) : (
+                  <>
+                    <RefreshCw className="w-4 h-4" />
+                    <Play className="w-4 h-4" />
+                  </>
+                )}
+                Auto
+              </button>
+              
+              {lastRefresh && (
+                <div className="text-xs text-gray-500">
+                  Última atualização: {lastRefresh.toLocaleTimeString()}
                 </div>
               )}
-                             <div className="flex items-center gap-2">
-                 <button
-                   onClick={() => setTextModalOpen(true)}
-                   className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm flex items-center gap-2"
-                 >
-                   <FileText className="w-4 h-4" />
-                   Enviar Texto
-                 </button>
-                 <button
-                   onClick={() => setUploadModalOpen(true)}
-                   className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm flex items-center gap-2"
-                 >
-                   <Upload className="w-4 h-4" />
-                   Enviar Áudio
-                 </button>
-               </div>
             </div>
+            
+            {/* Action Buttons */}
+            <div className="flex items-center gap-2 ml-auto">
+               <button
+                 onClick={() => setTextModalOpen(true)}
+                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm flex items-center gap-2"
+               >
+                 <FileText className="w-4 h-4" />
+                 Enviar Texto
+               </button>
+               <button
+                 onClick={() => setUploadModalOpen(true)}
+                 className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm flex items-center gap-2"
+               >
+                 <Upload className="w-4 h-4" />
+                 Enviar Áudio
+               </button>
+             </div>
           </div>
         </div>
+
+        {/* Notificação de Atualização */}
+        {showUpdateNotification && (
+          <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg flex items-center gap-2 animate-pulse">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-ping"></div>
+            <span className="text-sm text-green-700 font-medium">
+              Novos insights disponíveis! A tabela foi atualizada automaticamente.
+            </span>
+            <button
+              onClick={() => setShowUpdateNotification(false)}
+              className="ml-auto text-green-500 hover:text-green-700"
+            >
+              ×
+            </button>
+          </div>
+        )}
 
         {/* Campo de Busca */}
         <div className="mb-6">
