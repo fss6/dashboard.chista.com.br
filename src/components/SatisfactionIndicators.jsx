@@ -21,7 +21,6 @@ export default function SatisfactionIndicators({ indicators }) {
         </div>
         <p>Nenhum indicador de satisfação disponível</p>
         <p className="text-sm mt-2">Os indicadores serão calculados automaticamente após o processamento</p>
-        <p className="text-xs mt-2 text-gray-400">Debug: {JSON.stringify(indicators)}</p>
       </div>
     );
   }
