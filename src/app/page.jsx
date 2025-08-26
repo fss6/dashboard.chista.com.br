@@ -3,7 +3,7 @@ import Image from "next/image";
 import React from "react";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { useAuth } from "../contexts/AuthContext";
-import { ArrowRight, Shield, Zap, BarChart3, Users } from "lucide-react";
+import { ArrowRight, Shield, Zap, BarChart3, Users, Heart, Brain, TrendingUp } from "lucide-react";
 import NavMenu from "../components/NavMenu";
 
 export default function Home() {
@@ -54,8 +54,7 @@ export default function Home() {
                 <span className="block text-blue-600">Dashboard Chista</span>
               </h1>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-                Gerencie seus batches, monitore processos e acompanhe o progresso de suas operações 
-                com uma interface moderna e intuitiva.
+                Descubra automaticamente a percepção dos seus clientes. Analise interações em áudio e texto para medir NPS, CES e CSAT de forma simples e eficiente.
               </p>
               
               {/* CTA Button */}
@@ -72,26 +71,26 @@ export default function Home() {
             <div className="grid md:grid-cols-3 gap-8 mb-16">
               <div className="bg-white p-6 rounded-xl shadow-sm border border-blue-100 hover:shadow-md transition-shadow">
                 <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                  <BarChart3 className="w-6 h-6 text-[#174A8B]" />
+                  <Heart className="w-6 h-6 text-[#174A8B]" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Monitoramento</h3>
-                <p className="text-gray-600">Acompanhe o progresso dos seus batches em tempo real</p>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Análise de Sentimentos</h3>
+                <p className="text-gray-600">Detecte emoções, satisfação e insatisfação nas interações dos clientes</p>
               </div>
               
               <div className="bg-white p-6 rounded-xl shadow-sm border border-blue-100 hover:shadow-md transition-shadow">
                 <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                  <Zap className="w-6 h-6 text-[#174A8B]" />
+                  <TrendingUp className="w-6 h-6 text-[#174A8B]" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Performance</h3>
-                <p className="text-gray-600">Interface otimizada para máxima velocidade e eficiência</p>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Métricas de Satisfação</h3>
+                <p className="text-gray-600">Avalie automaticamente NPS, CES e CSAT das interações com seus clientes</p>
               </div>
               
               <div className="bg-white p-6 rounded-xl shadow-sm border border-blue-100 hover:shadow-md transition-shadow">
                 <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                  <Shield className="w-6 h-6 text-[#174A8B]" />
+                  <Brain className="w-6 h-6 text-[#174A8B]" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Segurança</h3>
-                <p className="text-gray-600">Autenticação segura e dados protegidos</p>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Processamento Inteligente</h3>
+                <p className="text-gray-600">Processamento automático de áudio e texto com tecnologia de IA</p>
               </div>
             </div>
           </div>
@@ -107,7 +106,7 @@ export default function Home() {
                 Bem-vindo, {user.name || user.email}!
               </h1>
               <p className="text-gray-600 mb-8">
-                Você está logado e pronto para visualizar seus insights.
+                Você está logado e pronto para analisar feedback de clientes.
               </p>
             </div>
 
@@ -118,7 +117,7 @@ export default function Home() {
                   <BarChart3 className="w-5 h-5 text-[#174A8B] mr-2" />
                   Ver Insights
                 </h3>
-                <p className="text-gray-600 mb-4">Transforme as interações com seus clientes em insights valiosos para o seu negócio</p>
+                <p className="text-gray-600 mb-4">Analise feedback de clientes através de áudios e textos para gerar insights de NPS, CES e CSAT</p>
                 <button 
                   onClick={() => window.location.href = '/insights'}
                   className="bg-[#174A8B] hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
@@ -130,14 +129,14 @@ export default function Home() {
               <div className="bg-white p-6 rounded-xl shadow-sm border border-blue-100 hover:shadow-md transition-all duration-300 hover:border-blue-300">
                 <h3 className="text-lg font-semibold text-gray-900 mb-2 flex items-center">
                   <BarChart3 className="w-5 h-5 text-green-600 mr-2" />
-                  Dashboard
+                  Histórico
                 </h3>
-                <p className="text-gray-600 mb-4">Acompanhe indicadores de satisfação dos clientes</p>
+                <p className="text-gray-600 mb-4">Visualize histórico de análises e métricas de satisfação</p>
                 <button 
                   onClick={() => window.location.href = '/dashboard'}
                   className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                 >
-                  Ver Dashboard
+                  Ver Histórico
                 </button>
               </div>
               
