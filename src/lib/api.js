@@ -356,4 +356,32 @@ export async function uploadText(text, description, token) {
   }
 
   return response.json();
+}
+
+/**
+ * Send message to chat API
+ * @param {string} message - Message content
+ * @param {string} userId - User ID
+ * @param {string} token - Authorization token
+ * @returns {Promise<Object>} - Response with chat answer
+ */
+export async function sendChatMessage(message, userId, token) {
+  const response = await fetch(buildApiUrl('/chat'), {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      message: message,
+      user_id: userId
+    })
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Erro no chat: ${response.status} - ${errorText}`);
+  }
+
+  return response.json();
 } 

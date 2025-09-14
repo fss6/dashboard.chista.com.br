@@ -28,6 +28,11 @@ const NavMenu = ({
       id: 'dashboard', 
       label: 'Dashboard', 
       path: '/dashboard' 
+    },
+    { 
+      id: 'chat', 
+      label: 'Chat', 
+      path: '/chat' 
     }
   ];
 

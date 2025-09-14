@@ -62,7 +62,7 @@ export function isTokenCached() {
  * @returns {Object} - Dados de autenticação otimizados
  */
 export function useOptimizedAuth(auth0) {
-  const { user, isAuthenticated, isLoading, error, loginWithRedirect, logout } = auth0;
+  const { user, isAuthenticated, isLoading, error, loginWithRedirect, logout, getAccessTokenSilently } = auth0;
   
   // Obtém o token com cache
   const chistaApiToken = getChistaApiToken(user);
@@ -77,6 +77,7 @@ export function useOptimizedAuth(auth0) {
     error,
     loginWithRedirect,
     logout,
+    getAccessTokenSilently,
     chistaApiToken,
     isTokenCached: isTokenCached()
   };
