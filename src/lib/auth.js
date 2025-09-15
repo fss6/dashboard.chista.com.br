@@ -24,9 +24,9 @@ export function getChistaApiToken(user) {
     token = user[dynamicTokenKey];
   }
   
-  // Token encontrado com sucesso
-  
-  if (!token) return null;
+  if (!token) {
+    return null;
+  }
 
   // Verifica se o token está em cache e ainda é válido
   if (cachedToken && tokenExpiry && Date.now() < tokenExpiry) {

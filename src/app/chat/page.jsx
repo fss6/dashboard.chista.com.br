@@ -1,7 +1,14 @@
 "use client";
 import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { sendChatMessage } from '../../lib/api';
+import { 
+  sendChatMessage, 
+  getConversations, 
+  createConversation, 
+  updateConversation, 
+  deleteConversation as deleteConversationApi,
+  getConversationMessages 
+} from '../../lib/api';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import NavMenu from '../../components/NavMenu';
 import { Send, Bot, User, Loader2, Plus, MessageSquare, Trash2, Menu } from 'lucide-react';
@@ -12,7 +19,7 @@ const ReactMarkdown = dynamicImport(() => import('react-markdown'), { ssr: false
 export const dynamic = 'force-dynamic';
 
 const ChatPage = () => {
-  const { isAuthenticated, isLoading, getAccessTokenSilently, user, logout } = useAuth();
+  const { isAuthenticated, isLoading, user, logout, chistaApiToken } = useAuth();
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoadingResponse, setIsLoadingResponse] = useState(false);
@@ -21,33 +28,25 @@ const ChatPage = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Carregar conversas do localStorage
-  useEffect(() => {
-    if (isAuthenticated) {
-      const savedConversations = localStorage.getItem('chista-conversations');
-      if (savedConversations) {
-        const parsed = JSON.parse(savedConversations);
-        // Converter strings de data de volta para objetos Date
-        const conversationsWithDates = parsed.map(conv => ({
-          ...conv,
-          createdAt: new Date(conv.createdAt),
-          updatedAt: new Date(conv.updatedAt),
-          messages: conv.messages.map(msg => ({
-            ...msg,
-            timestamp: new Date(msg.timestamp)
-          }))
-        }));
-        setConversations(conversationsWithDates);
-      }
-    }
-  }, [isAuthenticated]);
 
-  // Salvar conversas no localStorage
+  // Carregar conversas da API
   useEffect(() => {
-    if (conversations.length > 0) {
-      localStorage.setItem('chista-conversations', JSON.stringify(conversations));
-    }
-  }, [conversations]);
+    const loadConversations = async () => {
+      if (isAuthenticated && user && chistaApiToken) {
+        try {
+          const conversationsData = await getConversations(user.sub, chistaApiToken);
+          
+      setConversations(conversationsData);
+        } catch (error) {
+          console.error('Erro ao carregar conversas:', error);
+          // Sem fallback - apenas API
+        }
+      }
+    };
+
+    loadConversations();
+  }, [isAuthenticated, user, chistaApiToken]);
+
 
   // Gerar título automático para conversa
   const generateConversationTitle = (firstMessage) => {
@@ -56,51 +55,101 @@ const ChatPage = () => {
   };
 
   // Criar nova conversa
-  const createNewConversation = () => {
-    const newConversation = {
-      id: Date.now().toString(),
-      title: 'Nova Conversa',
-      messages: [],
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-    
-    setConversations(prev => [newConversation, ...prev]);
-    setCurrentConversationId(newConversation.id);
-    setMessages([]);
-    setSidebarOpen(false);
-  };
-
-  // Carregar conversa existente
-  const loadConversation = (conversationId) => {
-    const conversation = conversations.find(c => c.id === conversationId);
-    if (conversation) {
-      setMessages(conversation.messages);
-      setCurrentConversationId(conversationId);
+  const createNewConversation = async () => {
+    try {
+      const newConversationData = await createConversation(user.sub, chistaApiToken, 'Nova Conversa');
+      
+      const newConversation = {
+        ...newConversationData,
+        messages: []
+      };
+      
+      setConversations(prev => [newConversation, ...prev]);
+      setCurrentConversationId(newConversation.id);
+      setMessages([]);
+      setSidebarOpen(false);
+    } catch (error) {
+      console.error('Erro ao criar conversa:', error);
+      // Fallback: criar conversa local
+      const newConversation = {
+        id: Date.now().toString(),
+        title: 'Nova Conversa',
+        messages: [],
+        createdAt: new Date()
+      };
+      setConversations(prev => [newConversation, ...prev]);
+      setCurrentConversationId(newConversation.id);
+      setMessages([]);
       setSidebarOpen(false);
     }
   };
 
+  // Carregar conversa existente
+  const loadConversation = async (conversationId) => {
+    try {
+      const messagesData = await getConversationMessages(conversationId, chistaApiToken);
+      
+      setMessages(messagesData);
+      setCurrentConversationId(conversationId);
+    } catch (error) {
+      console.error('Erro ao carregar mensagens:', error);
+      // Fallback: usar dados locais
+      const conversation = conversations.find(c => c.id === conversationId);
+      if (conversation) {
+        setMessages(conversation.messages);
+        setCurrentConversationId(conversationId);
+      }
+    }
+    setSidebarOpen(false);
+  };
+
   // Deletar conversa
-  const deleteConversation = (conversationId) => {
-    setConversations(prev => prev.filter(c => c.id !== conversationId));
-    if (currentConversationId === conversationId) {
-      setCurrentConversationId(null);
-      setMessages([]);
+  const deleteConversation = async (conversationId) => {
+    try {
+      await deleteConversationApi(conversationId, chistaApiToken);
+      
+      setConversations(prev => prev.filter(c => c.id !== conversationId));
+      if (currentConversationId === conversationId) {
+        setCurrentConversationId(null);
+        setMessages([]);
+      }
+    } catch (error) {
+      console.error('Erro ao deletar conversa:', error);
+      // Fallback: deletar localmente
+      setConversations(prev => prev.filter(c => c.id !== conversationId));
+      if (currentConversationId === conversationId) {
+        setCurrentConversationId(null);
+        setMessages([]);
+      }
     }
   };
 
   // Atualizar título da conversa quando receber primeira resposta
-  const updateConversationTitle = (conversationId, firstUserMessage) => {
+  const updateConversationTitle = async (conversationId, firstUserMessage) => {
     if (firstUserMessage) {
       const newTitle = generateConversationTitle(firstUserMessage);
-      setConversations(prev => 
-        prev.map(c => 
-          c.id === conversationId 
-            ? { ...c, title: newTitle, updatedAt: new Date() }
-            : c
-        )
-      );
+      
+      try {
+        await updateConversation(conversationId, newTitle, chistaApiToken);
+        
+        setConversations(prev => 
+          prev.map(c => 
+            c.id === conversationId 
+              ? { ...c, title: newTitle, updatedAt: new Date() }
+              : c
+          )
+        );
+      } catch (error) {
+        console.error('Erro ao atualizar título da conversa:', error);
+        // Fallback: atualizar localmente
+        setConversations(prev => 
+          prev.map(c => 
+            c.id === conversationId 
+              ? { ...c, title: newTitle, updatedAt: new Date() }
+              : c
+          )
+        );
+      }
     }
   };
 
@@ -130,19 +179,33 @@ const ChatPage = () => {
     e.preventDefault();
     if (!inputMessage.trim() || isLoadingResponse) return;
 
-    // Criar nova conversa se não houver uma ativa
-    let conversationId = currentConversationId;
-    if (!conversationId) {
+             // Criar nova conversa se não houver uma ativa
+             let conversationId = currentConversationId;
+             if (!conversationId) {
+               try {
+                 const newConversationData = await createConversation(user.sub, chistaApiToken, 'Nova Conversa');
+        
       const newConversation = {
-        id: Date.now().toString(),
-        title: 'Nova Conversa',
-        messages: [],
-        createdAt: new Date(),
-        updatedAt: new Date()
+        ...newConversationData,
+        messages: []
       };
-      setConversations(prev => [newConversation, ...prev]);
-      conversationId = newConversation.id;
-      setCurrentConversationId(conversationId);
+        
+        setConversations(prev => [newConversation, ...prev]);
+        conversationId = newConversation.id;
+        setCurrentConversationId(conversationId);
+      } catch (error) {
+        console.error('Erro ao criar conversa:', error);
+        // Fallback: criar conversa local
+        const newConversation = {
+          id: Date.now().toString(),
+          title: 'Nova Conversa',
+          messages: [],
+          createdAt: new Date()
+        };
+        setConversations(prev => [newConversation, ...prev]);
+        conversationId = newConversation.id;
+        setCurrentConversationId(conversationId);
+      }
     }
 
     const userMessage = {
@@ -162,19 +225,18 @@ const ChatPage = () => {
     setConversations(prev => 
       prev.map(c => 
         c.id === conversationId 
-          ? { ...c, messages: newMessages, updatedAt: new Date() }
+          ? { ...c, messages: newMessages }
           : c
       )
     );
 
-    try {
-      const token = await getAccessTokenSilently();
-      
-      // Chama a API para obter resposta
-      const data = await sendChatMessage(
+             try {
+               // Chama a API para obter resposta
+               const data = await sendChatMessage(
         userMessage.content,
         user?.sub || user?.id,
-        token
+        chistaApiToken,
+        conversationId
       );
       
       // Adiciona resposta da API
@@ -192,7 +254,7 @@ const ChatPage = () => {
       setConversations(prev => 
         prev.map(c => 
           c.id === conversationId 
-            ? { ...c, messages: finalMessages, updatedAt: new Date() }
+            ? { ...c, messages: finalMessages }
             : c
         )
       );
@@ -220,7 +282,7 @@ const ChatPage = () => {
       setConversations(prev => 
         prev.map(c => 
           c.id === conversationId 
-            ? { ...c, messages: finalMessages, updatedAt: new Date() }
+            ? { ...c, messages: finalMessages }
             : c
         )
       );
@@ -276,7 +338,7 @@ const ChatPage = () => {
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Chat com Chista AI</h1>
             <p className="text-gray-600">
-              Faça perguntas e obtenha respostas inteligentes sobre análise de sentimentos
+              Faça perguntas e obtenha respostas inteligentes
             </p>
           </div>
           <div className="flex space-x-2">
@@ -330,9 +392,9 @@ const ChatPage = () => {
                           <p className={`text-xs mt-1 ${
                             currentConversationId === conversation.id ? 'text-blue-100' : 'text-gray-500'
                           }`}>
-                            {conversation.updatedAt instanceof Date 
-                              ? conversation.updatedAt.toLocaleDateString('pt-BR')
-                              : new Date(conversation.updatedAt).toLocaleDateString('pt-BR')
+                            {conversation.created_at 
+                              ? new Date(conversation.created_at).toLocaleDateString('pt-BR')
+                              : 'Data não disponível'
                             }
                           </p>
                         </div>
@@ -417,7 +479,7 @@ const ChatPage = () => {
                     <div className={`text-xs mt-1 ${
                       message.role === 'user' ? 'text-blue-100' : 'text-gray-500'
                     }`}>
-                      {message.timestamp.toLocaleTimeString()}
+                      {new Date(message.timestamp).toLocaleTimeString()}
                     </div>
                   </div>
                 </div>
@@ -434,7 +496,7 @@ const ChatPage = () => {
                   <div className="px-4 py-2 rounded-lg bg-gray-100 text-gray-900">
                     <div className="flex items-center space-x-2">
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      <span className="text-sm">Chista AI está digitando...</span>
+                      <span className="text-sm">Chista AI está pensando...</span>
                     </div>
                   </div>
                 </div>
@@ -471,7 +533,7 @@ const ChatPage = () => {
               </button>
             </form>
             <p className="text-xs text-gray-500 mt-2">
-              Pressione Enter para enviar, Shift+Enter para nova linha
+              Pressione Enter para enviar
             </p>
           </div>
         </div>

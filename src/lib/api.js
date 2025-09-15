@@ -363,9 +363,10 @@ export async function uploadText(text, description, token) {
  * @param {string} message - Message content
  * @param {string} userId - User ID
  * @param {string} token - Authorization token
+ * @param {string} conversationId - Optional conversation ID
  * @returns {Promise<Object>} - Response with chat answer
  */
-export async function sendChatMessage(message, userId, token) {
+export async function sendChatMessage(message, userId, token, conversationId = null) {
   const response = await fetch(buildApiUrl('/chat'), {
     method: 'POST',
     headers: {
@@ -374,13 +375,139 @@ export async function sendChatMessage(message, userId, token) {
     },
     body: JSON.stringify({
       message: message,
-      user_id: userId
+      user_id: userId,
+      account_id: userId, // Tentativa de usar o mesmo valor para account_id
+      conversation_id: conversationId
     })
   });
 
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(`Erro no chat: ${response.status} - ${errorText}`);
+  }
+
+  return response.json();
+}
+
+/**
+ * Get all conversations for a user
+ * @param {string} userId - User ID
+ * @param {string} token - Authorization token
+ * @returns {Promise<Array>} - List of conversations
+ */
+export async function getConversations(userId, token) {
+  const response = await fetch(buildApiUrl(`/conversations?user_id=${userId}`), {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    }
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Erro ao buscar conversas: ${response.status} - ${errorText}`);
+  }
+
+  return response.json();
+}
+
+/**
+ * Create a new conversation
+ * @param {string} userId - User ID
+ * @param {string} token - Authorization token
+ * @param {string} title - Conversation title
+ * @returns {Promise<Object>} - Created conversation
+ */
+export async function createConversation(userId, token, title = 'Nova Conversa') {
+  const response = await fetch(buildApiUrl('/conversations'), {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      user_id: userId,
+      title: title
+    })
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Erro ao criar conversa: ${response.status} - ${errorText}`);
+  }
+
+  return response.json();
+}
+
+/**
+ * Update conversation title
+ * @param {string} conversationId - Conversation ID
+ * @param {string} title - New title
+ * @param {string} token - Authorization token
+ * @returns {Promise<Object>} - Updated conversation
+ */
+export async function updateConversation(conversationId, title, token) {
+  const response = await fetch(buildApiUrl(`/conversations/${conversationId}`), {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      title: title
+    })
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Erro ao atualizar conversa: ${response.status} - ${errorText}`);
+  }
+
+  return response.json();
+}
+
+/**
+ * Delete a conversation
+ * @param {string} conversationId - Conversation ID
+ * @param {string} token - Authorization token
+ * @returns {Promise<Object>} - Deletion response
+ */
+export async function deleteConversation(conversationId, token) {
+  const response = await fetch(buildApiUrl(`/conversations/${conversationId}`), {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    }
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Erro ao deletar conversa: ${response.status} - ${errorText}`);
+  }
+
+  return response.json();
+}
+
+/**
+ * Get messages from a conversation
+ * @param {string} conversationId - Conversation ID
+ * @param {string} token - Authorization token
+ * @returns {Promise<Array>} - List of messages
+ */
+export async function getConversationMessages(conversationId, token) {
+  const response = await fetch(buildApiUrl(`/conversations/${conversationId}/messages`), {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    }
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Erro ao buscar mensagens: ${response.status} - ${errorText}`);
   }
 
   return response.json();
