@@ -4,10 +4,11 @@ import { X, FileText, Send, Loader2 } from 'lucide-react';
 import { uploadText } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
 
-const TextModal = ({ isOpen, onClose, onSuccess }) => {
+const TextModal = ({ isOpen, onClose, onSuccess, themes = [] }) => {
   const { user } = useAuth();
   const [text, setText] = useState('');
   const [description, setDescription] = useState('');
+  const [selectedTheme, setSelectedTheme] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [step, setStep] = useState(1);
   const [progress, setProgress] = useState(0);
@@ -33,7 +34,7 @@ const TextModal = ({ isOpen, onClose, onSuccess }) => {
       await new Promise(resolve => setTimeout(resolve, 1000));
 
       // Chamar a API real para enviar o texto
-      await uploadText(text, description, user?.chistaApiToken);
+      await uploadText(text, description, user?.chistaApiToken, selectedTheme);
       
       setProgress(100);
       await new Promise(resolve => setTimeout(resolve, 500));
@@ -48,6 +49,7 @@ const TextModal = ({ isOpen, onClose, onSuccess }) => {
       setProgress(0);
       setText('');
       setDescription('');
+      setSelectedTheme('');
     }
   };
 
@@ -55,6 +57,7 @@ const TextModal = ({ isOpen, onClose, onSuccess }) => {
     if (!isSubmitting) {
       setText('');
       setDescription('');
+      setSelectedTheme('');
       setStep(1);
       setProgress(0);
       onClose();
@@ -104,6 +107,29 @@ const TextModal = ({ isOpen, onClose, onSuccess }) => {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
                 />
+              </div>
+
+              {/* Tema */}
+              <div>
+                <label htmlFor="theme" className="block text-sm font-medium text-gray-700 mb-2">
+                  Tema (Opcional)
+                </label>
+                <select
+                  id="theme"
+                  value={selectedTheme}
+                  onChange={(e) => setSelectedTheme(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="">Selecione um tema (opcional)</option>
+                  {themes.map((theme) => (
+                    <option key={theme.id} value={theme.id}>
+                      {theme.name}
+                    </option>
+                  ))}
+                </select>
+                <p className="text-xs text-gray-500 mt-1">
+                  Classifique este texto com um tema específico para melhor organização
+                </p>
               </div>
 
               {/* Texto */}

@@ -33,6 +33,11 @@ const NavMenu = ({
       id: 'chat', 
       label: 'Chat', 
       path: '/chat' 
+    },
+    { 
+      id: 'settings', 
+      label: 'Configurações', 
+      path: '/settings' 
     }
   ];
 

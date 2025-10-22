@@ -8,17 +8,19 @@ import UploadModal from "../../components/UploadModal";
 import TextModal from "../../components/TextModal";
 import NavMenu from "../../components/NavMenu";
 import { useAuth } from "../../contexts/AuthContext";
-import { fetchInsights, useLoadingState, uploadFile, clearApiCache } from "../../lib/api";
+import { fetchInsights, useLoadingState, uploadFile, clearApiCache, fetchThemes } from "../../lib/api";
 import { getStatusTranslation, getStatusColor } from "../../lib/utils";
 
 export default function InsightsPage() {
   const { user, isAuthenticated, isLoading, loginWithRedirect, logout, chistaApiToken } = useAuth();
   const [insights, setInsights] = useState(null);
+  const [themes, setThemes] = useState([]);
   const [error, setError] = useState(null);
   const [dataLoading, setDataLoading] = useState(false);
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [textModalOpen, setTextModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedTheme, setSelectedTheme] = useState('');
   const [sortBy, setSortBy] = useState('recent'); // recent, nps_high, nps_low, ces_high, ces_low, csat_high, csat_low
   const [autoRefresh, setAutoRefresh] = useState(true); // Auto refresh enabled by default
   const [lastRefresh, setLastRefresh] = useState(null);
@@ -57,9 +59,22 @@ export default function InsightsPage() {
     }
   };
 
+  // Função para carregar temas
+  const loadThemes = async () => {
+    if (isAuthenticated && chistaApiToken) {
+      try {
+        const themesData = await fetchThemes(chistaApiToken);
+        setThemes(themesData);
+      } catch (err) {
+        console.error('Erro ao carregar temas:', err);
+      }
+    }
+  };
+
   // Carregamento inicial
   useEffect(() => {
     loadInsights();
+    loadThemes();
   }, [isAuthenticated, chistaApiToken]);
 
   // Auto refresh a cada 30 segundos
@@ -110,9 +125,9 @@ export default function InsightsPage() {
 
 
 
-  const handleFileUpload = async (file, description, onProgress) => {
+  const handleFileUpload = async (file, description, onProgress, themeId = null) => {
     try {
-      await uploadFile(file, description, chistaApiToken, onProgress);
+      await uploadFile(file, description, chistaApiToken, onProgress, themeId);
       // Clear cache and reload insights after successful upload
       clearApiCache();
       await loadInsights();
@@ -121,23 +136,33 @@ export default function InsightsPage() {
     }
   };
 
-  // Função para filtrar insights baseado no termo de busca
+  // Função para filtrar insights baseado no termo de busca e tema
   const filteredInsights = insights?.filter((insight) => {
-    if (!searchTerm) return true;
+    // Filtro por termo de busca
+    if (searchTerm) {
+      const searchLower = searchTerm.toLowerCase();
+      const title = (insight.title || insight.name || `Insight #${insight.id}`).toLowerCase();
+      const description = (insight.description || '').toLowerCase();
+      const status = getStatusTranslation(insight.status).toLowerCase();
+      const type = (insight.type || 'Insight').toLowerCase();
+      
+      const matchesSearch = (
+        title.includes(searchLower) ||
+        description.includes(searchLower) ||
+        status.includes(searchLower) ||
+        type.includes(searchLower) ||
+        insight.id.toString().includes(searchLower)
+      );
+      
+      if (!matchesSearch) return false;
+    }
     
-    const searchLower = searchTerm.toLowerCase();
-    const title = (insight.title || insight.name || `Insight #${insight.id}`).toLowerCase();
-    const description = (insight.description || '').toLowerCase();
-    const status = getStatusTranslation(insight.status).toLowerCase();
-    const type = (insight.type || 'Insight').toLowerCase();
+    // Filtro por tema
+    if (selectedTheme) {
+      return insight.theme_id === parseInt(selectedTheme);
+    }
     
-    return (
-      title.includes(searchLower) ||
-      description.includes(searchLower) ||
-      status.includes(searchLower) ||
-      type.includes(searchLower) ||
-      insight.id.toString().includes(searchLower)
-    );
+    return true;
   }) || [];
 
   // Função para ordenar insights
@@ -285,8 +310,9 @@ export default function InsightsPage() {
           </div>
         )}
 
-        {/* Campo de Busca */}
-        <div className="mb-6">
+        {/* Filtros de Busca e Tema */}
+        <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Campo de Busca */}
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <Search className="h-5 w-5 text-gray-400" />
@@ -299,12 +325,41 @@ export default function InsightsPage() {
               className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-[#174A8B] focus:border-[#174A8B] sm:text-sm"
             />
           </div>
-          {searchTerm && (
-            <div className="mt-2 text-sm text-gray-600">
-              {filteredInsights.length} de {insights?.length || 0} insight{filteredInsights.length !== 1 ? 's' : ''} encontrado{filteredInsights.length !== 1 ? 's' : ''}
-            </div>
-          )}
+          
+          {/* Filtro de Tema */}
+          <div className="relative">
+            <select
+              value={selectedTheme}
+              onChange={(e) => setSelectedTheme(e.target.value)}
+              className="block w-full px-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white focus:outline-none focus:ring-1 focus:ring-[#174A8B] focus:border-[#174A8B] sm:text-sm"
+            >
+              <option value="">Todos os temas</option>
+              {themes.map((theme) => (
+                <option key={theme.id} value={theme.id}>
+                  {theme.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
+        
+        {/* Resultados dos Filtros */}
+        {(searchTerm || selectedTheme) && (
+          <div className="mb-4 text-sm text-gray-600">
+            {filteredInsights.length} de {insights?.length || 0} insight{filteredInsights.length !== 1 ? 's' : ''} encontrado{filteredInsights.length !== 1 ? 's' : ''}
+            {(searchTerm || selectedTheme) && (
+              <button
+                onClick={() => {
+                  setSearchTerm('');
+                  setSelectedTheme('');
+                }}
+                className="ml-2 text-[#174A8B] hover:text-blue-700 font-medium"
+              >
+                Limpar filtros
+              </button>
+            )}
+          </div>
+        )}
 
         {/* Filtros de Ordenação */}
         <div className="mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
@@ -410,6 +465,9 @@ export default function InsightsPage() {
                       Insight
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Tema
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Status
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -448,6 +506,15 @@ export default function InsightsPage() {
                             )}
                           </div>
                         </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {insight.theme_id ? (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            {themes.find(theme => theme.id === insight.theme_id)?.name || `Tema #${insight.theme_id}`}
+                          </span>
+                        ) : (
+                          <span className="text-sm text-gray-400">Sem tema</span>
+                        )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {insight.status && (
@@ -536,6 +603,7 @@ export default function InsightsPage() {
         isOpen={uploadModalOpen}
         onClose={() => setUploadModalOpen(false)}
         onUpload={handleFileUpload}
+        themes={themes}
       />
 
       {/* Text Modal */}
@@ -547,6 +615,7 @@ export default function InsightsPage() {
             setTextModalOpen(false);
             fetchInsights();
           }}
+          themes={themes}
         />
       )}
     </div>

@@ -2,10 +2,11 @@
 import React, { useState, useRef } from "react";
 import { X, Upload, Music, AlertCircle, CheckCircle, Loader2 } from "lucide-react";
 
-export default function UploadModal({ isOpen, onClose, onUpload }) {
+export default function UploadModal({ isOpen, onClose, onUpload, themes = [] }) {
   const [dragActive, setDragActive] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [description, setDescription] = useState("");
+  const [selectedTheme, setSelectedTheme] = useState("");
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadStatus, setUploadStatus] = useState(null); // 'success', 'error', null
@@ -18,6 +19,7 @@ export default function UploadModal({ isOpen, onClose, onUpload }) {
     if (!isOpen) {
       setSelectedFile(null);
       setDescription("");
+      setSelectedTheme("");
       setUploading(false);
       setUploadProgress(0);
       setUploadStatus(null);
@@ -118,7 +120,7 @@ export default function UploadModal({ isOpen, onClose, onUpload }) {
         }
       };
 
-      await onUpload(selectedFile, description.trim(), onProgress);
+      await onUpload(selectedFile, description.trim(), onProgress, selectedTheme);
       
       setUploadProgress(100);
       setUploadStep("Upload concluído!");
@@ -249,6 +251,30 @@ export default function UploadModal({ isOpen, onClose, onUpload }) {
                 </div>
               </div>
             )}
+          </div>
+
+          {/* Theme Selection */}
+          <div className="mt-4">
+            <label htmlFor="audio-theme" className="block text-sm font-medium text-gray-900 mb-2">
+              Tema (Opcional)
+            </label>
+            <select
+              id="audio-theme"
+              value={selectedTheme}
+              onChange={(e) => setSelectedTheme(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#174A8B] focus:border-[#174A8B]"
+              disabled={uploading}
+            >
+              <option value="">Selecione um tema (opcional)</option>
+              {themes.map((theme) => (
+                <option key={theme.id} value={theme.id}>
+                  {theme.name}
+                </option>
+              ))}
+            </select>
+            <p className="text-xs text-gray-500 mt-1">
+              Classifique este áudio com um tema específico para melhor organização
+            </p>
           </div>
 
           {/* Description Field */}

@@ -50,9 +50,20 @@ export async function fetchInsightFileUrl(insightId, token) {
  * @param {File} file - File to upload
  * @param {string} description - Description of the audio content
  * @param {string} token - Authorization token
+ * @param {number} themeId - Optional theme ID
  * @returns {Promise<Object>} - Response with token and upload URLs
  */
-export async function createAudioBatch(file, description, token) {
+export async function createAudioBatch(file, description, token, themeId = null) {
+  const batchData = {
+    description: description,
+    entries: [file.name] // Array com o nome do arquivo
+  };
+
+  // Add theme_id if provided
+  if (themeId) {
+    batchData.theme_id = themeId;
+  }
+
   const response = await fetch(buildApiUrl('/batches/audio'), {
     method: 'POST',
     headers: {
@@ -60,10 +71,7 @@ export async function createAudioBatch(file, description, token) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      batch: {
-        description: description,
-        entries: [file.name] // Array com o nome do arquivo
-      }
+      batch: batchData
     })
   });
 
@@ -147,12 +155,13 @@ export async function completeBatch(batchToken, token, uploadStats = null) {
  * @param {string} description - Description of the audio content
  * @param {string} token - Authorization token
  * @param {Function} onProgress - Optional progress callback
+ * @param {number} themeId - Optional theme ID
  * @returns {Promise<Object>} - Complete upload response
  */
-export async function uploadFile(file, description, token, onProgress = null) {
+export async function uploadFile(file, description, token, onProgress = null, themeId = null) {
   try {
     // Step 1: Create batch and get presigned URL
-    const batchResponse = await createAudioBatch(file, description, token);
+    const batchResponse = await createAudioBatch(file, description, token, themeId);
     const { token: batchToken, uploads } = batchResponse;
     
     if (!uploads || uploads.length === 0) {
@@ -333,9 +342,20 @@ export function useLoadingState(authLoading, dataLoading, hasData, hasError) {
  * @param {string} text - Text content to analyze
  * @param {string} description - Description of the text
  * @param {string} token - Authorization token
+ * @param {number} themeId - Optional theme ID
  * @returns {Promise<Object>} - Response with analysis results
  */
-export async function uploadText(text, description, token) {
+export async function uploadText(text, description, token, themeId = null) {
+  const textData = {
+    content: text,
+    description: description
+  };
+
+  // Add theme_id if provided
+  if (themeId) {
+    textData.theme_id = themeId;
+  }
+
   const response = await fetch(buildApiUrl('/texts'), {
     method: 'POST',
     headers: {
@@ -343,10 +363,7 @@ export async function uploadText(text, description, token) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      text: {
-        content: text,
-        description: description
-      }
+      text: textData
     })
   });
 
@@ -508,6 +525,252 @@ export async function getConversationMessages(conversationId, token) {
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(`Erro ao buscar mensagens: ${response.status} - ${errorText}`);
+  }
+
+  return response.json();
+}
+
+// ===== THEMES API FUNCTIONS =====
+
+/**
+ * Fetch all themes from API
+ * @param {string} token - Authorization token
+ * @returns {Promise<Array>} - List of themes
+ */
+export async function fetchThemes(token) {
+  const response = await fetch(buildApiUrl('/themes'), {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    }
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Erro ao buscar temas: ${response.status} - ${errorText}`);
+  }
+
+  return response.json();
+}
+
+/**
+ * Fetch specific theme by ID
+ * @param {string} themeId - Theme ID
+ * @param {string} token - Authorization token
+ * @returns {Promise<Object>} - Theme details
+ */
+export async function fetchThemeById(themeId, token) {
+  const response = await fetch(buildApiUrl(`/themes/${themeId}`), {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    }
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Erro ao buscar tema: ${response.status} - ${errorText}`);
+  }
+
+  return response.json();
+}
+
+/**
+ * Create a new theme
+ * @param {Object} themeData - Theme data (name, persona)
+ * @param {string} token - Authorization token
+ * @returns {Promise<Object>} - Created theme
+ */
+export async function createTheme(themeData, token) {
+  const response = await fetch(buildApiUrl('/themes'), {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      theme: themeData
+    })
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Erro ao criar tema: ${response.status} - ${errorText}`);
+  }
+
+  return response.json();
+}
+
+/**
+ * Update an existing theme
+ * @param {string} themeId - Theme ID
+ * @param {Object} themeData - Updated theme data
+ * @param {string} token - Authorization token
+ * @returns {Promise<Object>} - Updated theme
+ */
+export async function updateTheme(themeId, themeData, token) {
+  const response = await fetch(buildApiUrl(`/themes/${themeId}`), {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      theme: themeData
+    })
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Erro ao atualizar tema: ${response.status} - ${errorText}`);
+  }
+
+  return response.json();
+}
+
+/**
+ * Delete a theme
+ * @param {string} themeId - Theme ID
+ * @param {string} token - Authorization token
+ * @returns {Promise<Object>} - Deletion response
+ */
+export async function deleteTheme(themeId, token) {
+  const response = await fetch(buildApiUrl(`/themes/${themeId}`), {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    }
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Erro ao deletar tema: ${response.status} - ${errorText}`);
+  }
+
+  return response.json();
+}
+
+// ===== ALERTS API FUNCTIONS =====
+
+/**
+ * Fetch all alerts from API
+ * @param {string} token - Authorization token
+ * @returns {Promise<Array>} - List of alerts
+ */
+export async function fetchAlerts(token) {
+  const response = await fetch(buildApiUrl('/alerts'), {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    }
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Erro ao buscar alertas: ${response.status} - ${errorText}`);
+  }
+
+  return response.json();
+}
+
+/**
+ * Fetch specific alert by ID
+ * @param {string} alertId - Alert ID
+ * @param {string} token - Authorization token
+ * @returns {Promise<Object>} - Alert details
+ */
+export async function fetchAlertById(alertId, token) {
+  const response = await fetch(buildApiUrl(`/alerts/${alertId}`), {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    }
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Erro ao buscar alerta: ${response.status} - ${errorText}`);
+  }
+
+  return response.json();
+}
+
+/**
+ * Create a new alert
+ * @param {Object} alertData - Alert data (indicador, value, active)
+ * @param {string} token - Authorization token
+ * @returns {Promise<Object>} - Created alert
+ */
+export async function createAlert(alertData, token) {
+  const response = await fetch(buildApiUrl('/alerts'), {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      alert: alertData
+    })
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Erro ao criar alerta: ${response.status} - ${errorText}`);
+  }
+
+  return response.json();
+}
+
+/**
+ * Update an existing alert
+ * @param {string} alertId - Alert ID
+ * @param {Object} alertData - Updated alert data
+ * @param {string} token - Authorization token
+ * @returns {Promise<Object>} - Updated alert
+ */
+export async function updateAlert(alertId, alertData, token) {
+  const response = await fetch(buildApiUrl(`/alerts/${alertId}`), {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      alert: alertData
+    })
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Erro ao atualizar alerta: ${response.status} - ${errorText}`);
+  }
+
+  return response.json();
+}
+
+/**
+ * Delete an alert
+ * @param {string} alertId - Alert ID
+ * @param {string} token - Authorization token
+ * @returns {Promise<Object>} - Deletion response
+ */
+export async function deleteAlert(alertId, token) {
+  const response = await fetch(buildApiUrl(`/alerts/${alertId}`), {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    }
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Erro ao deletar alerta: ${response.status} - ${errorText}`);
   }
 
   return response.json();
