@@ -774,4 +774,104 @@ export async function deleteAlert(alertId, token) {
   }
 
   return response.json();
+}
+
+// ===== QA SCORE WEIGHTS API FUNCTIONS =====
+
+/**
+ * Fetch all QA score weights from API
+ * @param {string} token - Authorization token
+ * @returns {Promise<Array>} - List of QA score weights
+ */
+export async function fetchQAScoreWeights(token) {
+  const response = await fetch(buildApiUrl('/qa_score_weights'), {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    }
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Erro ao buscar pesos QA Score: ${response.status} - ${errorText}`);
+  }
+
+  return response.json();
+}
+
+/**
+ * Fetch specific QA score weight by ID
+ * @param {string} weightId - QA Score Weight ID
+ * @param {string} token - Authorization token
+ * @returns {Promise<Object>} - QA Score Weight details
+ */
+export async function fetchQAScoreWeightById(weightId, token) {
+  const response = await fetch(buildApiUrl(`/qa_score_weights/${weightId}`), {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    }
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Erro ao buscar peso QA Score: ${response.status} - ${errorText}`);
+  }
+
+  return response.json();
+}
+
+/**
+ * Create a new QA score weight
+ * @param {Object} weightData - QA Score Weight data
+ * @param {string} token - Authorization token
+ * @returns {Promise<Object>} - Created QA Score Weight
+ */
+export async function createQAScoreWeight(weightData, token) {
+  const response = await fetch(buildApiUrl('/qa_score_weights'), {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      qa_score_weight: weightData
+    })
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Erro ao criar peso QA Score: ${response.status} - ${errorText}`);
+  }
+
+  return response.json();
+}
+
+/**
+ * Update an existing QA score weight
+ * @param {string} weightId - QA Score Weight ID
+ * @param {Object} weightData - Updated QA Score Weight data
+ * @param {string} token - Authorization token
+ * @returns {Promise<Object>} - Updated QA Score Weight
+ */
+export async function updateQAScoreWeight(weightId, weightData, token) {
+  const response = await fetch(buildApiUrl(`/qa_score_weights/${weightId}`), {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      qa_score_weight: weightData
+    })
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Erro ao atualizar peso QA Score: ${response.status} - ${errorText}`);
+  }
+
+  return response.json();
 } 

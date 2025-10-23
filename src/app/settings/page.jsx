@@ -3,19 +3,21 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import NavMenu from '../../components/NavMenu';
-import { Settings, Plus, Edit, Trash2, Tag, Bell, TrendingUp, Zap, Heart } from 'lucide-react';
-import { fetchThemes, createTheme, updateTheme, deleteTheme, fetchAlerts, updateAlert } from '../../lib/api';
+import { Settings, Plus, Edit, Trash2, Tag, Bell, TrendingUp, Zap, Heart, BarChart3 } from 'lucide-react';
+import { fetchThemes, createTheme, updateTheme, deleteTheme, fetchAlerts, updateAlert, fetchQAScoreWeights, updateQAScoreWeight } from '../../lib/api';
 
 export default function SettingsPage() {
   const { user, isAuthenticated, isLoading, loginWithRedirect, logout, chistaApiToken } = useAuth();
   const [themes, setThemes] = useState([]);
   const [alerts, setAlerts] = useState([]);
+  const [qaScoreWeights, setQAScoreWeights] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('themes');
   const [showModal, setShowModal] = useState(false);
   const [editingTheme, setEditingTheme] = useState(null);
   const [editingAlert, setEditingAlert] = useState(null);
+  const [editingQAWeight, setEditingQAWeight] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     persona: ''
@@ -25,12 +27,16 @@ export default function SettingsPage() {
     value: '',
     active: true
   });
+  const [qaWeightFormData, setQAWeightFormData] = useState({
+    weight: ''
+  });
 
   // Carregar dados
   useEffect(() => {
     if (isAuthenticated && chistaApiToken) {
       loadThemes();
       loadAlerts();
+      loadQAScoreWeights();
     }
   }, [isAuthenticated, chistaApiToken]);
 
@@ -53,6 +59,15 @@ export default function SettingsPage() {
       setAlerts(alertsData);
     } catch (err) {
       console.error('Erro ao carregar alertas:', err);
+    }
+  };
+
+  const loadQAScoreWeights = async () => {
+      try {
+        const weightsData = await fetchQAScoreWeights(chistaApiToken);
+        setQAScoreWeights(weightsData);
+    } catch (err) {
+      console.error('Erro ao carregar QA Score:', err);
     }
   };
 
@@ -150,6 +165,33 @@ export default function SettingsPage() {
     }
   };
 
+  // Funções para QA Score Weights
+  const handleQAWeightSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      
+      await updateQAScoreWeight(editingQAWeight.id, qaWeightFormData, chistaApiToken);
+      
+      await loadQAScoreWeights();
+      setShowModal(false);
+      setEditingQAWeight(null);
+      setQAWeightFormData({ weight: '' });
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEditQAWeight = (weight) => {
+    setEditingQAWeight(weight);
+    setQAWeightFormData({
+      weight: weight.weight.toString()
+    });
+    setShowModal(true);
+  };
+
   if (isLoading) {
     return <LoadingSpinner message="Carregando configurações..." subtitle="Preparando área de administração" />;
   }
@@ -229,6 +271,17 @@ export default function SettingsPage() {
               >
                 <Bell className="w-4 h-4" />
                 Alertas
+              </button>
+              <button
+                onClick={() => setActiveTab('qa-score')}
+                className={`py-2 px-1 border-b-2 font-medium text-sm flex items-center gap-2 ${
+                  activeTab === 'qa-score'
+                    ? 'border-[#174A8B] text-[#174A8B]'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                <BarChart3 className="w-4 h-4" />
+                QA Score
               </button>
             </nav>
           </div>
@@ -386,6 +439,75 @@ export default function SettingsPage() {
           </>
         )}
 
+        {activeTab === 'qa-score' && (
+          <>
+            {/* QA Score Weights Section */}
+            <div className="bg-white shadow rounded-lg">
+              <div className="px-6 py-4 border-b border-gray-200">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <BarChart3 className="w-5 h-5 text-[#174A8B]" />
+                    <h2 className="text-lg font-medium text-gray-900">QA Score</h2>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-6">
+                {/* Explicação sobre QA Score */}
+                <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0">
+                      <BarChart3 className="w-5 h-5 text-green-400" />
+                    </div>
+                    <div className="ml-3">
+                      <h3 className="text-sm font-medium text-green-800">Pesos Personalizáveis</h3>
+                      <div className="mt-2 text-sm text-green-700">
+                        <p>Configure os pesos para cada critério do QA Score.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {qaScoreWeights.length === 0 ? (
+                  <div className="text-center py-8">
+                    <BarChart3 className="mx-auto h-12 w-12 text-gray-400" />
+                    <h3 className="mt-2 text-sm font-medium text-gray-900">Nenhum peso encontrado</h3>
+                    <p className="mt-1 text-sm text-gray-500">Os pesos são criados automaticamente pelo sistema.</p>
+                  </div>
+                ) : (
+                  <div className="grid gap-4">
+                    {qaScoreWeights.map((weight) => (
+                      <div key={weight.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <BarChart3 className="w-4 h-4 text-[#174A8B]" />
+                              <h3 className="text-lg font-medium text-gray-900">{weight.qa_score_block?.name}</h3>
+                            </div>
+                            <p className="text-sm text-gray-600 mb-2">{weight.qa_score_block?.description}</p>
+                            <p className="text-sm text-gray-600">
+                              Peso atual: <span className="font-medium">{weight.weight}</span>
+                            </p>
+                          </div>
+                          <div className="ml-4 flex items-center gap-2">
+                            <button
+                              onClick={() => handleEditQAWeight(weight)}
+                              className="p-2 text-gray-400 hover:text-[#174A8B] transition-colors"
+                              title="Editar peso"
+                            >
+                              <Edit className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </>
+        )}
+
         {/* Modal */}
         {showModal && (
           <div className="fixed inset-0 bg-black/10 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
@@ -393,15 +515,17 @@ export default function SettingsPage() {
               {/* Header */}
               <div className="flex items-center justify-between p-6 border-b border-gray-200">
                 <h2 className="text-xl font-semibold text-gray-900">
-                  {editingAlert ? 'Editar Alerta' : (editingTheme ? 'Editar Tema' : 'Novo Tema')}
+                  {editingQAWeight ? 'Editar Peso QA Score' : (editingAlert ? 'Editar Alerta' : (editingTheme ? 'Editar Tema' : 'Novo Tema'))}
                 </h2>
                 <button
                   onClick={() => {
                     setShowModal(false);
                     setEditingTheme(null);
                     setEditingAlert(null);
+                    setEditingQAWeight(null);
                     setFormData({ name: '', persona: '' });
                     setAlertFormData({ indicador: '', value: '', active: true });
+                    setQAWeightFormData({ weight: '' });
                   }}
                   className="text-gray-400 hover:text-gray-600 transition-colors"
                 >
@@ -413,8 +537,39 @@ export default function SettingsPage() {
 
               {/* Content */}
               <div className="p-6">
-                <form id="modal-form" onSubmit={editingAlert ? handleAlertSubmit : handleSubmit}>
-                  {editingAlert ? (
+                <form id="modal-form" onSubmit={editingQAWeight ? handleQAWeightSubmit : (editingAlert ? handleAlertSubmit : handleSubmit)}>
+                  {editingQAWeight ? (
+                    // Formulário de QA Score Weight
+                    <>
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Nome do Critério
+                        </label>
+                        <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 border border-gray-300 rounded-md">
+                          <BarChart3 className="w-4 h-4 text-[#174A8B]" />
+                          <span className="text-sm font-medium text-gray-900">{editingQAWeight.qa_score_block?.name}</span>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1">O nome do critério não pode ser alterado</p>
+                      </div>
+                      <div className="mb-4">
+                        <label htmlFor="weight" className="block text-sm font-medium text-gray-700 mb-2">
+                          Peso <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="number"
+                          id="weight"
+                          value={qaWeightFormData.weight}
+                          onChange={(e) => setQAWeightFormData({ ...qaWeightFormData, weight: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#174A8B] focus:border-transparent"
+                          placeholder="Ex: 30"
+                          step="0.1"
+                          min="0"
+                          required
+                        />
+                        <p className="text-xs text-gray-500 mt-1">Apenas números positivos (ex: 30, 50, 100)</p>
+                      </div>
+                    </>
+                  ) : editingAlert ? (
                     // Formulário de Alerta
                     <>
                       <div className="mb-4">
@@ -497,8 +652,10 @@ export default function SettingsPage() {
                     setShowModal(false);
                     setEditingTheme(null);
                     setEditingAlert(null);
+                    setEditingQAWeight(null);
                     setFormData({ name: '', persona: '' });
                     setAlertFormData({ indicador: '', value: '', active: true });
+                    setQAWeightFormData({ weight: '' });
                   }}
                   className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
                 >
@@ -510,7 +667,7 @@ export default function SettingsPage() {
                   disabled={loading}
                   className="px-4 py-2 text-sm font-medium text-white bg-[#174A8B] hover:bg-blue-700 rounded-md transition-colors disabled:opacity-50"
                 >
-                  {loading ? 'Salvando...' : (editingAlert || editingTheme) ? 'Atualizar' : 'Criar'}
+                  {loading ? 'Salvando...' : (editingQAWeight || editingAlert || editingTheme) ? 'Atualizar' : 'Criar'}
                 </button>
               </div>
             </div>

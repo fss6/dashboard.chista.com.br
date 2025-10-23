@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft, Calendar, Brain, HardDrive, Volume2, Target } from "lucide-react";
+import { ArrowLeft, Calendar, Brain, HardDrive, Volume2, Target, BarChart3, CheckCircle, AlertCircle } from "lucide-react";
 import PDFDownloadButton from "../../../components/PDFDownloadButton";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import LocalizedDate from "../../../components/LocalizedDate";
@@ -158,6 +158,68 @@ export default function InsightDetailsPage() {
     }
 
 
+
+    return elements;
+  };
+
+  // Função para formatar QA Score
+  const formatQAScore = (qaScoreData) => {
+    if (!qaScoreData) return null;
+
+    const elements = [];
+    let elementIndex = 0;
+
+    // Score geral
+    if (qaScoreData.total_score !== undefined) {
+      elements.push(
+        <div key={elementIndex++} className="font-bold text-gray-900 text-lg mt-6 mb-3 first:mt-0">
+          QA Score Geral
+        </div>
+      );
+      elements.push(
+        <div key={elementIndex++} className="mb-4">
+          <div className="flex items-center gap-2">
+            <BarChart3 className="w-5 h-5 text-[#174A8B]" />
+            <span className="text-2xl font-bold text-[#174A8B]">{qaScoreData.total_score}</span>
+            <span className="text-gray-600">pontos</span>
+          </div>
+        </div>
+      );
+    }
+
+    // Avaliações por bloco
+    if (qaScoreData.evaluations && qaScoreData.evaluations.length > 0) {
+      elements.push(
+        <div key={elementIndex++} className="font-bold text-gray-900 text-lg mt-6 mb-3">
+          Avaliações por Critério
+        </div>
+      );
+      
+      qaScoreData.evaluations.forEach((evaluation, index) => {
+        elements.push(
+          <div key={elementIndex++} className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex-1">
+                <h4 className="font-semibold text-gray-900 mb-1">{evaluation.block_name}</h4>
+                <p className="text-sm text-gray-600 mb-2">{evaluation.block_description}</p>
+              </div>
+              <div className="flex items-center gap-2 ml-4">
+                <span className="text-lg font-bold text-[#174A8B]">{evaluation.score}/5</span>
+                <span className="text-sm text-gray-500">({evaluation.weight}% peso)</span>
+              </div>
+            </div>
+            
+            {evaluation.justification && (
+              <div className="mt-3 p-3 bg-white rounded border-l-4 border-[#174A8B]">
+                <p className="text-sm text-gray-700">
+                  <span className="font-medium">Justificativa:</span> {evaluation.justification}
+                </p>
+              </div>
+            )}
+          </div>
+        );
+      });
+    }
 
     return elements;
   };
@@ -386,6 +448,30 @@ export default function InsightDetailsPage() {
                   />
                 </div>
               </div>
+
+              {/* 6. QA Score */}
+              {insight?.qa_score && (
+                <div id="qa-score">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                    QA Score
+                  </h3>
+                  <div className="bg-white border border-gray-200 rounded-lg p-6">
+                    {insight.qa_score_summary ? (
+                      <div className="prose max-w-none">
+                        <div className="text-gray-700 leading-relaxed">
+                          {formatQAScore(insight.qa_score_summary)}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="text-center text-gray-500 py-8">
+                        <BarChart3 className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                        <p>Nenhum QA Score disponível</p>
+                        <p className="text-sm mt-2">O QA Score será gerado automaticamente após o processamento</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* 4. Resumo e Insights */}
               <div id="resumo-ia">
