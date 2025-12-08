@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../contexts/AuthContext';
 import LoadingSpinner from '../../components/LoadingSpinner';
@@ -36,8 +36,10 @@ export default function ReportsPage() {
         fetchInsights(chistaApiToken),
         fetchThemes(chistaApiToken)
       ]);
-      setInsights(insightsData || []);
-      setThemes(themesData || []);
+      const insightsArray = Array.isArray(insightsData) ? insightsData : [];
+      const themesArray = Array.isArray(themesData) ? themesData : [];
+      setInsights(insightsArray);
+      setThemes(themesArray);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -46,31 +48,67 @@ export default function ReportsPage() {
   };
 
   // Filtrar insights por data e tema
-  const filteredInsights = insights.filter((insight) => {
-    // Filtro por data
-    if (dateRange.startDate || dateRange.endDate) {
-      const insightDate = new Date(insight.created_at);
-      
-      if (dateRange.startDate) {
-        const startDate = new Date(dateRange.startDate);
-        startDate.setHours(0, 0, 0, 0);
-        if (insightDate < startDate) return false;
+  const filteredInsights = useMemo(() => {
+    if (!insights || !Array.isArray(insights) || insights.length === 0) {
+      return [];
+    }
+
+    const filtered = insights.filter((insight) => {
+      // Filtro por data
+      if (dateRange.startDate || dateRange.endDate) {
+        if (!insight.created_at) {
+          return false;
+        }
+        
+        try {
+          const insightDate = new Date(insight.created_at);
+          
+          // Verificar se a data é válida
+          if (isNaN(insightDate.getTime())) {
+            return false;
+          }
+          
+          // Extrair apenas a data (YYYY-MM-DD) para comparação
+          const year = insightDate.getFullYear();
+          const month = String(insightDate.getMonth() + 1).padStart(2, '0');
+          const day = String(insightDate.getDate()).padStart(2, '0');
+          const insightDateStr = `${year}-${month}-${day}`;
+          
+          if (dateRange.startDate && insightDateStr < dateRange.startDate) {
+            return false;
+          }
+          
+          if (dateRange.endDate && insightDateStr > dateRange.endDate) {
+            return false;
+          }
+        } catch (error) {
+          console.error('Erro ao processar data do insight:', error, insight.created_at);
+          return false;
+        }
       }
       
-      if (dateRange.endDate) {
-        const endDate = new Date(dateRange.endDate);
-        endDate.setHours(23, 59, 59, 999);
-        if (insightDate > endDate) return false;
+      // Filtro por tema
+      if (selectedTheme && selectedTheme !== '') {
+        const themeId = parseInt(selectedTheme, 10);
+        if (isNaN(themeId)) {
+          return false;
+        }
+        
+        const insightThemeId = insight.theme_id;
+        if (insightThemeId === null || insightThemeId === undefined) {
+          return false;
+        }
+        
+        if (parseInt(insightThemeId, 10) !== themeId) {
+          return false;
+        }
       }
-    }
-    
-    // Filtro por tema
-    if (selectedTheme) {
-      return insight.theme_id === parseInt(selectedTheme);
-    }
-    
-    return true;
-  });
+      
+      return true;
+    });
+
+    return filtered;
+  }, [insights, dateRange.startDate, dateRange.endDate, selectedTheme]);
 
   // Calcular estatísticas
   const calculateStats = () => {
@@ -331,29 +369,37 @@ export default function ReportsPage() {
           </div>
 
           {/* Info do filtro ativo */}
-          {(dateRange.startDate || dateRange.endDate || selectedTheme) && (
-            <div className="text-sm text-gray-600 bg-blue-50 p-3 rounded-md">
-              <span className="font-medium">Filtros ativos:</span>
-              {dateRange.startDate && (
-                <span className="ml-2">
-                  De <LocalizedDate date={dateRange.startDate} />
-                </span>
-              )}
-              {dateRange.endDate && (
-                <span className="ml-2">
-                  até <LocalizedDate date={dateRange.endDate} />
-                </span>
-              )}
-              {selectedTheme && (
-                <span className="ml-2">
-                  • Tema: {themes.find(t => t.id === parseInt(selectedTheme))?.name}
-                </span>
-              )}
-              <span className="ml-2 font-semibold">
-                ({filteredInsights.length} de {insights.length} insights)
-              </span>
+          <div className={`text-sm ${(dateRange.startDate || dateRange.endDate || selectedTheme) ? 'text-gray-600 bg-blue-50 border border-blue-200' : 'text-gray-500 bg-gray-50'} p-3 rounded-md`}>
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="font-medium">Filtros:</span>
+                {dateRange.startDate || dateRange.endDate || selectedTheme ? (
+                  <>
+                    {dateRange.startDate && (
+                      <span className="ml-2">
+                        De <strong>{dateRange.startDate}</strong>
+                      </span>
+                    )}
+                    {dateRange.endDate && (
+                      <span className="ml-2">
+                        até <strong>{dateRange.endDate}</strong>
+                      </span>
+                    )}
+                    {selectedTheme && (
+                      <span className="ml-2">
+                        • Tema: <strong>{themes.find(t => t.id === parseInt(selectedTheme))?.name || selectedTheme}</strong>
+                      </span>
+                    )}
+                  </>
+                ) : (
+                  <span className="ml-2">Nenhum filtro aplicado</span>
+                )}
+              </div>
+              <div className="font-semibold text-[#174A8B]">
+                {filteredInsights.length} de {insights.length} insights
+              </div>
             </div>
-          )}
+          </div>
         </div>
 
         {/* Estatísticas Principais */}
