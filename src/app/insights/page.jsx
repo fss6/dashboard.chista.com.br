@@ -278,7 +278,8 @@ export default function InsightsPage() {
             <div className="flex items-center gap-2 ml-auto">
                <button
                  onClick={() => setTextModalOpen(true)}
-                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm flex items-center gap-2"
+                 disabled
+                 className="bg-gray-400 hover:bg-gray-400 cursor-not-allowed text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm flex items-center gap-2 opacity-50"
                >
                  <FileText className="w-4 h-4" />
                  Enviar Texto
