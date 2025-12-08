@@ -8,6 +8,8 @@ export default function AuthProvider({ children }) {
       clientId={process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID}
       authorizationParams={{
         redirect_uri: typeof window !== "undefined" ? window.location.origin : "http://localhost:3000",
+        audience: "https://api.chista.com.br",
+        scope: "openid profile email"
       }}
     >
       {children}

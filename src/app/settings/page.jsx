@@ -7,7 +7,7 @@ import { Settings, Plus, Edit, Trash2, Tag, Bell, TrendingUp, Zap, Heart, BarCha
 import { fetchThemes, createTheme, updateTheme, deleteTheme, fetchAlerts, updateAlert, fetchQAScoreWeights, updateQAScoreWeight } from '../../lib/api';
 
 export default function SettingsPage() {
-  const { user, isAuthenticated, isLoading, loginWithRedirect, logout, chistaApiToken } = useAuth();
+  const { user, isAuthenticated, isLoading, loginWithRedirect, logout, chistaApiToken, isSuperAdmin } = useAuth();
   const [themes, setThemes] = useState([]);
   const [alerts, setAlerts] = useState([]);
   const [qaScoreWeights, setQAScoreWeights] = useState([]);
@@ -298,13 +298,15 @@ export default function SettingsPage() {
               <Tag className="w-5 h-5 text-[#174A8B]" />
               <h2 className="text-lg font-medium text-gray-900">Temas</h2>
             </div>
-              <button
-                onClick={handleNewTheme}
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-[#174A8B] hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#174A8B]"
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                Novo Tema
-              </button>
+              {isSuperAdmin && (
+                <button
+                  onClick={handleNewTheme}
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-[#174A8B] hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#174A8B]"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Novo Tema
+                </button>
+              )}
             </div>
           </div>
 
@@ -318,15 +320,17 @@ export default function SettingsPage() {
                 <Tag className="mx-auto h-12 w-12 text-gray-400" />
                 <h3 className="mt-2 text-sm font-medium text-gray-900">Nenhum tema encontrado</h3>
                 <p className="mt-1 text-sm text-gray-500">Comece criando seu primeiro tema.</p>
-                <div className="mt-6">
-                  <button
-                    onClick={handleNewTheme}
-                    className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-[#174A8B] hover:bg-blue-700"
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Criar Primeiro Tema
-                  </button>
-                </div>
+                {isSuperAdmin && (
+                  <div className="mt-6">
+                    <button
+                      onClick={handleNewTheme}
+                      className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-[#174A8B] hover:bg-blue-700"
+                    >
+                      <Plus className="w-4 h-4 mr-2" />
+                      Criar Primeiro Tema
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="grid gap-4">
@@ -337,22 +341,24 @@ export default function SettingsPage() {
                         <h3 className="text-lg font-medium text-gray-900">{theme.name}</h3>
                         <p className="mt-2 text-sm text-gray-600 line-clamp-3">{theme.persona}</p>
                       </div>
-                      <div className="ml-4 flex items-center gap-2">
-                        <button
-                          onClick={() => handleEdit(theme)}
-                          className="p-2 text-gray-400 hover:text-[#174A8B] transition-colors"
-                          title="Editar tema"
-                        >
-                          <Edit className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(theme.id)}
-                          className="p-2 text-gray-400 hover:text-red-600 transition-colors"
-                          title="Deletar tema"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
+                      {isSuperAdmin && (
+                        <div className="ml-4 flex items-center gap-2">
+                          <button
+                            onClick={() => handleEdit(theme)}
+                            className="p-2 text-gray-400 hover:text-[#174A8B] transition-colors"
+                            title="Editar tema"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(theme.id)}
+                            className="p-2 text-gray-400 hover:text-red-600 transition-colors"
+                            title="Deletar tema"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}

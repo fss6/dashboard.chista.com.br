@@ -57,6 +57,53 @@ export function isTokenCached() {
 }
 
 /**
+ * Obtém as roles do usuário
+ * @param {Object} user - Objeto do usuário do Auth0
+ * @returns {Array<string>} - Array de roles ou array vazio
+ */
+export function getUserRoles(user) {
+  if (!user) return [];
+
+  // Primeiro tenta a chave fixa do Auth0 (que é sempre https://api.chista.com.br)
+  const fixedRolesKey = 'https://api.chista.com.br/roles';
+  let roles = user[fixedRolesKey];
+  
+  // Se não encontrar, tenta com a URL da variável de ambiente
+  if (!roles) {
+    const apiBaseUrl = getApiBaseUrl();
+    const dynamicRolesKey = `${apiBaseUrl}/roles`;
+    roles = user[dynamicRolesKey];
+  }
+  
+  // Garante que retorna um array
+  if (!Array.isArray(roles)) {
+    return [];
+  }
+  
+  return roles;
+}
+
+/**
+ * Verifica se o usuário tem uma role específica
+ * @param {Object} user - Objeto do usuário do Auth0
+ * @param {string} role - Role a ser verificada
+ * @returns {boolean}
+ */
+export function hasRole(user, role) {
+  const roles = getUserRoles(user);
+  return roles.includes(role);
+}
+
+/**
+ * Verifica se o usuário é super-admin
+ * @param {Object} user - Objeto do usuário do Auth0
+ * @returns {boolean}
+ */
+export function isSuperAdmin(user) {
+  return hasRole(user, 'super-admin');
+}
+
+/**
  * Hook personalizado para autenticação otimizada
  * @param {Object} auth0 - Objeto do useAuth0
  * @returns {Object} - Dados de autenticação otimizados
@@ -66,6 +113,9 @@ export function useOptimizedAuth(auth0) {
   
   // Obtém o token com cache
   const chistaApiToken = getChistaApiToken(user);
+  
+  // Obtém as roles do usuário
+  const userRoles = getUserRoles(user);
   
   // Determina se precisa mostrar loading
   const shouldShowLoading = isLoading;
@@ -79,6 +129,8 @@ export function useOptimizedAuth(auth0) {
     logout,
     getAccessTokenSilently,
     chistaApiToken,
-    isTokenCached: isTokenCached()
+    isTokenCached: isTokenCached(),
+    userRoles,
+    isSuperAdmin: isSuperAdmin(user)
   };
 } 
