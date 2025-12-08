@@ -165,9 +165,9 @@ export default function ReportsPage() {
 
     return {
       total: filteredInsights.length,
-      averageNPS: npsCount > 0 ? (npsSum / npsCount).toFixed(2) : 0,
-      averageCES: cesCount > 0 ? (cesSum / cesCount).toFixed(2) : 0,
-      averageCSAT: csatCount > 0 ? (csatSum / csatCount).toFixed(2) : 0,
+      averageNPS: npsCount > 0 ? (npsSum / npsCount).toFixed(1) : 0,
+      averageCES: cesCount > 0 ? (cesSum / cesCount).toFixed(1) : 0,
+      averageCSAT: csatCount > 0 ? (csatSum / csatCount).toFixed(1) : 0,
       npsCount,
       cesCount,
       csatCount,
