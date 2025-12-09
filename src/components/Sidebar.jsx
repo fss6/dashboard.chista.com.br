@@ -63,12 +63,12 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
 
   return (
     <div 
-      className={`fixed left-0 top-0 h-screen bg-white border-r border-gray-200 transition-all duration-300 flex flex-col shadow-sm z-40 ${
+      className={`fixed left-0 top-0 h-screen bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 flex flex-col shadow-sm z-40 ${
         isCollapsed ? 'w-20' : 'w-64'
       }`}
     >
       {/* Logo Section */}
-      <div className="h-16 flex items-center justify-center px-4 border-b border-gray-200">
+      <div className="h-16 flex items-center justify-center px-4 border-b border-gray-200 dark:border-gray-700">
         {!isCollapsed ? (
           <Image 
             src="/logo.png" 
@@ -88,12 +88,12 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
       {/* Toggle Button */}
       <button
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className="absolute -right-3 top-20 w-6 h-6 bg-white border border-gray-200 rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors shadow-sm"
+        className="absolute -right-3 top-20 w-6 h-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm"
       >
         {isCollapsed ? (
-          <ChevronRight className="w-4 h-4 text-gray-600" />
+          <ChevronRight className="w-4 h-4 text-gray-600 dark:text-gray-300" />
         ) : (
-          <ChevronLeft className="w-4 h-4 text-gray-600" />
+          <ChevronLeft className="w-4 h-4 text-gray-600 dark:text-gray-300" />
         )}
       </button>
 
@@ -110,8 +110,8 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                   onClick={() => router.push(item.path)}
                   className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
                     active
-                      ? 'bg-[#174A8B] text-white shadow-sm'
-                      : 'text-gray-700 hover:bg-gray-100 hover:text-[#174A8B]'
+                      ? 'bg-[#174A8B] dark:bg-blue-600 text-white shadow-sm'
+                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-[#174A8B] dark:hover:text-blue-400'
                   } ${isCollapsed ? 'justify-center' : ''}`}
                   title={isCollapsed ? item.label : ''}
                 >
@@ -127,9 +127,9 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
       </nav>
 
       {/* Footer */}
-      <div className="p-4 border-t border-gray-200">
+      <div className="p-4 border-t border-gray-200 dark:border-gray-700">
         {!isCollapsed && (
-          <div className="text-xs text-gray-500 text-center">
+          <div className="text-xs text-gray-500 dark:text-gray-400 text-center">
             © 2025 Chista
           </div>
         )}
