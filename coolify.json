@@ -12,18 +12,7 @@
     "NEXT_TELEMETRY_DISABLED": "1",
     "PORT": "3000"
   },
-  "volumes": [
-    {
-      "name": "coolify_web_data",
-      "path": "/app/.next",
-      "type": "persistent"
-    },
-    {
-      "name": "coolify_public_data", 
-      "path": "/app/public",
-      "type": "persistent"
-    }
-  ],
+  "volumes": [],
   "networks": [
     "coolify_network"
   ],

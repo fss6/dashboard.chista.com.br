@@ -18,9 +18,14 @@ COPY . .
 # Build da aplicação
 RUN npm run build
 
+# Copiar pasta public para standalone (necessário para arquivos estáticos)
+# O Next.js não copia automaticamente a pasta public no modo standalone
+RUN cp -R public .next/standalone/public
+
 EXPOSE 3000
 
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["npm", "start"] 
+# Executar o servidor standalone
+CMD ["node", ".next/standalone/server.js"] 
