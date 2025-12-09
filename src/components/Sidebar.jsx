@@ -12,10 +12,12 @@ import {
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
+import { useTheme } from '../contexts/ThemeContext';
 
 const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
   const router = useRouter();
   const pathname = usePathname();
+  const { darkMode } = useTheme();
 
   const menuItems = [
     { 
@@ -74,15 +76,16 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
       <div className="h-16 flex items-center justify-center px-4 border-b border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-b from-white to-gray-50/50 dark:from-gray-900 dark:to-gray-900/50">
         {!isCollapsed ? (
           <Image 
-            src="/logo.png" 
+            src={darkMode ? "/logo-dark.png" : "/logo.png"}
             alt="Logo Chista" 
             width={88} 
             height={48} 
             priority 
-            className="object-contain"
+            className="object-contain transition-opacity duration-300"
+            key={darkMode ? 'dark' : 'light'} // Force re-render on theme change
           />
         ) : (
-          <div className="w-10 h-10 bg-[#174A8B] rounded-lg flex items-center justify-center">
+          <div className="w-10 h-10 bg-[#174A8B] dark:bg-blue-600 rounded-lg flex items-center justify-center transition-colors">
             <span className="text-white font-bold text-lg">C</span>
           </div>
         )}
