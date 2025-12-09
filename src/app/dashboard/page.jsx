@@ -2,8 +2,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import Image from 'next/image';
-import NavMenu from '../../components/NavMenu';
+import DashboardLayout from '../../components/DashboardLayout';
 import { TrendingUp, Zap, Heart } from 'lucide-react';
 import NPSIndicator from '../../components/NPSIndicator';
 import CESIndicator from '../../components/CESIndicator';
@@ -35,17 +34,9 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <NavMenu 
-        currentPage="dashboard" 
-        user={user}
-        isAuthenticated={isAuthenticated}
-        logout={logout}
-      />
-
+    <DashboardLayout user={user} logout={logout}>
       {/* Page Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="p-6">
         {/* Page Title */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
@@ -108,6 +99,6 @@ export default function Dashboard() {
           </a>
         </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
 }

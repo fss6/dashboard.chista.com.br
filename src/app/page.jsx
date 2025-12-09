@@ -5,6 +5,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import { useAuth } from "../contexts/AuthContext";
 import { ArrowRight, Shield, Zap, BarChart3, Users, Heart, Brain, TrendingUp } from "lucide-react";
 import NavMenu from "../components/NavMenu";
+import DashboardLayout from "../components/DashboardLayout";
 
 export default function Home() {
   const { user, isLoading, error, loginWithRedirect, logout, isAuthenticated, chistaApiToken } = useAuth();
@@ -23,80 +24,82 @@ export default function Home() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
-      {/* Header */}
-      {isAuthenticated ? (
-        <NavMenu 
-          currentPage="home" 
-          user={user}
-          isAuthenticated={isAuthenticated}
-          logout={logout}
-        />
+    <>
+      {!isAuthenticated ? (
+        // Landing page para não autenticados
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
+          <header className="w-full bg-white/80 backdrop-blur-sm border-b border-blue-100 sticky top-0 z-10">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="py-4 flex justify-center">
+                <Image src="/logo.png" alt="Logo Chista" width={88} height={48} priority />
+              </div>
+            </div>
+          </header>
+
+          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div className="text-center">
+              {/* Hero Section */}
+              <div className="mb-16">
+                <h1 className="text-4xl sm:text-6xl font-bold text-[#174A8B] mb-6">
+                  Bem-vindo ao
+                  <span className="block text-blue-600">Dashboard Chista</span>
+                </h1>
+                <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+                  Descubra automaticamente a percepção dos seus clientes. Analise interações em áudio e texto para medir NPS, CES e CSAT de forma simples e eficiente.
+                </p>
+                
+                {/* CTA Button */}
+                <button 
+                  onClick={() => loginWithRedirect()}
+                  className="group bg-[#174A8B] hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center mx-auto space-x-2"
+                >
+                  <span>Entrar no Dashboard</span>
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
+
+              {/* Features Grid */}
+              <div className="grid md:grid-cols-3 gap-8 mb-16">
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-blue-100 hover:shadow-md transition-shadow">
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                    <Heart className="w-6 h-6 text-[#174A8B]" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Análise de Sentimentos</h3>
+                  <p className="text-gray-600">Detecte emoções, satisfação e insatisfação nas interações dos clientes</p>
+                </div>
+                
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-blue-100 hover:shadow-md transition-shadow">
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                    <TrendingUp className="w-6 h-6 text-[#174A8B]" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Métricas de Satisfação</h3>
+                  <p className="text-gray-600">Avalie automaticamente NPS, CES e CSAT das interações com seus clientes</p>
+                </div>
+                
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-blue-100 hover:shadow-md transition-shadow">
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                    <Brain className="w-6 h-6 text-[#174A8B]" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Processamento Inteligente</h3>
+                  <p className="text-gray-600">Processamento automático de áudio e texto com tecnologia de IA</p>
+                </div>
+              </div>
+            </div>
+          </main>
+          
+          {/* Footer */}
+          <footer className="bg-white border-t border-blue-100 mt-16">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+              <div className="text-center text-gray-500">
+                <p>&copy; 2025 Chista Dashboard. Todos os direitos reservados.</p>
+              </div>
+            </div>
+          </footer>
+        </div>
       ) : (
-        <header className="w-full bg-white/80 backdrop-blur-sm border-b border-blue-100 sticky top-0 z-10">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="py-4 flex justify-center">
-              <Image src="/logo.png" alt="Logo Chista" width={88} height={48} priority />
-            </div>
-          </div>
-        </header>
-      )}
-
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {!isAuthenticated ? (
-          // Landing Page para usuários não autenticados
-          <div className="text-center">
-            {/* Hero Section */}
-            <div className="mb-16">
-              <h1 className="text-4xl sm:text-6xl font-bold text-[#174A8B] mb-6">
-                Bem-vindo ao
-                <span className="block text-blue-600">Dashboard Chista</span>
-              </h1>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-                Descubra automaticamente a percepção dos seus clientes. Analise interações em áudio e texto para medir NPS, CES e CSAT de forma simples e eficiente.
-              </p>
-              
-              {/* CTA Button */}
-              <button 
-                onClick={() => loginWithRedirect()}
-                className="group bg-[#174A8B] hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center mx-auto space-x-2"
-              >
-                <span>Entrar no Dashboard</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
-
-            {/* Features Grid */}
-            <div className="grid md:grid-cols-3 gap-8 mb-16">
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-blue-100 hover:shadow-md transition-shadow">
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                  <Heart className="w-6 h-6 text-[#174A8B]" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Análise de Sentimentos</h3>
-                <p className="text-gray-600">Detecte emoções, satisfação e insatisfação nas interações dos clientes</p>
-              </div>
-              
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-blue-100 hover:shadow-md transition-shadow">
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                  <TrendingUp className="w-6 h-6 text-[#174A8B]" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Métricas de Satisfação</h3>
-                <p className="text-gray-600">Avalie automaticamente NPS, CES e CSAT das interações com seus clientes</p>
-              </div>
-              
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-blue-100 hover:shadow-md transition-shadow">
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                  <Brain className="w-6 h-6 text-[#174A8B]" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Processamento Inteligente</h3>
-                <p className="text-gray-600">Processamento automático de áudio e texto com tecnologia de IA</p>
-              </div>
-            </div>
-          </div>
-        ) : (
-          // Dashboard para usuários autenticados
-          <div className="max-w-4xl mx-auto">
+        // Dashboard para usuários autenticados - usando novo layout
+        <DashboardLayout user={user} logout={logout}>
+          <div className="p-6">
             {/* Welcome Section */}
             <div className="text-center mb-12">
               <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -166,17 +169,8 @@ export default function Home() {
               </button>
             </div>
           </div>
-        )}
-      </main>
-
-      {/* Footer */}
-      <footer className="bg-white border-t border-blue-100 mt-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center text-gray-500">
-            <p>&copy; 2025 Chista Dashboard. Todos os direitos reservados.</p>
-          </div>
-        </div>
-      </footer>
-    </div>
+        </DashboardLayout>
+      )}
+    </>
   );
 } 

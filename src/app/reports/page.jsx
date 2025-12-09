@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../contexts/AuthContext';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import NavMenu from '../../components/NavMenu';
+import DashboardLayout from '../../components/DashboardLayout';
 import { fetchInsights, fetchThemes, useLoadingState } from '../../lib/api';
 import { FileText, Calendar, TrendingUp, Zap, Heart, BarChart3, Download, Filter, ExternalLink } from 'lucide-react';
 import LocalizedDate from '../../components/LocalizedDate';
@@ -267,15 +267,8 @@ export default function ReportsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <NavMenu 
-        currentPage="reports" 
-        user={user}
-        isAuthenticated={isAuthenticated}
-        logout={logout}
-      />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <DashboardLayout user={user} logout={logout}>
+      <div className="p-6">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
@@ -812,6 +805,6 @@ export default function ReportsPage() {
           </div>
         </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
 }

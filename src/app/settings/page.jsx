@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import NavMenu from '../../components/NavMenu';
+import DashboardLayout from '../../components/DashboardLayout';
 import { Settings, Plus, Edit, Trash2, Tag, Bell, TrendingUp, Zap, Heart, BarChart3 } from 'lucide-react';
 import { fetchThemes, createTheme, updateTheme, deleteTheme, fetchAlerts, updateAlert, fetchQAScoreWeights, updateQAScoreWeight } from '../../lib/api';
 
@@ -214,17 +214,8 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <NavMenu 
-        currentPage="settings" 
-        user={user}
-        isAuthenticated={isAuthenticated}
-        logout={logout}
-      />
-
-      {/* Page Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <DashboardLayout user={user} logout={logout}>
+      <div className="p-6">
         {/* Page Title */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
@@ -680,7 +671,7 @@ export default function SettingsPage() {
           </div>
         )}
       </div>
-    </div>
+    </DashboardLayout>
   );
 }
 

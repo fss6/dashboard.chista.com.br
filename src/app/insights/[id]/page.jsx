@@ -8,7 +8,7 @@ import LocalizedDate from "../../../components/LocalizedDate";
 import WordCloudLibrary from "../../../components/WordCloudLibrary";
 import AudioPlayer from "../../../components/AudioPlayer";
 import TranscriptionSection from "../../../components/TranscriptionSection";
-import NavMenu from "../../../components/NavMenu";
+import DashboardLayout from "../../../components/DashboardLayout";
 import SatisfactionIndicators from "../../../components/SatisfactionIndicators";
 import { useAuth } from "../../../contexts/AuthContext";
 import { fetchInsightById, fetchInsightFileUrl, uploadFile, clearApiCache } from "../../../lib/api";
@@ -313,17 +313,8 @@ export default function InsightDetailsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <NavMenu 
-        currentPage="insights" 
-        user={user}
-        isAuthenticated={isAuthenticated}
-        logout={logout}
-      />
-
-      {/* Conteúdo Principal */}
-      <div className="max-w-7xl mx-auto">
+    <DashboardLayout user={user} logout={logout}>
+      <div className="p-6">
         {insight ? (
           <div className="px-4 py-6">
             <div className="bg-white shadow-lg rounded-lg">
@@ -528,8 +519,6 @@ export default function InsightDetailsPage() {
           </div>
         )}
       </div>
-
-
-    </div>
+    </DashboardLayout>
   );
 }

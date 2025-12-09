@@ -6,7 +6,7 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import LocalizedDate from "../../components/LocalizedDate";
 import UploadModal from "../../components/UploadModal";
 import TextModal from "../../components/TextModal";
-import NavMenu from "../../components/NavMenu";
+import DashboardLayout from "../../components/DashboardLayout";
 import { useAuth } from "../../contexts/AuthContext";
 import { fetchInsights, useLoadingState, uploadFile, clearApiCache, fetchThemes } from "../../lib/api";
 import { getStatusTranslation, getStatusColor } from "../../lib/utils";
@@ -21,8 +21,8 @@ export default function InsightsPage() {
   const [textModalOpen, setTextModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTheme, setSelectedTheme] = useState('');
-  const [sortBy, setSortBy] = useState('recent'); // recent, nps_high, nps_low, ces_high, ces_low, csat_high, csat_low
-  const [autoRefresh, setAutoRefresh] = useState(true); // Auto refresh enabled by default
+  const [sortBy, setSortBy] = useState('recent');
+  const [autoRefresh, setAutoRefresh] = useState(true);
   const [lastRefresh, setLastRefresh] = useState(null);
   const [showUpdateNotification, setShowUpdateNotification] = useState(false);
   const [previousInsightCount, setPreviousInsightCount] = useState(0);
@@ -34,17 +34,15 @@ export default function InsightsPage() {
     }
   }, [isLoading, isAuthenticated, loginWithRedirect]);
 
-  // Função para carregar insights
   const loadInsights = async () => {
     if (isAuthenticated && chistaApiToken) {
       setDataLoading(true);
       try {
         const data = await fetchInsights(chistaApiToken);
         
-        // Verificar se há novos insights
         if (insights && data.length > insights.length) {
           setShowUpdateNotification(true);
-          setTimeout(() => setShowUpdateNotification(false), 3000); // Esconder após 3 segundos
+          setTimeout(() => setShowUpdateNotification(false), 3000);
         }
         
         setPreviousInsightCount(insights?.length || 0);
@@ -59,7 +57,6 @@ export default function InsightsPage() {
     }
   };
 
-  // Função para carregar temas
   const loadThemes = async () => {
     if (isAuthenticated && chistaApiToken) {
       try {
@@ -71,74 +68,40 @@ export default function InsightsPage() {
     }
   };
 
-  // Carregamento inicial
   useEffect(() => {
     loadInsights();
     loadThemes();
   }, [isAuthenticated, chistaApiToken]);
 
-  // Auto refresh a cada 30 segundos
   useEffect(() => {
     if (!autoRefresh || !isAuthenticated || !chistaApiToken) return;
 
     const interval = setInterval(() => {
       console.log('Auto refreshing insights...');
       loadInsights();
-    }, 30000); // 30 segundos
+    }, 30000);
 
     return () => clearInterval(interval);
   }, [autoRefresh, isAuthenticated, chistaApiToken]);
 
-  // Usa o hook otimizado para gerenciar o estado de loading
   const { shouldShowLoading, message, subtitle } = useLoadingState(
-    isLoading,           // authLoading
-    dataLoading,         // dataLoading
-    !!insights,          // hasData
-    !!error              // hasError
+    isLoading,
+    dataLoading,
+    !!insights,
+    !!error
   );
-
-  const getInsightTypeIcon = (type) => {
-    switch (type?.toLowerCase()) {
-      case 'trend':
-        return <TrendingUp className="w-5 h-5 text-green-500" />;
-      case 'metric':
-        return <BarChart3 className="w-5 h-5 text-blue-500" />;
-      case 'analysis':
-        return <Filter className="w-5 h-5 text-purple-500" />;
-      default:
-        return <BarChart3 className="w-5 h-5 text-gray-500" />;
-    }
-  };
-
-  const getInsightTypeColor = (type) => {
-    switch (type?.toLowerCase()) {
-      case 'trend':
-        return 'bg-green-100 text-green-800';
-      case 'metric':
-        return 'bg-blue-100 text-blue-800';
-      case 'analysis':
-        return 'bg-purple-100 text-purple-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
-
-
 
   const handleFileUpload = async (file, description, onProgress, themeId = null) => {
     try {
       await uploadFile(file, description, chistaApiToken, onProgress, themeId);
-      // Clear cache and reload insights after successful upload
       clearApiCache();
       await loadInsights();
     } catch (error) {
-      throw error; // Re-throw to let modal handle the error display
+      throw error;
     }
   };
 
-  // Função para filtrar insights baseado no termo de busca e tema
   const filteredInsights = insights?.filter((insight) => {
-    // Filtro por termo de busca
     if (searchTerm) {
       const searchLower = searchTerm.toLowerCase();
       const title = (insight.title || insight.name || `Insight #${insight.id}`).toLowerCase();
@@ -157,7 +120,6 @@ export default function InsightsPage() {
       if (!matchesSearch) return false;
     }
     
-    // Filtro por tema
     if (selectedTheme) {
       return insight.theme_id === parseInt(selectedTheme);
     }
@@ -165,7 +127,6 @@ export default function InsightsPage() {
     return true;
   }) || [];
 
-  // Função para ordenar insights
   const sortedInsights = [...filteredInsights].sort((a, b) => {
     switch (sortBy) {
       case 'recent':
@@ -187,6 +148,19 @@ export default function InsightsPage() {
     }
   });
 
+  const getInsightTypeIcon = (type) => {
+    switch (type?.toLowerCase()) {
+      case 'trend':
+        return <TrendingUp className="w-5 h-5 text-green-500" />;
+      case 'metric':
+        return <BarChart3 className="w-5 h-5 text-blue-500" />;
+      case 'analysis':
+        return <Filter className="w-5 h-5 text-purple-500" />;
+      default:
+        return <BarChart3 className="w-5 h-5 text-gray-500" />;
+    }
+  };
+
   if (shouldShowLoading) {
     return (
       <LoadingSpinner 
@@ -196,45 +170,39 @@ export default function InsightsPage() {
     );
   }
 
+  if (!isAuthenticated) {
+    return null;
+  }
+
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        {/* Header */}
-        <NavMenu 
-          currentPage="insights" 
-          user={user}
-          isAuthenticated={isAuthenticated}
-          logout={logout}
-          showUploadButton={true}
-          onUploadClick={() => setUploadModalOpen(true)}
-        />
-
-        <div className="flex flex-col items-center justify-center min-h-[calc(100vh-5rem)] text-red-600">
+      <DashboardLayout 
+        user={user} 
+        logout={logout}
+        showUploadButton={true}
+        onUploadClick={() => setUploadModalOpen(true)}
+      >
+        <div className="p-6">
           <div className="text-center p-8">
             <div className="text-red-600 text-6xl mb-4">⚠️</div>
             <h1 className="text-2xl font-bold text-red-800 mb-2">Erro ao Carregar Insights</h1>
             <p className="text-red-600">{error}</p>
           </div>
         </div>
-      </div>
+      </DashboardLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <NavMenu 
-        currentPage="insights" 
-        user={user}
-        isAuthenticated={isAuthenticated}
-        logout={logout}
-      />
-
-      {/* Main content */}
-      <main className="w-full max-w-7xl mx-auto px-4 py-8">
+    <DashboardLayout 
+      user={user} 
+      logout={logout}
+      showUploadButton={true}
+      onUploadClick={() => setUploadModalOpen(true)}
+    >
+      <div className="p-6">
         {/* Header */}
         <div className="mb-8">
-          {/* Title and Description */}
           <div className="mb-6">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Insights</h1>
             <p className="text-gray-600">Transforme suas interações em insights valiosos para o seu negócio</p>
@@ -313,7 +281,6 @@ export default function InsightsPage() {
 
         {/* Filtros de Busca e Tema */}
         <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Campo de Busca */}
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <Search className="h-5 w-5 text-gray-400" />
@@ -327,7 +294,6 @@ export default function InsightsPage() {
             />
           </div>
           
-          {/* Filtro de Tema */}
           <div className="relative">
             <select
               value={selectedTheme}
@@ -597,7 +563,7 @@ export default function InsightsPage() {
             </p>
           </div>
         )}
-      </main>
+      </div>
 
       {/* Upload Modal */}
       <UploadModal
@@ -614,11 +580,11 @@ export default function InsightsPage() {
           onClose={() => setTextModalOpen(false)}
           onSuccess={() => {
             setTextModalOpen(false);
-            fetchInsights();
+            loadInsights();
           }}
           themes={themes}
         />
       )}
-    </div>
+    </DashboardLayout>
   );
 }
