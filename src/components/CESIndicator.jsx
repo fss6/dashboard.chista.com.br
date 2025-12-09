@@ -209,12 +209,12 @@ export default function CESIndicator() {
   return (
     <>
       {/* Explicação CES */}
-      <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-        <h3 className="text-sm font-semibold text-blue-900 mb-2 flex items-center gap-2">
+      <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+        <h3 className="text-sm font-semibold text-blue-900 dark:text-blue-300 mb-2 flex items-center gap-2">
           <MousePointer className="w-4 h-4" />
           Sobre o CES (Customer Effort Score)
         </h3>
-        <p className="text-sm text-blue-800 leading-relaxed">
+        <p className="text-sm text-blue-800 dark:text-blue-300 leading-relaxed">
           O CES mede o esforço que os clientes precisam fazer para interagir com sua empresa. 
           Quanto menor o esforço, maior a satisfação. Um CES baixo indica que os processos são 
           intuitivos e fáceis de usar, resultando em maior retenção e recomendação de clientes.
@@ -223,11 +223,11 @@ export default function CESIndicator() {
 
       {/* CES Score Card */}
       <div className="mb-8">
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">CES Score Atual</h2>
-              <p className="text-sm text-gray-600">Customer Effort Score</p>
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">CES Score Atual</h2>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Customer Effort Score</p>
             </div>
             <div className="text-right">
               <div className={`text-4xl font-bold ${cesScore >= 50 ? 'text-green-600' : cesScore >= 20 ? 'text-yellow-600' : 'text-red-600'}`}>
@@ -244,8 +244,8 @@ export default function CESIndicator() {
       {/* Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Gráfico de Pizza */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6">Distribuição CES</h3>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">Distribuição CES</h3>
           <div className="h-80 flex items-center justify-center">
             {/* Gráfico CSS - Fallback confiável */}
             <div className="flex flex-col items-center justify-center">
@@ -259,10 +259,10 @@ export default function CESIndicator() {
                 )`,
                 filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))'
               }}>
-                <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-90 rounded-full m-8">
+                <div className="absolute inset-0 flex items-center justify-center bg-white dark:bg-gray-800 bg-opacity-90 dark:bg-opacity-90 rounded-full m-8">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-gray-800">{calculateCES()}</div>
-                    <div className="text-sm text-gray-600">CES Score</div>
+                    <div className="text-2xl font-bold text-gray-800 dark:text-gray-100">{calculateCES()}</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">CES Score</div>
                   </div>
                 </div>
               </div>
@@ -276,7 +276,7 @@ export default function CESIndicator() {
                         className="w-3 h-3 rounded-full mr-1" 
                         style={{ backgroundColor: item.color }}
                       ></div>
-                      <span className="text-xs font-medium text-gray-700 truncate">{item.name}</span>
+                      <span className="text-xs font-medium text-gray-700 dark:text-gray-300 truncate">{item.name}</span>
                     </div>
                     <div className="text-lg font-bold" style={{ color: item.color }}>
                       {item.value}%
@@ -289,8 +289,8 @@ export default function CESIndicator() {
         </div>
 
         {/* Gráfico de Linha */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6">Evolução Mensal</h3>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">Evolução Mensal</h3>
           <div className="h-80">
             <Line data={lineChartData} options={lineChartOptions} />
           </div>
@@ -299,50 +299,50 @@ export default function CESIndicator() {
 
       {/* Insights Cards CES */}
       <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <div className="w-8 h-8 bg-green-100 rounded-md flex items-center justify-center">
+              <div className="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-md flex items-center justify-center">
                 <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
               </div>
             </div>
             <div className="ml-4">
-              <h4 className="text-lg font-semibold text-gray-900">Experiência Fácil</h4>
-              <p className="text-sm text-gray-600">75% acham fácil ou muito fácil</p>
+              <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Experiência Fácil</h4>
+              <p className="text-sm text-gray-600 dark:text-gray-400">75% acham fácil ou muito fácil</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <div className="w-8 h-8 bg-blue-100 rounded-md flex items-center justify-center">
+              <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-md flex items-center justify-center">
                 <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
             </div>
             <div className="ml-4">
-              <h4 className="text-lg font-semibold text-gray-900">Tendência Positiva</h4>
-              <p className="text-sm text-gray-600">+5% nos últimos 3 meses</p>
+              <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Tendência Positiva</h4>
+              <p className="text-sm text-gray-600 dark:text-gray-400">+5% nos últimos 3 meses</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <div className="w-8 h-8 bg-purple-100 rounded-md flex items-center justify-center">
+              <div className="w-8 h-8 bg-purple-100 dark:bg-purple-900/30 rounded-md flex items-center justify-center">
                 <svg className="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
                 </svg>
               </div>
             </div>
             <div className="ml-4">
-              <h4 className="text-lg font-semibold text-gray-900">Total de Interações</h4>
-              <p className="text-sm text-gray-600">2.156 interações este mês</p>
+              <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Total de Interações</h4>
+              <p className="text-sm text-gray-600 dark:text-gray-400">2.156 interações este mês</p>
             </div>
           </div>
         </div>

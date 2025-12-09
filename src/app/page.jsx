@@ -102,25 +102,25 @@ export default function Home() {
           <div className="p-6">
             {/* Welcome Section */}
             <div className="text-center mb-12">
-              <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Users className="w-10 h-10 text-[#174A8B]" />
+              <div className="w-20 h-20 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Users className="w-10 h-10 text-[#174A8B] dark:text-blue-400" />
               </div>
-              <h1 className="text-3xl font-bold text-[#174A8B] mb-4">
+              <h1 className="text-3xl font-bold text-[#174A8B] dark:text-blue-400 mb-4">
                 Bem-vindo, {user.name || user.email}!
               </h1>
-              <p className="text-gray-600 mb-8">
+              <p className="text-gray-600 dark:text-gray-400 mb-8">
                 Você está logado e pronto para analisar feedback de clientes.
               </p>
             </div>
 
             {/* Quick Actions */}
             <div className="grid md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-blue-100 hover:shadow-md transition-all duration-300 hover:border-blue-300">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2 flex items-center">
-                  <BarChart3 className="w-5 h-5 text-[#174A8B] mr-2" />
+              <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-blue-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 hover:border-blue-300 dark:hover:border-blue-600">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 flex items-center">
+                  <BarChart3 className="w-5 h-5 text-[#174A8B] dark:text-blue-400 mr-2" />
                   Ver Insights
                 </h3>
-                <p className="text-gray-600 mb-4">Analise feedback de clientes através de áudios e textos para gerar insights de NPS, CES e CSAT</p>
+                <p className="text-gray-600 dark:text-gray-400 mb-4">Analise feedback de clientes através de áudios e textos para gerar insights de NPS, CES e CSAT</p>
                 <button 
                   onClick={() => window.location.href = '/insights'}
                   className="bg-[#174A8B] hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
@@ -129,12 +129,12 @@ export default function Home() {
                 </button>
               </div>
 
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-blue-100 hover:shadow-md transition-all duration-300 hover:border-blue-300">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2 flex items-center">
-                  <BarChart3 className="w-5 h-5 text-green-600 mr-2" />
+              <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-blue-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 hover:border-blue-300 dark:hover:border-blue-600">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 flex items-center">
+                  <BarChart3 className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
                   Histórico
                 </h3>
-                <p className="text-gray-600 mb-4">Visualize histórico de análises e métricas de satisfação</p>
+                <p className="text-gray-600 dark:text-gray-400 mb-4">Visualize histórico de análises e métricas de satisfação</p>
                 <button 
                   onClick={() => window.location.href = '/dashboard'}
                   className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
@@ -143,15 +143,15 @@ export default function Home() {
                 </button>
               </div>
               
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-blue-100 hover:shadow-md transition-all duration-300 hover:border-blue-300">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2 flex items-center">
-                  <Shield className="w-5 h-5 text-[#174A8B] mr-2" />
+              <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-blue-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 hover:border-blue-300 dark:hover:border-blue-600">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 flex items-center">
+                  <Shield className="w-5 h-5 text-[#174A8B] dark:text-blue-400 mr-2" />
                   Informações da Conta
                 </h3>
-                <p className="text-gray-600 mb-4">Visualize detalhes da sua autenticação</p>
-                <div className="bg-gray-50 p-3 rounded-lg">
-                  <p className="text-xs text-gray-500 mb-1">Token de API:</p>
-                  <p className="text-sm font-mono text-gray-700 break-all">
+                <p className="text-gray-600 dark:text-gray-400 mb-4">Visualize detalhes da sua autenticação</p>
+                <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Token de API:</p>
+                  <p className="text-sm font-mono text-gray-700 dark:text-gray-300 break-all">
                     {chistaApiToken ? `${chistaApiToken.substring(0, 20)}...` : 'Não encontrado'}
                     {chistaApiToken}
                   </p>
@@ -163,7 +163,7 @@ export default function Home() {
             <div className="text-center">
               <button 
                 onClick={() => logout({ returnTo: window.location.origin })}
-                className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-medium transition-colors"
+                className="bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 px-6 py-3 rounded-lg font-medium transition-colors"
               >
                 Sair da Conta
               </button>

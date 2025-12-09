@@ -209,12 +209,12 @@ export default function CSATIndicator() {
   return (
     <>
       {/* Explicação CSAT */}
-      <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-        <h3 className="text-sm font-semibold text-blue-900 mb-2 flex items-center gap-2">
+      <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+        <h3 className="text-sm font-semibold text-blue-900 dark:text-blue-300 mb-2 flex items-center gap-2">
           <Heart className="w-4 h-4" />
           Sobre o CSAT (Customer Satisfaction Score)
         </h3>
-        <p className="text-sm text-blue-800 leading-relaxed">
+        <p className="text-sm text-blue-800 dark:text-blue-300 leading-relaxed">
           O CSAT mede a satisfação geral dos clientes com sua empresa, produto ou serviço. 
           É calculado pela diferença entre clientes satisfeitos e insatisfeitos. 
           Um CSAT alto indica que os clientes estão felizes e propensos a continuar usando seus serviços.
@@ -223,11 +223,11 @@ export default function CSATIndicator() {
 
       {/* CSAT Score Card */}
       <div className="mb-8">
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">CSAT Score Atual</h2>
-              <p className="text-sm text-gray-600">Customer Satisfaction Score</p>
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">CSAT Score Atual</h2>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Customer Satisfaction Score</p>
             </div>
             <div className="text-right">
               <div className={`text-4xl font-bold ${csatScore >= 70 ? 'text-green-600' : csatScore >= 40 ? 'text-yellow-600' : 'text-red-600'}`}>
@@ -244,8 +244,8 @@ export default function CSATIndicator() {
       {/* Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Gráfico de Pizza */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6">Distribuição CSAT</h3>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">Distribuição CSAT</h3>
           <div className="h-80 flex items-center justify-center">
             {/* Gráfico CSS - Fallback confiável */}
             <div className="flex flex-col items-center justify-center">
@@ -259,10 +259,10 @@ export default function CSATIndicator() {
                 )`,
                 filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))'
               }}>
-                <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-90 rounded-full m-8">
+                <div className="absolute inset-0 flex items-center justify-center bg-white dark:bg-gray-800 bg-opacity-90 dark:bg-opacity-90 rounded-full m-8">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-gray-800">{calculateCSAT()}</div>
-                    <div className="text-sm text-gray-600">CSAT Score</div>
+                    <div className="text-2xl font-bold text-gray-800 dark:text-gray-100">{calculateCSAT()}</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">CSAT Score</div>
                   </div>
                 </div>
               </div>
@@ -276,7 +276,7 @@ export default function CSATIndicator() {
                         className="w-3 h-3 rounded-full mr-1" 
                         style={{ backgroundColor: item.color }}
                       ></div>
-                      <span className="text-xs font-medium text-gray-700 truncate">{item.name}</span>
+                      <span className="text-xs font-medium text-gray-700 dark:text-gray-300 truncate">{item.name}</span>
                     </div>
                     <div className="text-lg font-bold" style={{ color: item.color }}>
                       {item.value}%
@@ -289,8 +289,8 @@ export default function CSATIndicator() {
         </div>
 
         {/* Gráfico de Linha */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6">Evolução Mensal</h3>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">Evolução Mensal</h3>
           <div className="h-80">
             <Line data={lineChartData} options={lineChartOptions} />
           </div>
@@ -299,48 +299,48 @@ export default function CSATIndicator() {
 
       {/* Insights Cards CSAT */}
       <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <div className="w-8 h-8 bg-green-100 rounded-md flex items-center justify-center">
+              <div className="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-md flex items-center justify-center">
                 <Heart className="w-5 h-5 text-green-600" />
               </div>
             </div>
             <div className="ml-4">
-              <h4 className="text-lg font-semibold text-gray-900">Alta Satisfação</h4>
-              <p className="text-sm text-gray-600">85% dos clientes satisfeitos</p>
+              <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Alta Satisfação</h4>
+              <p className="text-sm text-gray-600 dark:text-gray-400">85% dos clientes satisfeitos</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <div className="w-8 h-8 bg-blue-100 rounded-md flex items-center justify-center">
+              <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-md flex items-center justify-center">
                 <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
             </div>
             <div className="ml-4">
-              <h4 className="text-lg font-semibold text-gray-900">Tendência Positiva</h4>
-              <p className="text-sm text-gray-600">+6% nos últimos 3 meses</p>
+              <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Tendência Positiva</h4>
+              <p className="text-sm text-gray-600 dark:text-gray-400">+6% nos últimos 3 meses</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <div className="w-8 h-8 bg-purple-100 rounded-md flex items-center justify-center">
+              <div className="w-8 h-8 bg-purple-100 dark:bg-purple-900/30 rounded-md flex items-center justify-center">
                 <svg className="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
                 </svg>
               </div>
             </div>
             <div className="ml-4">
-              <h4 className="text-lg font-semibold text-gray-900">Total de Avaliações</h4>
-              <p className="text-sm text-gray-600">3.421 avaliações este mês</p>
+              <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Total de Avaliações</h4>
+              <p className="text-sm text-gray-600 dark:text-gray-400">3.421 avaliações este mês</p>
             </div>
           </div>
         </div>

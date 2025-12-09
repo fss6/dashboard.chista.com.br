@@ -26,9 +26,9 @@ export default function SatisfactionIndicators({ indicators }) {
   }
 
   return (
-    <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-6">
-      <div className="bg-white rounded-lg overflow-hidden shadow-sm">
-        <div className="grid grid-cols-1 md:grid-cols-3 divide-x divide-green-200">
+    <div className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-lg p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm border border-gray-200 dark:border-gray-700">
+        <div className="grid grid-cols-1 md:grid-cols-3 divide-x divide-green-200 dark:divide-gray-700">
           
           {/* NPS - Net Promoter Score */}
           <div className="p-6">
@@ -39,14 +39,14 @@ export default function SatisfactionIndicators({ indicators }) {
                    <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                  </div>
-                 <span className="text-2xl font-bold text-gray-900">NPS</span>
+                 <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">NPS</span>
                </div>
-               <p className="text-sm text-gray-600">Net Promoter Score</p>
+               <p className="text-sm text-gray-600 dark:text-gray-400">Net Promoter Score</p>
              </div>
             
             <div className="space-y-4">
               <div className="text-center">
-                <p className="text-xs text-gray-500 mb-2">De 0 a 10, o quanto você recomendaria a empresa para um amigo ou familiar?</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">De 0 a 10, o quanto você recomendaria a empresa para um amigo ou familiar?</p>
               </div>
               
                              {parsedIndicators.nps && (
@@ -60,7 +60,7 @@ export default function SatisfactionIndicators({ indicators }) {
                    }`}>
                      {parsedIndicators.nps.pontuacao}/10
                    </div>
-                   <div className="text-sm font-medium text-gray-700 mb-3">
+                   <div className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
                      {parsedIndicators.nps.pontuacao >= 9 
                        ? 'Promotor' 
                        : parsedIndicators.nps.pontuacao >= 7 
@@ -68,7 +68,7 @@ export default function SatisfactionIndicators({ indicators }) {
                          : 'Detrator'
                      }
                    </div>
-                  <p className="text-sm text-gray-600 leading-relaxed">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                     {parsedIndicators.nps.justificativa}
                   </p>
                 </div>
@@ -85,14 +85,14 @@ export default function SatisfactionIndicators({ indicators }) {
                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                    </svg>
                  </div>
-                 <span className="text-2xl font-bold text-gray-900">CES</span>
+                 <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">CES</span>
                </div>
-               <p className="text-sm text-gray-600">Customer Effort Score</p>
+               <p className="text-sm text-gray-600 dark:text-gray-400">Customer Effort Score</p>
              </div>
             
             <div className="space-y-4">
                              <div className="text-center">
-                 <p className="text-xs text-gray-500 mb-2">Mede o esforço necessário para resolver uma situação ou completar uma tarefa.</p>
+                 <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Mede o esforço necessário para resolver uma situação ou completar uma tarefa.</p>
                </div>
               
                              {parsedIndicators.ces && (
@@ -106,7 +106,7 @@ export default function SatisfactionIndicators({ indicators }) {
                    }`}>
                      {parsedIndicators.ces.pontuacao}/7
                    </div>
-                   <div className="text-sm font-medium text-gray-700 mb-3">
+                   <div className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
                      {parsedIndicators.ces.pontuacao === 7 
                        ? 'Muito Fácil' 
                        : parsedIndicators.ces.pontuacao >= 5 
@@ -116,7 +116,7 @@ export default function SatisfactionIndicators({ indicators }) {
                            : 'Difícil'
                      }
                    </div>
-                  <p className="text-sm text-gray-600 leading-relaxed">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                     {parsedIndicators.ces.justificativa}
                   </p>
                 </div>
@@ -140,14 +140,14 @@ export default function SatisfactionIndicators({ indicators }) {
                      </svg>
                    </div>
                  </div>
-                 <span className="text-2xl font-bold text-gray-900">CSAT</span>
+                 <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">CSAT</span>
                </div>
-               <p className="text-sm text-gray-600">Customer Satisfaction Score</p>
+               <p className="text-sm text-gray-600 dark:text-gray-400">Customer Satisfaction Score</p>
              </div>
             
             <div className="space-y-4">
                              <div className="text-center">
-                 <p className="text-xs text-gray-500 mb-2">Mede o nível de satisfação geral com a experiência do cliente.</p>
+                 <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Mede o nível de satisfação geral com a experiência do cliente.</p>
                </div>
               
                              {parsedIndicators.csat && (
@@ -161,7 +161,7 @@ export default function SatisfactionIndicators({ indicators }) {
                    }`}>
                      {parsedIndicators.csat.pontuacao}/5
                    </div>
-                   <div className="text-sm font-medium text-gray-700 mb-3">
+                   <div className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
                      {parsedIndicators.csat.pontuacao === 5 
                        ? 'Muito Satisfeito' 
                        : parsedIndicators.csat.pontuacao === 4 
@@ -173,7 +173,7 @@ export default function SatisfactionIndicators({ indicators }) {
                              : 'Muito Insatisfeito'
                      }
                    </div>
-                  <p className="text-sm text-gray-600 leading-relaxed">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                     {parsedIndicators.csat.justificativa}
                   </p>
                 </div>

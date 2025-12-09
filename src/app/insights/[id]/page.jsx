@@ -28,7 +28,7 @@ export default function InsightDetailsPage() {
     // Resumo da conversa
     if (data.resume) {
       elements.push(
-        <div key={elementIndex++} className="font-bold text-gray-900 text-lg mt-6 mb-3 first:mt-0">
+        <div key={elementIndex++} className="font-bold text-gray-900 dark:text-gray-100 text-lg mt-6 mb-3 first:mt-0">
           Resumo da conversa
         </div>
       );
@@ -46,21 +46,21 @@ export default function InsightDetailsPage() {
       // Sentimento geral
       if (sentiment.sentimento) {
         elements.push(
-          <div key={elementIndex++} className="font-bold text-gray-900 text-lg mt-6 mb-3">
+          <div key={elementIndex++} className="font-bold text-gray-900 dark:text-gray-100 text-lg mt-6 mb-3">
             Sentimento geral
           </div>
         );
         elements.push(
           <div key={elementIndex++} className="mb-1 leading-relaxed">
-            <span className="font-semibold text-gray-800">Sentimento: </span>
-            <span className="text-gray-700">{sentiment.sentimento}</span>
+            <span className="font-semibold text-gray-800 dark:text-gray-200">Sentimento: </span>
+            <span className="text-gray-700 dark:text-gray-300">{sentiment.sentimento}</span>
           </div>
         );
         if (sentiment.justificativa) {
           elements.push(
             <div key={elementIndex++} className="mb-1 leading-relaxed">
-              <span className="font-semibold text-gray-800">Justificativa: </span>
-              <span className="text-gray-700">{sentiment.justificativa}</span>
+              <span className="font-semibold text-gray-800 dark:text-gray-200">Justificativa: </span>
+              <span className="text-gray-700 dark:text-gray-300">{sentiment.justificativa}</span>
             </div>
           );
         }
@@ -69,7 +69,7 @@ export default function InsightDetailsPage() {
       // Pontos-chave
       if (sentiment.pontos_chave && sentiment.pontos_chave.length > 0) {
         elements.push(
-          <div key={elementIndex++} className="font-bold text-gray-900 text-lg mt-6 mb-3">
+          <div key={elementIndex++} className="font-bold text-gray-900 dark:text-gray-100 text-lg mt-6 mb-3">
             Pontos-chave
           </div>
         );
@@ -86,7 +86,7 @@ export default function InsightDetailsPage() {
       if (sentiment.licoes_aprendidas) {
         const licoes = sentiment.licoes_aprendidas;
         elements.push(
-          <div key={elementIndex++} className="font-bold text-gray-900 text-lg mt-6 mb-3">
+          <div key={elementIndex++} className="font-bold text-gray-900 dark:text-gray-100 text-lg mt-6 mb-3">
             Lições Aprendidas
           </div>
         );
@@ -95,7 +95,7 @@ export default function InsightDetailsPage() {
         if (licoes.pontos_fortes && licoes.pontos_fortes.length > 0) {
           elements.push(
             <div key={elementIndex++} className="mt-4 mb-2">
-              <span className="font-semibold text-gray-800">Pontos fortes identificados na conversa:</span>
+              <span className="font-semibold text-gray-800 dark:text-gray-200">Pontos fortes identificados na conversa:</span>
             </div>
           );
           licoes.pontos_fortes.forEach((ponto, index) => {
@@ -111,7 +111,7 @@ export default function InsightDetailsPage() {
         if (licoes.oportunidades_melhoria && licoes.oportunidades_melhoria.length > 0) {
           elements.push(
             <div key={elementIndex++} className="mt-4 mb-2">
-              <span className="font-semibold text-gray-800">Oportunidades de melhoria:</span>
+              <span className="font-semibold text-gray-800 dark:text-gray-200">Oportunidades de melhoria:</span>
             </div>
           );
           licoes.oportunidades_melhoria.forEach((oportunidade, index) => {
@@ -127,7 +127,7 @@ export default function InsightDetailsPage() {
         if (licoes.praticas_funcionaram && licoes.praticas_funcionaram.length > 0) {
           elements.push(
             <div key={elementIndex++} className="mt-4 mb-2">
-              <span className="font-semibold text-gray-800">Práticas que funcionaram bem:</span>
+              <span className="font-semibold text-gray-800 dark:text-gray-200">Práticas que funcionaram bem:</span>
             </div>
           );
           licoes.praticas_funcionaram.forEach((pratica, index) => {
@@ -143,7 +143,7 @@ export default function InsightDetailsPage() {
         if (licoes.aspectos_aprimorar && licoes.aspectos_aprimorar.length > 0) {
           elements.push(
             <div key={elementIndex++} className="mt-4 mb-2">
-              <span className="font-semibold text-gray-800">Aspectos que poderiam ser aprimorados:</span>
+              <span className="font-semibold text-gray-800 dark:text-gray-200">Aspectos que poderiam ser aprimorados:</span>
             </div>
           );
           licoes.aspectos_aprimorar.forEach((aspecto, index) => {
@@ -172,7 +172,7 @@ export default function InsightDetailsPage() {
     // Score geral
     if (qaScoreData.total_score !== undefined) {
       elements.push(
-        <div key={elementIndex++} className="font-bold text-gray-900 text-lg mt-6 mb-3 first:mt-0">
+        <div key={elementIndex++} className="font-bold text-gray-900 dark:text-gray-100 text-lg mt-6 mb-3 first:mt-0">
           QA Score Geral
         </div>
       );
@@ -190,7 +190,7 @@ export default function InsightDetailsPage() {
     // Avaliações por bloco
     if (qaScoreData.evaluations && qaScoreData.evaluations.length > 0) {
       elements.push(
-        <div key={elementIndex++} className="font-bold text-gray-900 text-lg mt-6 mb-3">
+        <div key={elementIndex++} className="font-bold text-gray-900 dark:text-gray-100 text-lg mt-6 mb-3">
           Avaliações por Critério
         </div>
       );
@@ -200,8 +200,8 @@ export default function InsightDetailsPage() {
           <div key={elementIndex++} className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
             <div className="flex items-start justify-between mb-3">
               <div className="flex-1">
-                <h4 className="font-semibold text-gray-900 mb-1">{evaluation.block_name}</h4>
-                <p className="text-sm text-gray-600 mb-2">{evaluation.block_description}</p>
+                <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">{evaluation.block_name}</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{evaluation.block_description}</p>
               </div>
               <div className="flex items-center gap-2 ml-4">
                 <span className="text-lg font-bold text-[#174A8B]">{evaluation.score}/5</span>
@@ -210,8 +210,8 @@ export default function InsightDetailsPage() {
             </div>
             
             {evaluation.justification && (
-              <div className="mt-3 p-3 bg-white rounded border-l-4 border-[#174A8B]">
-                <p className="text-sm text-gray-700">
+              <div className="mt-3 p-3 bg-white dark:bg-gray-900 rounded border-l-4 border-[#174A8B] dark:border-blue-400">
+                <p className="text-sm text-gray-700 dark:text-gray-300">
                   <span className="font-medium">Justificativa:</span> {evaluation.justification}
                 </p>
               </div>
@@ -317,9 +317,9 @@ export default function InsightDetailsPage() {
       <div className="p-6">
         {insight ? (
           <div className="px-4 py-6">
-            <div className="bg-white shadow-lg rounded-lg">
+            <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg border border-gray-200 dark:border-gray-700">
             {/* Header do Insight */}
-            <div className="border-b border-gray-200">
+            <div className="border-b border-gray-200 dark:border-gray-700">
               <div className="p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
@@ -332,7 +332,7 @@ export default function InsightDetailsPage() {
                       >
                         <ArrowLeft className="w-4 h-4" />
                       </button>
-                      <h2 className="text-2xl font-bold text-gray-900">
+                      <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                         Insight #{insight.id}
                       </h2>
                       {insight.status && (
@@ -343,10 +343,10 @@ export default function InsightDetailsPage() {
                     </div>
                     
                     {insight.description && (
-                      <p className="text-gray-600 mb-4">{insight.description}</p>
+                      <p className="text-gray-600 dark:text-gray-400 mb-4">{insight.description}</p>
                     )}
                     
-                    <div className="flex items-center space-x-6 text-sm text-gray-500">
+                    <div className="flex items-center space-x-6 text-sm text-gray-500 dark:text-gray-400">
                       {insight.created_at && (
                         <div className="flex items-center space-x-1">
                           <Calendar className="w-4 h-4" />
@@ -363,16 +363,16 @@ export default function InsightDetailsPage() {
             <div className="p-6 space-y-8">
               {/* 1. Estatísticas de Upload */}
               <div id="upload-stats">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                  <HardDrive className="w-5 h-5 mr-2 text-[#174A8B]" />
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
+                  <HardDrive className="w-5 h-5 mr-2 text-[#174A8B] dark:text-blue-400" />
                   Estatísticas de Upload
                 </h3>
-                <div className="bg-gray-50 rounded-lg p-4">
+                <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
                   {insight.upload_stats ? (
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       {insight.upload_stats.file_name && (
                         <div>
-                          <div className="text-sm text-gray-500">Nome do Arquivo</div>
+                          <div className="text-sm text-gray-500 dark:text-gray-400">Nome do Arquivo</div>
                           <div className="text-sm font-medium text-gray-900 truncate" title={insight.upload_stats.file_name}>
                             {insight.upload_stats.file_name}
                           </div>
@@ -380,22 +380,22 @@ export default function InsightDetailsPage() {
                       )}
                       {insight.upload_stats.file_size && (
                         <div>
-                          <div className="text-sm text-gray-500">Tamanho</div>
-                          <div className="text-sm font-medium text-gray-900">
+                          <div className="text-sm text-gray-500 dark:text-gray-400">Tamanho</div>
+                          <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
                             {(insight.upload_stats.file_size / (1024 * 1024)).toFixed(2)} MB
                           </div>
                         </div>
                       )}
                       {insight.upload_stats.file_type && (
                         <div>
-                          <div className="text-sm text-gray-500">Tipo</div>
-                          <div className="text-sm font-medium text-gray-900">{insight.upload_stats.file_type}</div>
+                          <div className="text-sm text-gray-500 dark:text-gray-400">Tipo</div>
+                          <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{insight.upload_stats.file_type}</div>
                         </div>
                       )}
                       {insight.upload_stats.upload_duration_ms && (
                         <div>
-                          <div className="text-sm text-gray-500">Duração do Upload</div>
-                          <div className="text-sm font-medium text-gray-900">
+                          <div className="text-sm text-gray-500 dark:text-gray-400">Duração do Upload</div>
+                          <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
                             {(insight.upload_stats.upload_duration_ms / 1000).toFixed(1)}s
                           </div>
                         </div>
@@ -409,8 +409,8 @@ export default function InsightDetailsPage() {
 
               {/* 2. Player de Áudio */}
               <div id="audio-player">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                  <Volume2 className="w-5 h-5 mr-2 text-[#174A8B]" />
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
+                  <Volume2 className="w-5 h-5 mr-2 text-[#174A8B] dark:text-blue-400" />
                   Áudio Original
                 </h3>
                 <AudioPlayer 
@@ -427,13 +427,13 @@ export default function InsightDetailsPage() {
                {/* 5. Indicadores de Satisfação */}
                <div id="indicadores-satisfacao">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold text-gray-900 flex items-center">
-                    <Target className="w-5 h-5 mr-2 text-[#174A8B]" />
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 flex items-center">
+                    <Target className="w-5 h-5 mr-2 text-[#174A8B] dark:text-blue-400" />
                     Indicadores de Satisfação
                   </h3>
                   <PDFDownloadButton insight={insight} insightId={insightId} />
                 </div>
-                <div className="bg-white border border-gray-200 rounded-lg p-6">
+                <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
                   <SatisfactionIndicators 
                     indicators={insight?.insight?.sentiment_analysis?.indicadores_satisfacao}
                   />
@@ -443,13 +443,13 @@ export default function InsightDetailsPage() {
               {/* 6. QA Score */}
               {insight?.qa_score && (
                 <div id="qa-score">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
                     QA Score
                   </h3>
-                  <div className="bg-white border border-gray-200 rounded-lg p-6">
+                  <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
                     {insight.qa_score_summary ? (
                       <div className="prose max-w-none">
-                        <div className="text-gray-700 leading-relaxed">
+                        <div className="text-gray-700 dark:text-gray-300 leading-relaxed">
                           {formatQAScore(insight.qa_score_summary)}
                         </div>
                       </div>
@@ -466,14 +466,14 @@ export default function InsightDetailsPage() {
 
               {/* 4. Resumo e Insights */}
               <div id="resumo-ia">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                  <Brain className="w-5 h-5 mr-2 text-[#174A8B]" />
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
+                  <Brain className="w-5 h-5 mr-2 text-[#174A8B] dark:text-blue-400" />
                   Resumo e Insights
                 </h3>
-                <div className="bg-white border border-gray-200 rounded-lg p-6">
+                <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
                   {insight?.insight?.as_structured_json ? (
                     <div className="prose max-w-none">
-                      <div className="text-gray-700 leading-relaxed">
+                      <div className="text-gray-700 dark:text-gray-300 leading-relaxed">
                         {formatStructuredData(insight.insight.as_structured_json)}
                       </div>
                     </div>

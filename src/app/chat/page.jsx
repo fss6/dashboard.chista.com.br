@@ -327,8 +327,8 @@ const ChatPage = () => {
         {/* Page Title */}
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Chat com Chista AI</h1>
-            <p className="text-gray-600">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">Chat com Chista AI</h1>
+            <p className="text-gray-600 dark:text-gray-400">
               Faça perguntas e obtenha respostas inteligentes
             </p>
           </div>
@@ -353,8 +353,8 @@ const ChatPage = () => {
         <div className="flex gap-6">
           {/* Sidebar - Histórico de Conversas */}
           <div className={`${sidebarOpen ? 'block' : 'hidden'} lg:block w-80 flex-shrink-0`}>
-            <div className="bg-white rounded-lg shadow-sm border p-4">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
                 <MessageSquare className="w-5 h-5 mr-2" />
                 Conversas
               </h3>
@@ -368,15 +368,15 @@ const ChatPage = () => {
                       key={conversation.id}
                       className={`p-3 rounded-lg cursor-pointer transition-colors group ${
                         currentConversationId === conversation.id
-                          ? 'bg-[#174A8B] text-white'
-                          : 'bg-gray-50 hover:bg-gray-100'
+                          ? 'bg-[#174A8B] dark:bg-blue-600 text-white'
+                          : 'bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700'
                       }`}
                       onClick={() => loadConversation(conversation.id)}
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1 min-w-0">
                           <p className={`text-sm font-medium truncate ${
-                            currentConversationId === conversation.id ? 'text-white' : 'text-gray-900'
+                            currentConversationId === conversation.id ? 'text-white' : 'text-gray-900 dark:text-gray-100'
                           }`}>
                             {conversation.title}
                           </p>
@@ -411,7 +411,7 @@ const ChatPage = () => {
           </div>
 
           {/* Chat Container */}
-          <div className="flex-1 bg-white rounded-lg shadow-sm border h-[70vh] flex flex-col">
+          <div className="flex-1 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 h-[70vh] flex flex-col">
           {/* Messages Area */}
           <div className="flex-1 overflow-y-auto p-6 space-y-4">
             {messages.map((message) => (
@@ -443,8 +443,8 @@ const ChatPage = () => {
                   <div
                     className={`px-4 py-2 rounded-lg ${
                       message.role === 'user'
-                        ? 'bg-[#174A8B] text-white'
-                        : 'bg-gray-100 text-gray-900'
+                        ? 'bg-[#174A8B] dark:bg-blue-600 text-white'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100'
                     }`}
                   >
                     <div className="text-sm prose prose-sm max-w-none prose-invert">
@@ -484,7 +484,7 @@ const ChatPage = () => {
                   <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-100 text-gray-600 mr-3 flex items-center justify-center">
                     <Bot className="w-4 h-4" />
                   </div>
-                  <div className="px-4 py-2 rounded-lg bg-gray-100 text-gray-900">
+                  <div className="px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                     <div className="flex items-center space-x-2">
                       <Loader2 className="w-4 h-4 animate-spin" />
                       <span className="text-sm">Chista AI está pensando...</span>
@@ -498,7 +498,7 @@ const ChatPage = () => {
           </div>
 
           {/* Input Area */}
-          <div className="border-t bg-gray-50 p-4 rounded-b-lg">
+          <div className="border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-4 rounded-b-lg">
             <form onSubmit={sendMessage} className="flex space-x-4">
               <div className="flex-1">
                 <input
@@ -506,7 +506,7 @@ const ChatPage = () => {
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Digite sua mensagem aqui..."
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#174A8B] focus:border-transparent resize-none"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 rounded-lg focus:ring-2 focus:ring-[#174A8B] focus:border-transparent resize-none"
                   disabled={isLoadingResponse}
                 />
               </div>

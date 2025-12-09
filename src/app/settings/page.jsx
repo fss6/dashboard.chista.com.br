@@ -219,10 +219,10 @@ export default function SettingsPage() {
         {/* Page Title */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <Settings className="w-8 h-8 text-[#174A8B]" />
-            <h1 className="text-3xl font-bold text-gray-900">Configurações</h1>
+            <Settings className="w-8 h-8 text-[#174A8B] dark:text-blue-400" />
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Configurações</h1>
           </div>
-          <p className="text-gray-600">Gerencie os temas e configurações do sistema</p>
+          <p className="text-gray-600 dark:text-gray-400">Gerencie os temas e configurações do sistema</p>
         </div>
 
         {/* Error Message */}
@@ -282,12 +282,12 @@ export default function SettingsPage() {
         {activeTab === 'themes' && (
           <>
             {/* Themes Section */}
-        <div className="bg-white shadow rounded-lg">
-          <div className="px-6 py-4 border-b border-gray-200">
+        <div className="bg-white dark:bg-gray-800 shadow rounded-lg border border-gray-200 dark:border-gray-700">
+          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Tag className="w-5 h-5 text-[#174A8B]" />
-              <h2 className="text-lg font-medium text-gray-900">Temas</h2>
+              <Tag className="w-5 h-5 text-[#174A8B] dark:text-blue-400" />
+              <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">Temas</h2>
             </div>
               {isSuperAdmin && (
                 <button
@@ -326,11 +326,11 @@ export default function SettingsPage() {
             ) : (
               <div className="grid gap-4">
                 {themes.map((theme) => (
-                  <div key={theme.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                  <div key={theme.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow bg-gray-50 dark:bg-gray-900">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <h3 className="text-lg font-medium text-gray-900">{theme.name}</h3>
-                        <p className="mt-2 text-sm text-gray-600 line-clamp-3">{theme.persona}</p>
+                        <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">{theme.name}</h3>
+                        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 line-clamp-3">{theme.persona}</p>
                       </div>
                       {isSuperAdmin && (
                         <div className="ml-4 flex items-center gap-2">
@@ -363,26 +363,26 @@ export default function SettingsPage() {
         {activeTab === 'alerts' && (
           <>
             {/* Alerts Section */}
-        <div className="bg-white shadow rounded-lg">
-          <div className="px-6 py-4 border-b border-gray-200">
+        <div className="bg-white dark:bg-gray-800 shadow rounded-lg border border-gray-200 dark:border-gray-700">
+          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <Bell className="w-5 h-5 text-[#174A8B]" />
-                <h2 className="text-lg font-medium text-gray-900">Alertas</h2>
+                <Bell className="w-5 h-5 text-[#174A8B] dark:text-blue-400" />
+                <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">Alertas</h2>
               </div>
             </div>
           </div>
 
           <div className="p-6">
             {/* Explicação sobre alertas */}
-            <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
               <div className="flex items-start">
                 <div className="flex-shrink-0">
-                  <Bell className="w-5 h-5 text-blue-400" />
+                  <Bell className="w-5 h-5 text-blue-400 dark:text-blue-300" />
                 </div>
                 <div className="ml-3">
-                  <h3 className="text-sm font-medium text-blue-800">Como funcionam os alertas</h3>
-                  <div className="mt-2 text-sm text-blue-700">
+                  <h3 className="text-sm font-medium text-blue-800 dark:text-blue-300">Como funcionam os alertas</h3>
+                  <div className="mt-2 text-sm text-blue-700 dark:text-blue-300">
                     <p>Quando ativo, o alerta será disparado quando o valor do indicador for <strong>menor</strong> que o valor definido.</p>
                     <p className="mt-1">Por exemplo: se o alerta de NPS estiver configurado para 7, você será notificado quando o NPS for menor que 7.</p>
                   </div>
@@ -399,12 +399,12 @@ export default function SettingsPage() {
             ) : (
               <div className="grid gap-4">
                 {alerts.map((alert) => (
-                  <div key={alert.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                  <div key={alert.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow bg-gray-50 dark:bg-gray-900">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
                           {getIndicatorIcon(alert.indicador)}
-                          <h3 className="text-lg font-medium text-gray-900">{alert.indicador}</h3>
+                          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">{alert.indicador}</h3>
                           <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
                             alert.active 
                               ? 'bg-green-100 text-green-800' 
@@ -413,7 +413,7 @@ export default function SettingsPage() {
                             {alert.active ? 'Ativo' : 'Inativo'}
                           </span>
                         </div>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
                           Valor do alerta: <span className="font-medium">{alert.value}</span>
                         </p>
                       </div>
@@ -439,26 +439,26 @@ export default function SettingsPage() {
         {activeTab === 'qa-score' && (
           <>
             {/* QA Score Weights Section */}
-            <div className="bg-white shadow rounded-lg">
-              <div className="px-6 py-4 border-b border-gray-200">
+            <div className="bg-white dark:bg-gray-800 shadow rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <BarChart3 className="w-5 h-5 text-[#174A8B]" />
-                    <h2 className="text-lg font-medium text-gray-900">QA Score</h2>
+                    <BarChart3 className="w-5 h-5 text-[#174A8B] dark:text-blue-400" />
+                    <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">QA Score</h2>
                   </div>
                 </div>
               </div>
 
               <div className="p-6">
                 {/* Explicação sobre QA Score */}
-                <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
                   <div className="flex items-start">
                     <div className="flex-shrink-0">
-                      <BarChart3 className="w-5 h-5 text-green-400" />
+                      <BarChart3 className="w-5 h-5 text-green-400 dark:text-green-300" />
                     </div>
                     <div className="ml-3">
-                      <h3 className="text-sm font-medium text-green-800">Pesos Personalizáveis</h3>
-                      <div className="mt-2 text-sm text-green-700">
+                      <h3 className="text-sm font-medium text-green-800 dark:text-green-300">Pesos Personalizáveis</h3>
+                      <div className="mt-2 text-sm text-green-700 dark:text-green-300">
                         <p>Configure os pesos para cada critério do QA Score.</p>
                       </div>
                     </div>
@@ -474,15 +474,15 @@ export default function SettingsPage() {
                 ) : (
                   <div className="grid gap-4">
                     {qaScoreWeights.map((weight) => (
-                      <div key={weight.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                      <div key={weight.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow bg-gray-50 dark:bg-gray-900">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-2">
-                              <BarChart3 className="w-4 h-4 text-[#174A8B]" />
-                              <h3 className="text-lg font-medium text-gray-900">{weight.qa_score_block?.name}</h3>
+                              <BarChart3 className="w-4 h-4 text-[#174A8B] dark:text-blue-400" />
+                              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">{weight.qa_score_block?.name}</h3>
                             </div>
-                            <p className="text-sm text-gray-600 mb-2">{weight.qa_score_block?.description}</p>
-                            <p className="text-sm text-gray-600">
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{weight.qa_score_block?.description}</p>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">
                               Peso atual: <span className="font-medium">{weight.weight}</span>
                             </p>
                           </div>
@@ -507,11 +507,11 @@ export default function SettingsPage() {
 
         {/* Modal */}
         {showModal && (
-          <div className="fixed inset-0 bg-black/10 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-            <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+          <div className="fixed inset-0 bg-black/10 dark:bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto border border-gray-200 dark:border-gray-700">
               {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-gray-200">
-                <h2 className="text-xl font-semibold text-gray-900">
+              <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
                   {editingQAWeight ? 'Editar Peso QA Score' : (editingAlert ? 'Editar Alerta' : (editingTheme ? 'Editar Tema' : 'Novo Tema'))}
                 </h2>
                 <button
@@ -539,17 +539,17 @@ export default function SettingsPage() {
                     // Formulário de QA Score Weight
                     <>
                       <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                           Nome do Critério
                         </label>
-                        <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 border border-gray-300 rounded-md">
+                        <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md">
                           <BarChart3 className="w-4 h-4 text-[#174A8B]" />
-                          <span className="text-sm font-medium text-gray-900">{editingQAWeight.qa_score_block?.name}</span>
+                          <span className="text-sm font-medium text-gray-900 dark:text-gray-100">{editingQAWeight.qa_score_block?.name}</span>
                         </div>
                         <p className="text-xs text-gray-500 mt-1">O nome do critério não pode ser alterado</p>
                       </div>
                       <div className="mb-4">
-                        <label htmlFor="weight" className="block text-sm font-medium text-gray-700 mb-2">
+                        <label htmlFor="weight" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                           Peso <span className="text-red-500">*</span>
                         </label>
                         <input
@@ -557,7 +557,7 @@ export default function SettingsPage() {
                           id="weight"
                           value={qaWeightFormData.weight}
                           onChange={(e) => setQAWeightFormData({ ...qaWeightFormData, weight: e.target.value })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#174A8B] focus:border-transparent"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-[#174A8B] focus:border-transparent"
                           placeholder="Ex: 30"
                           step="0.1"
                           min="0"
@@ -575,7 +575,7 @@ export default function SettingsPage() {
                         </label>
                         <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 border border-gray-300 rounded-md">
                           {getIndicatorIcon(alertFormData.indicador)}
-                          <span className="text-sm font-medium text-gray-900">{alertFormData.indicador}</span>
+                          <span className="text-sm font-medium text-gray-900 dark:text-gray-100">{alertFormData.indicador}</span>
                         </div>
                         <p className="text-xs text-gray-500 mt-1">O indicador não pode ser alterado</p>
                       </div>
@@ -588,7 +588,7 @@ export default function SettingsPage() {
                           id="value"
                           value={alertFormData.value}
                           onChange={(e) => setAlertFormData({ ...alertFormData, value: e.target.value })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#174A8B] focus:border-transparent"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-[#174A8B] focus:border-transparent"
                           placeholder="Ex: 7"
                           required
                         />
@@ -617,7 +617,7 @@ export default function SettingsPage() {
                           id="name"
                           value={formData.name}
                           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#174A8B] focus:border-transparent"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-[#174A8B] focus:border-transparent"
                           placeholder="Ex: Atendimento ao Cliente"
                           required
                         />
@@ -631,7 +631,7 @@ export default function SettingsPage() {
                           value={formData.persona}
                           onChange={(e) => setFormData({ ...formData, persona: e.target.value })}
                           rows={4}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#174A8B] focus:border-transparent"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-[#174A8B] focus:border-transparent"
                           placeholder="Descreva como a IA deve se comportar para este tema..."
                           required
                         />
@@ -642,7 +642,7 @@ export default function SettingsPage() {
               </div>
 
               {/* Footer */}
-              <div className="flex items-center justify-end space-x-3 p-6 border-t border-gray-200">
+              <div className="flex items-center justify-end space-x-3 p-6 border-t border-gray-200 dark:border-gray-700">
                 <button
                   type="button"
                   onClick={() => {

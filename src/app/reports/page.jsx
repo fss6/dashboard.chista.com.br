@@ -272,55 +272,55 @@ export default function ReportsPage() {
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <FileText className="w-8 h-8 text-[#174A8B]" />
-            <h1 className="text-3xl font-bold text-gray-900">Relatórios</h1>
+            <FileText className="w-8 h-8 text-[#174A8B] dark:text-blue-400" />
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Relatórios</h1>
           </div>
-          <p className="text-gray-600">Compilado de dados e estatísticas dos insights</p>
+          <p className="text-gray-600 dark:text-gray-400">Compilado de dados e estatísticas dos insights</p>
         </div>
 
         {/* Filtros */}
-        <div className="bg-white shadow rounded-lg p-6 mb-8">
+        <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 mb-8 border border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-2 mb-4">
-            <Filter className="w-5 h-5 text-gray-500" />
-            <h2 className="text-lg font-semibold text-gray-900">Filtros</h2>
+            <Filter className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Filtros</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             {/* Data Inicial */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Data Inicial
               </label>
               <input
                 type="date"
                 value={dateRange.startDate}
                 onChange={(e) => setDateRange({ ...dateRange, startDate: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#174A8B] focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-[#174A8B] focus:border-transparent"
               />
             </div>
 
             {/* Data Final */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Data Final
               </label>
               <input
                 type="date"
                 value={dateRange.endDate}
                 onChange={(e) => setDateRange({ ...dateRange, endDate: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#174A8B] focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-[#174A8B] focus:border-transparent"
               />
             </div>
 
             {/* Tema */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Tema
               </label>
               <select
                 value={selectedTheme}
                 onChange={(e) => setSelectedTheme(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#174A8B] focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-[#174A8B] focus:border-transparent"
               >
                 <option value="">Todos os temas</option>
                 {themes.map((theme) => (
@@ -334,35 +334,35 @@ export default function ReportsPage() {
 
           {/* Botões de Range Rápido */}
           <div className="flex flex-wrap gap-2 mb-4">
-            <span className="text-sm text-gray-600 self-center mr-2">Períodos rápidos:</span>
+            <span className="text-sm text-gray-600 dark:text-gray-400 self-center mr-2">Períodos rápidos:</span>
             <button
               onClick={() => setQuickRange(7)}
-              className="px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+              className="px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-md transition-colors"
             >
               Últimos 7 dias
             </button>
             <button
               onClick={() => setQuickRange(30)}
-              className="px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+              className="px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-md transition-colors"
             >
               Últimos 30 dias
             </button>
             <button
               onClick={() => setQuickRange(90)}
-              className="px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+              className="px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-md transition-colors"
             >
               Últimos 90 dias
             </button>
             <button
               onClick={clearFilters}
-              className="px-3 py-1.5 text-sm font-medium text-red-700 bg-red-50 hover:bg-red-100 rounded-md transition-colors"
+              className="px-3 py-1.5 text-sm font-medium text-red-700 dark:text-red-300 bg-red-50 dark:bg-red-900/30 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-md transition-colors"
             >
               Limpar Filtros
             </button>
           </div>
 
           {/* Info do filtro ativo */}
-          <div className={`text-sm ${(dateRange.startDate || dateRange.endDate || selectedTheme) ? 'text-gray-600 bg-blue-50 border border-blue-200' : 'text-gray-500 bg-gray-50'} p-3 rounded-md`}>
+          <div className={`text-sm ${(dateRange.startDate || dateRange.endDate || selectedTheme) ? 'text-gray-600 dark:text-gray-300 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800' : 'text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900'} p-3 rounded-md`}>
             <div className="flex items-center justify-between">
               <div>
                 <span className="font-medium">Filtros:</span>
@@ -388,7 +388,7 @@ export default function ReportsPage() {
                   <span className="ml-2">Nenhum filtro aplicado</span>
                 )}
               </div>
-              <div className="font-semibold text-[#174A8B]">
+              <div className="font-semibold text-[#174A8B] dark:text-blue-400">
                 {filteredInsights.length} de {insights.length} insights
               </div>
             </div>
@@ -398,22 +398,22 @@ export default function ReportsPage() {
         {/* Estatísticas Principais */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           {/* Total de Insights */}
-          <div className="bg-white shadow rounded-lg p-6">
+          <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total de Insights</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{stats.total}</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total de Insights</p>
+                <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-2">{stats.total}</p>
               </div>
               <FileText className="w-12 h-12 text-[#174A8B] opacity-20" />
             </div>
           </div>
 
           {/* Média NPS */}
-          <div className="bg-white shadow rounded-lg p-6">
+          <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Média NPS</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Média NPS</p>
+                <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-2">
                   {stats.averageNPS > 0 ? `${stats.averageNPS}/10` : '-'}
                 </p>
                 <p className="text-xs text-gray-500 mt-1">
@@ -425,11 +425,11 @@ export default function ReportsPage() {
           </div>
 
           {/* Média CES */}
-          <div className="bg-white shadow rounded-lg p-6">
+          <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Média CES</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Média CES</p>
+                <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-2">
                   {stats.averageCES > 0 ? `${stats.averageCES}/7` : '-'}
                 </p>
                 <p className="text-xs text-gray-500 mt-1">
@@ -441,11 +441,11 @@ export default function ReportsPage() {
           </div>
 
           {/* Média CSAT */}
-          <div className="bg-white shadow rounded-lg p-6">
+          <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Média CSAT</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Média CSAT</p>
+                <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-2">
                   {stats.averageCSAT > 0 ? `${stats.averageCSAT}/5` : '-'}
                 </p>
                 <p className="text-xs text-gray-500 mt-1">
@@ -458,8 +458,8 @@ export default function ReportsPage() {
         </div>
 
         {/* Distribuição por Tema */}
-        <div className="bg-white shadow rounded-lg p-6 mb-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+        <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 mb-8 border border-gray-200 dark:border-gray-700">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
             <BarChart3 className="w-5 h-5 mr-2 text-[#174A8B]" />
             Distribuição por Tema
           </h2>
@@ -469,15 +469,15 @@ export default function ReportsPage() {
                 .sort(([, a], [, b]) => b - a)
                 .map(([theme, count]) => (
                   <div key={theme} className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-gray-700">{theme}</span>
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{theme}</span>
                     <div className="flex items-center gap-3">
-                      <div className="w-48 bg-gray-200 rounded-full h-2">
+                      <div className="w-48 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                         <div
-                          className="bg-[#174A8B] h-2 rounded-full"
+                          className="bg-[#174A8B] dark:bg-blue-500 h-2 rounded-full"
                           style={{ width: `${(count / stats.total) * 100}%` }}
                         />
                       </div>
-                      <span className="text-sm font-semibold text-gray-900 w-12 text-right">
+                      <span className="text-sm font-semibold text-gray-900 dark:text-gray-100 w-12 text-right">
                         {count}
                       </span>
                     </div>
@@ -490,19 +490,19 @@ export default function ReportsPage() {
         </div>
 
         {/* Distribuição por Status */}
-        <div className="bg-white shadow rounded-lg p-6 mb-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+        <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 mb-8 border border-gray-200 dark:border-gray-700">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
             <BarChart3 className="w-5 h-5 mr-2 text-[#174A8B]" />
             Distribuição por Status
           </h2>
           {Object.keys(stats.byStatus).length > 0 ? (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {Object.entries(stats.byStatus).map(([status, count]) => (
-                <div key={status} className="bg-gray-50 rounded-lg p-4">
-                  <p className="text-sm font-medium text-gray-600 mb-1 capitalize">
+                <div key={status} className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1 capitalize">
                     {status.replace('_', ' ')}
                   </p>
-                  <p className="text-2xl font-bold text-gray-900">{count}</p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{count}</p>
                 </div>
               ))}
             </div>
@@ -514,8 +514,8 @@ export default function ReportsPage() {
         {/* Ranking de Indicadores */}
         <div className="space-y-8">
           {/* NPS Ranking */}
-          <div className="bg-white shadow rounded-lg p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-6 flex items-center">
+          <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6 flex items-center">
               <TrendingUp className="w-5 h-5 mr-2 text-green-500" />
               Ranking NPS (Net Promoter Score)
             </h2>
@@ -532,7 +532,7 @@ export default function ReportsPage() {
                       <div 
                         key={insight.id} 
                         onClick={() => router.push(`/insights/${insight.id}`)}
-                        className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200 cursor-pointer hover:bg-green-100 hover:border-green-300 transition-colors"
+                        className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800 cursor-pointer hover:bg-green-100 dark:hover:bg-green-900/30 hover:border-green-300 dark:hover:border-green-700 transition-colors"
                       >
                         <div className="flex items-center gap-3 flex-1">
                           <div className="flex items-center justify-center w-8 h-8 bg-green-500 text-white rounded-full font-bold text-sm">
@@ -540,12 +540,12 @@ export default function ReportsPage() {
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center gap-2">
-                              <p className="text-sm font-medium text-gray-900">
+                              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
                                 Insight #{insight.id}
                               </p>
                               <ExternalLink className="w-3 h-3 text-gray-400" />
                             </div>
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
                               {themes.find(t => t.id === insight.theme_id)?.name || 'Sem tema'} •{' '}
                               {insight.created_at && <LocalizedDate date={insight.created_at} />}
                             </p>
@@ -576,7 +576,7 @@ export default function ReportsPage() {
                       <div 
                         key={insight.id} 
                         onClick={() => router.push(`/insights/${insight.id}`)}
-                        className="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-200 cursor-pointer hover:bg-red-100 hover:border-red-300 transition-colors"
+                        className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800 cursor-pointer hover:bg-red-100 dark:hover:bg-red-900/30 hover:border-red-300 dark:hover:border-red-700 transition-colors"
                       >
                         <div className="flex items-center gap-3 flex-1">
                           <div className="flex items-center justify-center w-8 h-8 bg-red-500 text-white rounded-full font-bold text-sm">
@@ -584,12 +584,12 @@ export default function ReportsPage() {
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center gap-2">
-                              <p className="text-sm font-medium text-gray-900">
+                              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
                                 Insight #{insight.id}
                               </p>
                               <ExternalLink className="w-3 h-3 text-gray-400" />
                             </div>
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
                               {themes.find(t => t.id === insight.theme_id)?.name || 'Sem tema'} •{' '}
                               {insight.created_at && <LocalizedDate date={insight.created_at} />}
                             </p>
@@ -611,8 +611,8 @@ export default function ReportsPage() {
           </div>
 
           {/* CES Ranking */}
-          <div className="bg-white shadow rounded-lg p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-6 flex items-center">
+          <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6 flex items-center">
               <Zap className="w-5 h-5 mr-2 text-yellow-500" />
               Ranking CES (Customer Effort Score)
             </h2>
@@ -629,7 +629,7 @@ export default function ReportsPage() {
                       <div 
                         key={insight.id} 
                         onClick={() => router.push(`/insights/${insight.id}`)}
-                        className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200 cursor-pointer hover:bg-green-100 hover:border-green-300 transition-colors"
+                        className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800 cursor-pointer hover:bg-green-100 dark:hover:bg-green-900/30 hover:border-green-300 dark:hover:border-green-700 transition-colors"
                       >
                         <div className="flex items-center gap-3 flex-1">
                           <div className="flex items-center justify-center w-8 h-8 bg-green-500 text-white rounded-full font-bold text-sm">
@@ -637,12 +637,12 @@ export default function ReportsPage() {
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center gap-2">
-                              <p className="text-sm font-medium text-gray-900">
+                              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
                                 Insight #{insight.id}
                               </p>
                               <ExternalLink className="w-3 h-3 text-gray-400" />
                             </div>
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
                               {themes.find(t => t.id === insight.theme_id)?.name || 'Sem tema'} •{' '}
                               {insight.created_at && <LocalizedDate date={insight.created_at} />}
                             </p>
@@ -673,7 +673,7 @@ export default function ReportsPage() {
                       <div 
                         key={insight.id} 
                         onClick={() => router.push(`/insights/${insight.id}`)}
-                        className="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-200 cursor-pointer hover:bg-red-100 hover:border-red-300 transition-colors"
+                        className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800 cursor-pointer hover:bg-red-100 dark:hover:bg-red-900/30 hover:border-red-300 dark:hover:border-red-700 transition-colors"
                       >
                         <div className="flex items-center gap-3 flex-1">
                           <div className="flex items-center justify-center w-8 h-8 bg-red-500 text-white rounded-full font-bold text-sm">
@@ -681,12 +681,12 @@ export default function ReportsPage() {
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center gap-2">
-                              <p className="text-sm font-medium text-gray-900">
+                              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
                                 Insight #{insight.id}
                               </p>
                               <ExternalLink className="w-3 h-3 text-gray-400" />
                             </div>
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
                               {themes.find(t => t.id === insight.theme_id)?.name || 'Sem tema'} •{' '}
                               {insight.created_at && <LocalizedDate date={insight.created_at} />}
                             </p>
@@ -708,8 +708,8 @@ export default function ReportsPage() {
           </div>
 
           {/* CSAT Ranking */}
-          <div className="bg-white shadow rounded-lg p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-6 flex items-center">
+          <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6 flex items-center">
               <Heart className="w-5 h-5 mr-2 text-red-500" />
               Ranking CSAT (Customer Satisfaction)
             </h2>
@@ -726,7 +726,7 @@ export default function ReportsPage() {
                       <div 
                         key={insight.id} 
                         onClick={() => router.push(`/insights/${insight.id}`)}
-                        className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200 cursor-pointer hover:bg-green-100 hover:border-green-300 transition-colors"
+                        className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800 cursor-pointer hover:bg-green-100 dark:hover:bg-green-900/30 hover:border-green-300 dark:hover:border-green-700 transition-colors"
                       >
                         <div className="flex items-center gap-3 flex-1">
                           <div className="flex items-center justify-center w-8 h-8 bg-green-500 text-white rounded-full font-bold text-sm">
@@ -734,12 +734,12 @@ export default function ReportsPage() {
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center gap-2">
-                              <p className="text-sm font-medium text-gray-900">
+                              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
                                 Insight #{insight.id}
                               </p>
                               <ExternalLink className="w-3 h-3 text-gray-400" />
                             </div>
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
                               {themes.find(t => t.id === insight.theme_id)?.name || 'Sem tema'} •{' '}
                               {insight.created_at && <LocalizedDate date={insight.created_at} />}
                             </p>
@@ -770,7 +770,7 @@ export default function ReportsPage() {
                       <div 
                         key={insight.id} 
                         onClick={() => router.push(`/insights/${insight.id}`)}
-                        className="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-200 cursor-pointer hover:bg-red-100 hover:border-red-300 transition-colors"
+                        className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800 cursor-pointer hover:bg-red-100 dark:hover:bg-red-900/30 hover:border-red-300 dark:hover:border-red-700 transition-colors"
                       >
                         <div className="flex items-center gap-3 flex-1">
                           <div className="flex items-center justify-center w-8 h-8 bg-red-500 text-white rounded-full font-bold text-sm">
@@ -778,12 +778,12 @@ export default function ReportsPage() {
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center gap-2">
-                              <p className="text-sm font-medium text-gray-900">
+                              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
                                 Insight #{insight.id}
                               </p>
                               <ExternalLink className="w-3 h-3 text-gray-400" />
                             </div>
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
                               {themes.find(t => t.id === insight.theme_id)?.name || 'Sem tema'} •{' '}
                               {insight.created_at && <LocalizedDate date={insight.created_at} />}
                             </p>

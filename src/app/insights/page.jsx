@@ -204,8 +204,8 @@ export default function InsightsPage() {
         {/* Header */}
         <div className="mb-8">
           <div className="mb-6">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Insights</h1>
-            <p className="text-gray-600">Transforme suas interações em insights valiosos para o seu negócio</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">Insights</h1>
+            <p className="text-gray-600 dark:text-gray-400">Transforme suas interações em insights valiosos para o seu negócio</p>
           </div>
 
           {/* Stats and Controls Row */}
@@ -290,7 +290,7 @@ export default function InsightsPage() {
               placeholder="Buscar insights por título, descrição, status ou ID..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-[#174A8B] focus:border-[#174A8B] sm:text-sm"
+              className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg leading-5 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-[#174A8B] focus:border-[#174A8B] sm:text-sm"
             />
           </div>
           
@@ -298,7 +298,7 @@ export default function InsightsPage() {
             <select
               value={selectedTheme}
               onChange={(e) => setSelectedTheme(e.target.value)}
-              className="block w-full px-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white focus:outline-none focus:ring-1 focus:ring-[#174A8B] focus:border-[#174A8B] sm:text-sm"
+              className="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg leading-5 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-[#174A8B] focus:border-[#174A8B] sm:text-sm"
             >
               <option value="">Todos os temas</option>
               {themes.map((theme) => (
@@ -423,30 +423,30 @@ export default function InsightsPage() {
 
         {/* Content */}
         {insights && Array.isArray(insights) && insights.length > 0 ? (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead className="bg-gray-50 dark:bg-gray-900">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       Insight
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       Tema
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       Status
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       NPS Score
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       CES Score
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       CSAT Score
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       Data
                     </th>
                     <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -454,20 +454,20 @@ export default function InsightsPage() {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                   {sortedInsights.map((insight) => (
-                    <tr key={insight.id} className="hover:bg-gray-50 transition-colors">
+                    <tr key={insight.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="flex-shrink-0">
                             {getInsightTypeIcon(insight.type)}
                           </div>
                           <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">
+                            <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
                               {insight.title || insight.name || `Insight #${insight.id}`}
                             </div>
                             {insight.description && (
-                              <div className="text-sm text-gray-500 truncate max-w-xs">
+                              <div className="text-sm text-gray-500 dark:text-gray-400 truncate max-w-xs">
                                 {insight.description}
                               </div>
                             )}
@@ -492,7 +492,7 @@ export default function InsightsPage() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {insight.insight?.nps !== null ? (
-                          <span className="text-sm font-medium text-gray-900">
+                          <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                             {insight.insight.nps}/10
                           </span>
                         ) : (
@@ -501,7 +501,7 @@ export default function InsightsPage() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {insight.insight?.ces !== null ? (
-                          <span className="text-sm font-medium text-gray-900">
+                          <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                             {insight.insight.ces}/7
                           </span>
                         ) : (
@@ -510,7 +510,7 @@ export default function InsightsPage() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {insight.insight?.csat !== null ? (
-                          <span className="text-sm font-medium text-gray-900">
+                          <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                             {insight.insight.csat}/5
                           </span>
                         ) : (
