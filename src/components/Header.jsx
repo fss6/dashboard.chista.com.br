@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { 
-  Bell, 
   ChevronDown,
   LogOut,
   User,
@@ -13,11 +12,10 @@ import { useTheme } from '../contexts/ThemeContext';
 
 const Header = ({ user, logout, showUploadButton = false, onUploadClick = null }) => {
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const [showNotifications, setShowNotifications] = useState(false);
   const { darkMode, toggleDarkMode } = useTheme();
 
   return (
-    <header className="h-16 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 fixed top-0 right-0 left-0 z-30 flex items-center transition-colors">
+    <header className="h-16 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-200/50 dark:border-gray-700/50 fixed top-0 right-0 left-0 z-30 flex items-center transition-colors shadow-sm">
       <div className="flex items-center justify-end px-6 w-full">
         {/* Right Section */}
         <div className="flex items-center gap-3">
@@ -25,55 +23,15 @@ const Header = ({ user, logout, showUploadButton = false, onUploadClick = null }
           {/* Dark Mode Toggle */}
           <button
             onClick={toggleDarkMode}
-            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            className="p-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 hover:scale-105 active:scale-95"
             title={darkMode ? "Modo claro" : "Modo escuro"}
           >
             {darkMode ? (
-              <Sun className="w-5 h-5 text-gray-400 dark:text-gray-300" />
+              <Sun className="w-5 h-5 text-yellow-500 dark:text-yellow-400 transition-transform rotate-0 hover:rotate-45" />
             ) : (
-              <Moon className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+              <Moon className="w-5 h-5 text-gray-600 dark:text-gray-300 transition-transform" />
             )}
           </button>
-
-          {/* Notifications */}
-          <div className="relative">
-            <button
-              onClick={() => setShowNotifications(!showNotifications)}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors relative"
-            >
-              <Bell className="w-5 h-5 text-gray-600 dark:text-gray-300" />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-            </button>
-
-            {showNotifications && (
-              <>
-                <div 
-                  className="fixed inset-0 z-40" 
-                  onClick={() => setShowNotifications(false)}
-                />
-                <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50">
-                  <div className="px-4 py-2 border-b border-gray-100 dark:border-gray-700">
-                    <h3 className="font-semibold text-gray-900 dark:text-gray-100">Notificações</h3>
-                  </div>
-                  <div className="max-h-96 overflow-y-auto">
-                    <div className="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
-                      <p className="text-sm text-gray-900 dark:text-gray-100 font-medium">Novo relatório disponível</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Há 5 minutos</p>
-                    </div>
-                    <div className="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
-                      <p className="text-sm text-gray-900 dark:text-gray-100 font-medium">Análise concluída</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Há 1 hora</p>
-                    </div>
-                  </div>
-                  <div className="px-4 py-2 border-t border-gray-100 dark:border-gray-700">
-                    <button className="text-sm text-[#174A8B] dark:text-blue-400 hover:underline">
-                      Ver todas
-                    </button>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
 
           {/* User Menu */}
           {user && (

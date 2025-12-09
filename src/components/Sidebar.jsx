@@ -63,12 +63,15 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
 
   return (
     <div 
-      className={`fixed left-0 top-0 h-screen bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 flex flex-col shadow-sm z-40 ${
+      className={`fixed left-0 top-0 h-screen bg-white dark:bg-gray-900 border-r border-gray-200/50 dark:border-gray-700/50 transition-all duration-300 flex flex-col shadow-lg z-40 ${
         isCollapsed ? 'w-20' : 'w-64'
       }`}
+      style={{
+        boxShadow: '2px 0 12px rgba(0, 0, 0, 0.04)'
+      }}
     >
       {/* Logo Section */}
-      <div className="h-16 flex items-center justify-center px-4 border-b border-gray-200 dark:border-gray-700">
+      <div className="h-16 flex items-center justify-center px-4 border-b border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-b from-white to-gray-50/50 dark:from-gray-900 dark:to-gray-900/50">
         {!isCollapsed ? (
           <Image 
             src="/logo.png" 
@@ -108,14 +111,14 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
               <li key={item.id}>
                 <button
                   onClick={() => router.push(item.path)}
-                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 ${
                     active
-                      ? 'bg-[#174A8B] dark:bg-blue-600 text-white shadow-sm'
-                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-[#174A8B] dark:hover:text-blue-400'
+                      ? 'bg-gradient-to-r from-[#174A8B] to-blue-600 text-white shadow-md shadow-blue-500/20'
+                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-[#174A8B] dark:hover:text-blue-400 hover:translate-x-0.5'
                   } ${isCollapsed ? 'justify-center' : ''}`}
                   title={isCollapsed ? item.label : ''}
                 >
-                  <Icon className={`${isCollapsed ? 'w-5 h-5' : 'w-5 h-5'} flex-shrink-0`} />
+                  <Icon className={`${isCollapsed ? 'w-5 h-5' : 'w-5 h-5'} flex-shrink-0 ${active ? '' : 'group-hover:scale-110 transition-transform'}`} />
                   {!isCollapsed && (
                     <span className="font-medium text-sm">{item.label}</span>
                   )}
