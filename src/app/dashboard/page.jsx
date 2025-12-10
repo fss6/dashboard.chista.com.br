@@ -45,8 +45,8 @@ export default function Dashboard() {
 
         {/* Tabs */}
         <div className="mb-6 md:mb-8">
-          <div className="border-b border-gray-200 dark:border-gray-700 overflow-x-auto">
-            <nav className="-mb-px flex space-x-4 md:space-x-8 min-w-max md:min-w-0">
+          <div className="border-b border-gray-200 dark:border-gray-700 overflow-x-auto overflow-y-hidden">
+            <nav className="-mb-px flex space-x-4 md:space-x-8 min-w-max md:min-w-0 pb-0">
               <button
                 onClick={() => setActiveTab('nps')}
                 className={`py-2 px-2 md:px-1 border-b-2 font-medium text-sm flex items-center gap-2 whitespace-nowrap ${
