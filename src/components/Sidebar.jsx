@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
-const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
+const Sidebar = ({ isCollapsed, setIsCollapsed, isMobileMenuOpen, setIsMobileMenuOpen }) => {
   const router = useRouter();
   const pathname = usePathname();
   const { darkMode } = useTheme();
@@ -63,11 +63,19 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
     return pathname.startsWith(path);
   };
 
+  const handleNavigation = (path) => {
+    router.push(path);
+    if (setIsMobileMenuOpen) {
+      setIsMobileMenuOpen(false);
+    }
+  };
+
   return (
     <div 
-      className={`fixed left-0 top-0 h-screen bg-white dark:bg-gray-900 border-r border-gray-200/50 dark:border-gray-700/50 transition-all duration-300 flex flex-col shadow-lg z-40 ${
-        isCollapsed ? 'w-20' : 'w-64'
-      }`}
+      className={`fixed left-0 top-0 h-screen bg-white dark:bg-gray-900 border-r border-gray-200/50 dark:border-gray-700/50 transition-all duration-300 flex flex-col shadow-lg z-40
+        ${isCollapsed ? 'w-20' : 'w-64'}
+        ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+      `}
       style={{
         boxShadow: '2px 0 12px rgba(0, 0, 0, 0.04)'
       }}
@@ -91,10 +99,10 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
         )}
       </div>
 
-      {/* Toggle Button */}
+      {/* Toggle Button - Only on Desktop */}
       <button
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className="absolute -right-3 top-20 w-6 h-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm"
+        className="hidden md:flex absolute -right-3 top-20 w-6 h-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm"
       >
         {isCollapsed ? (
           <ChevronRight className="w-4 h-4 text-gray-600 dark:text-gray-300" />
@@ -113,7 +121,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
             return (
               <li key={item.id}>
                 <button
-                  onClick={() => router.push(item.path)}
+                  onClick={() => handleNavigation(item.path)}
                   className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 ${
                     active
                       ? 'bg-gradient-to-r from-[#174A8B] to-blue-600 text-white shadow-md shadow-blue-500/20'

@@ -268,18 +268,18 @@ export default function ReportsPage() {
 
   return (
     <DashboardLayout user={user} logout={logout}>
-      <div className="p-6">
+      <div className="p-4 md:p-6">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-6 md:mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <FileText className="w-8 h-8 text-[#174A8B] dark:text-blue-400" />
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Relatórios</h1>
+            <FileText className="w-6 md:w-8 h-6 md:h-8 text-[#174A8B] dark:text-blue-400" />
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100">Relatórios</h1>
           </div>
-          <p className="text-gray-600 dark:text-gray-400">Compilado de dados e estatísticas dos insights</p>
+          <p className="text-sm md:text-base text-gray-600 dark:text-gray-400">Compilado de dados e estatísticas dos insights</p>
         </div>
 
         {/* Filtros */}
-        <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 mb-8 border border-gray-200 dark:border-gray-700">
+        <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-4 md:p-6 mb-6 md:mb-8 border border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-2 mb-4">
             <Filter className="w-5 h-5 text-gray-500 dark:text-gray-400" />
             <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Filtros</h2>

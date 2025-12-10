@@ -6,19 +6,28 @@ import {
   LogOut,
   User,
   Moon,
-  Sun
+  Sun,
+  Menu
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
-const Header = ({ user, logout, showUploadButton = false, onUploadClick = null }) => {
+const Header = ({ user, logout, showUploadButton = false, onUploadClick = null, onMenuClick }) => {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const { darkMode, toggleDarkMode } = useTheme();
 
   return (
     <header className="h-16 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-200/50 dark:border-gray-700/50 fixed top-0 right-0 left-0 z-30 flex items-center transition-colors shadow-sm">
-      <div className="flex items-center justify-end px-6 w-full">
+      <div className="flex items-center justify-between px-4 md:px-6 w-full">
+        {/* Left Section - Mobile Menu Button */}
+        <button
+          onClick={onMenuClick}
+          className="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+        >
+          <Menu className="w-6 h-6 text-gray-700 dark:text-gray-300" />
+        </button>
+
         {/* Right Section */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 md:gap-3 ml-auto">
 
           {/* Dark Mode Toggle */}
           <button

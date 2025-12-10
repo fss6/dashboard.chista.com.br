@@ -200,16 +200,16 @@ export default function InsightsPage() {
       showUploadButton={true}
       onUploadClick={() => setUploadModalOpen(true)}
     >
-      <div className="p-6">
+      <div className="p-4 md:p-6">
         {/* Header */}
-        <div className="mb-8">
-          <div className="mb-6">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">Insights</h1>
-            <p className="text-gray-600 dark:text-gray-400">Transforme suas interações em insights valiosos para o seu negócio</p>
+        <div className="mb-6 md:mb-8">
+          <div className="mb-4 md:mb-6">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">Insights</h1>
+            <p className="text-sm md:text-base text-gray-600 dark:text-gray-400">Transforme suas interações em insights valiosos para o seu negócio</p>
           </div>
 
           {/* Stats and Controls Row */}
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-2 md:gap-4">
             {/* Auto Refresh Controls */}
             <div className="flex items-center gap-2">
               <button
@@ -329,13 +329,13 @@ export default function InsightsPage() {
         )}
 
         {/* Filtros de Ordenação */}
-        <div className="mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+        <div className="mb-4 md:mb-6 flex flex-col sm:flex-row gap-3 md:gap-4 items-start sm:items-center justify-between">
           <div className="flex items-center gap-2">
-            <ArrowUpDown className="w-4 h-4 text-gray-500" />
-            <span className="text-sm font-medium text-gray-700">Ordenar por:</span>
+            <ArrowUpDown className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Ordenar por:</span>
           </div>
           
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 w-full sm:w-auto">
             <button
               onClick={() => setSortBy('recent')}
               className={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors ${
@@ -349,74 +349,74 @@ export default function InsightsPage() {
             
             <button
               onClick={() => setSortBy('nps_high')}
-              className={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors flex items-center gap-1 ${
+              className={`px-2 md:px-3 py-1.5 text-xs font-medium rounded-full transition-colors flex items-center gap-1 ${
                 sortBy === 'nps_high'
-                  ? 'bg-[#174A8B] text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-[#174A8B] dark:bg-blue-600 text-white'
+                  : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
               }`}
             >
               <TrendingUp className="w-3 h-3" />
-              Maior NPS
+              <span className="hidden sm:inline">Maior </span>NPS
             </button>
             
             <button
               onClick={() => setSortBy('nps_low')}
-              className={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors flex items-center gap-1 ${
+              className={`px-2 md:px-3 py-1.5 text-xs font-medium rounded-full transition-colors flex items-center gap-1 ${
                 sortBy === 'nps_low'
-                  ? 'bg-[#174A8B] text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-[#174A8B] dark:bg-blue-600 text-white'
+                  : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
               }`}
             >
               <TrendingUp className="w-3 h-3 rotate-180" />
-              Menor NPS
+              <span className="hidden sm:inline">Menor </span>NPS
             </button>
             
             <button
               onClick={() => setSortBy('ces_high')}
-              className={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors flex items-center gap-1 ${
+              className={`px-2 md:px-3 py-1.5 text-xs font-medium rounded-full transition-colors flex items-center gap-1 ${
                 sortBy === 'ces_high'
-                  ? 'bg-[#174A8B] text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-[#174A8B] dark:bg-blue-600 text-white'
+                  : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
               }`}
             >
               <Zap className="w-3 h-3" />
-              Maior CES
+              <span className="hidden sm:inline">Maior </span>CES
             </button>
             
             <button
               onClick={() => setSortBy('ces_low')}
-              className={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors flex items-center gap-1 ${
+              className={`px-2 md:px-3 py-1.5 text-xs font-medium rounded-full transition-colors flex items-center gap-1 ${
                 sortBy === 'ces_low'
-                  ? 'bg-[#174A8B] text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-[#174A8B] dark:bg-blue-600 text-white'
+                  : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
               }`}
             >
               <Zap className="w-3 h-3" />
-              Menor CES
+              <span className="hidden sm:inline">Menor </span>CES
             </button>
             
             <button
               onClick={() => setSortBy('csat_high')}
-              className={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors flex items-center gap-1 ${
+              className={`px-2 md:px-3 py-1.5 text-xs font-medium rounded-full transition-colors flex items-center gap-1 ${
                 sortBy === 'csat_high'
-                  ? 'bg-[#174A8B] text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-[#174A8B] dark:bg-blue-600 text-white'
+                  : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
               }`}
             >
               <Heart className="w-3 h-3" />
-              Maior CSAT
+              <span className="hidden sm:inline">Maior </span>CSAT
             </button>
             
             <button
               onClick={() => setSortBy('csat_low')}
-              className={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors flex items-center gap-1 ${
+              className={`px-2 md:px-3 py-1.5 text-xs font-medium rounded-full transition-colors flex items-center gap-1 ${
                 sortBy === 'csat_low'
-                  ? 'bg-[#174A8B] text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-[#174A8B] dark:bg-blue-600 text-white'
+                  : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
               }`}
             >
               <Heart className="w-3 h-3" />
-              Menor CSAT
+              <span className="hidden sm:inline">Menor </span>CSAT
             </button>
           </div>
         </div>

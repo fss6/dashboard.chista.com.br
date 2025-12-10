@@ -36,49 +36,52 @@ export default function Dashboard() {
   return (
     <DashboardLayout user={user} logout={logout}>
       {/* Page Content */}
-      <div className="p-6">
+      <div className="p-4 md:p-6">
         {/* Page Title */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Dashboard</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">Acompanhe os indicadores de satisfação e esforço dos seus clientes</p>
+        <div className="mb-6 md:mb-8">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100">Dashboard</h1>
+          <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 mt-2">Acompanhe os indicadores de satisfação e esforço dos seus clientes</p>
         </div>
 
         {/* Tabs */}
-        <div className="mb-8">
-          <div className="border-b border-gray-200 dark:border-gray-700">
-            <nav className="-mb-px flex space-x-8">
+        <div className="mb-6 md:mb-8">
+          <div className="border-b border-gray-200 dark:border-gray-700 overflow-x-auto">
+            <nav className="-mb-px flex space-x-4 md:space-x-8 min-w-max md:min-w-0">
               <button
                 onClick={() => setActiveTab('nps')}
-                className={`py-2 px-1 border-b-2 font-medium text-sm flex items-center gap-2 ${
+                className={`py-2 px-2 md:px-1 border-b-2 font-medium text-sm flex items-center gap-2 whitespace-nowrap ${
                   activeTab === 'nps'
                     ? 'border-[#174A8B] dark:border-blue-400 text-[#174A8B] dark:text-blue-400'
                     : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
                 }`}
               >
                 <TrendingUp className="w-4 h-4" />
-                NPS (Net Promoter Score)
+                <span className="hidden sm:inline">NPS (Net Promoter Score)</span>
+                <span className="sm:hidden">NPS</span>
               </button>
               <button
                 onClick={() => setActiveTab('ces')}
-                className={`py-2 px-1 border-b-2 font-medium text-sm flex items-center gap-2 ${
+                className={`py-2 px-2 md:px-1 border-b-2 font-medium text-sm flex items-center gap-2 whitespace-nowrap ${
                   activeTab === 'ces'
                     ? 'border-[#174A8B] dark:border-blue-400 text-[#174A8B] dark:text-blue-400'
                     : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
                 }`}
               >
                 <Zap className="w-4 h-4" />
-                CES (Customer Effort Score)
+                <span className="hidden sm:inline">CES (Customer Effort Score)</span>
+                <span className="sm:hidden">CES</span>
               </button>
               <button
                 onClick={() => setActiveTab('csat')}
-                className={`py-2 px-1 border-b-2 font-medium text-sm flex items-center gap-2 ${
+                className={`py-2 px-2 md:px-1 border-b-2 font-medium text-sm flex items-center gap-2 whitespace-nowrap ${
                   activeTab === 'csat'
                     ? 'border-[#174A8B] dark:border-blue-400 text-[#174A8B] dark:text-blue-400'
                     : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
                 }`}
               >
                 <Heart className="w-4 h-4" />
-                CSAT (Customer Satisfaction)
+                <span className="hidden sm:inline">CSAT (Customer Satisfaction)</span>
+                <span className="sm:hidden">CSAT</span>
               </button>
             </nav>
           </div>

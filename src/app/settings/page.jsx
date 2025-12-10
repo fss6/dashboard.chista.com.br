@@ -215,14 +215,14 @@ export default function SettingsPage() {
 
   return (
     <DashboardLayout user={user} logout={logout}>
-      <div className="p-6">
+      <div className="p-4 md:p-6">
         {/* Page Title */}
-        <div className="mb-8">
+        <div className="mb-6 md:mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <Settings className="w-8 h-8 text-[#174A8B] dark:text-blue-400" />
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Configurações</h1>
+            <Settings className="w-6 md:w-8 h-6 md:h-8 text-[#174A8B] dark:text-blue-400" />
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100">Configurações</h1>
           </div>
-          <p className="text-gray-600 dark:text-gray-400">Gerencie os temas e configurações do sistema</p>
+          <p className="text-sm md:text-base text-gray-600 dark:text-gray-400">Gerencie os temas e configurações do sistema</p>
         </div>
 
         {/* Error Message */}

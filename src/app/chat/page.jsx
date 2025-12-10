@@ -323,12 +323,12 @@ const ChatPage = () => {
 
   return (
     <DashboardLayout user={user} logout={logout}>
-      <div className="p-6">
+      <div className="p-4 md:p-6">
         {/* Page Title */}
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-6 md:mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">Chat com Chista AI</h1>
-            <p className="text-gray-600 dark:text-gray-400">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">Chat com Chista AI</h1>
+            <p className="text-sm md:text-base text-gray-600 dark:text-gray-400">
               Faça perguntas e obtenha respostas inteligentes
             </p>
           </div>
@@ -342,7 +342,7 @@ const ChatPage = () => {
             </button>
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="lg:hidden flex items-center space-x-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+              className="lg:hidden flex items-center space-x-2 px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
             >
               <Menu className="w-4 h-4" />
               <span>Histórico</span>
@@ -350,14 +350,43 @@ const ChatPage = () => {
           </div>
         </div>
 
-        <div className="flex gap-6">
+        {/* Mobile Backdrop */}
+        {sidebarOpen && (
+          <div 
+            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+
+        <div className="flex gap-6 relative">
           {/* Sidebar - Histórico de Conversas */}
-          <div className={`${sidebarOpen ? 'block' : 'hidden'} lg:block w-80 flex-shrink-0`}>
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-                <MessageSquare className="w-5 h-5 mr-2" />
-                Conversas
-              </h3>
+          <div className={`
+            ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
+            lg:translate-x-0 
+            fixed lg:relative 
+            left-0 top-0 
+            h-full lg:h-auto 
+            w-80 
+            flex-shrink-0 
+            transition-transform duration-300 
+            z-50 lg:z-0
+            pt-20 lg:pt-0
+          `}>
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 h-full lg:h-auto overflow-y-auto">
+              <div className="flex items-center justify-between mb-4 lg:mb-4">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 flex items-center">
+                  <MessageSquare className="w-5 h-5 mr-2" />
+                  Conversas
+                </h3>
+                <button
+                  onClick={() => setSidebarOpen(false)}
+                  className="lg:hidden p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
               
               {conversations.length === 0 ? (
                 <p className="text-gray-500 text-sm">Nenhuma conversa ainda</p>
@@ -371,7 +400,10 @@ const ChatPage = () => {
                           ? 'bg-[#174A8B] dark:bg-blue-600 text-white'
                           : 'bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700'
                       }`}
-                      onClick={() => loadConversation(conversation.id)}
+                      onClick={() => {
+                        loadConversation(conversation.id);
+                        setSidebarOpen(false);
+                      }}
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1 min-w-0">
