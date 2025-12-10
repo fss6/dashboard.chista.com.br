@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 // Cache para requisições da API
 const apiCache = new Map();
@@ -280,7 +280,7 @@ export function useApiRequest(url, token, options = {}) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     if (!url || !token) return;
 
     setLoading(true);
@@ -294,11 +294,11 @@ export function useApiRequest(url, token, options = {}) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [url, token, options]);
 
   useEffect(() => {
     fetchData();
-  }, [url, token]);
+  }, [fetchData]);
 
   const refetch = () => {
     fetchData();
