@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Eye, TrendingUp, BarChart3, Calendar, Filter, Upload, Search, ArrowUpDown, Zap, FileText, Heart, RefreshCw, Pause, Play } from "lucide-react";
+import { Eye, TrendingUp, BarChart3, Calendar, Filter, Upload, Search, ArrowUpDown, Zap, FileText, Heart, RefreshCw, Pause, Play, Lightbulb } from "lucide-react";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import LocalizedDate from "../../components/LocalizedDate";
 import UploadModal from "../../components/UploadModal";
@@ -204,7 +204,10 @@ export default function InsightsPage() {
         {/* Header */}
         <div className="mb-6 md:mb-8">
           <div className="mb-4 md:mb-6">
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">Insights</h1>
+            <div className="flex items-center gap-3 mb-4">
+              <Lightbulb className="w-6 md:w-8 h-6 md:h-8 text-[#174A8B] dark:text-blue-400" />
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100">Insights</h1>
+            </div>
             <p className="text-sm md:text-base text-gray-600 dark:text-gray-400">Transforme suas interações em insights valiosos para o seu negócio</p>
           </div>
 
