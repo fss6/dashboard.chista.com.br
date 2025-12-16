@@ -25,10 +25,35 @@ export function buildApiUrl(endpoint) {
 /**
  * Fetch insights from API
  * @param {string} token - Authorization token
- * @returns {Promise<Array>} - List of insights
+ * @param {Object} options - Optional pagination parameters (page, per_page)
+ * @returns {Promise<Array>} - List of insights (or object with data and pagination if pagination params provided)
  */
-export async function fetchInsights(token) {
-  return fetchWithCache(buildApiUrl('/insights'), token);
+export async function fetchInsights(token, options = {}) {
+  const { page, per_page } = options;
+  let url = buildApiUrl('/insights');
+  
+  // Add pagination query parameters if provided
+  const params = new URLSearchParams();
+  if (page !== undefined) params.append('page', page);
+  if (per_page !== undefined) params.append('per_page', per_page);
+  
+  if (params.toString()) {
+    url += `?${params.toString()}`;
+  }
+  
+  const response = await fetchWithCache(url, token);
+  
+  // Handle paginated response format: { data: [...], pagination: {...} }
+  if (response && typeof response === 'object' && !Array.isArray(response) && 'data' in response) {
+    // If pagination params were provided, return full response; otherwise just return data array
+    if (page !== undefined || per_page !== undefined) {
+      return response;
+    }
+    return Array.isArray(response.data) ? response.data : [];
+  }
+  
+  // Fallback: if response is already an array (backward compatibility)
+  return Array.isArray(response) ? response : [];
 }
 
 /**

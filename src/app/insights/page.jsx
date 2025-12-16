@@ -10,6 +10,7 @@ import DashboardLayout from "../../components/DashboardLayout";
 import { useAuth } from "../../contexts/AuthContext";
 import { fetchInsights, useLoadingState, uploadFile, clearApiCache, fetchThemes } from "../../lib/api";
 import { getStatusTranslation, getStatusColor } from "../../lib/utils";
+import Pagination from "../../components/Pagination";
 
 export default function InsightsPage() {
   const { user, isAuthenticated, isLoading, loginWithRedirect, logout, chistaApiToken } = useAuth();
@@ -26,6 +27,9 @@ export default function InsightsPage() {
   const [lastRefresh, setLastRefresh] = useState(null);
   const [showUpdateNotification, setShowUpdateNotification] = useState(false);
   const [previousInsightCount, setPreviousInsightCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage] = useState(10); // Items per page
+  const [pagination, setPagination] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -34,11 +38,23 @@ export default function InsightsPage() {
     }
   }, [isLoading, isAuthenticated, loginWithRedirect]);
 
-  const loadInsights = async () => {
+  const loadInsights = async (page = currentPage) => {
     if (isAuthenticated && chistaApiToken) {
       setDataLoading(true);
       try {
-        const data = await fetchInsights(chistaApiToken);
+        const response = await fetchInsights(chistaApiToken, { page, per_page: perPage });
+        
+        // Handle paginated response
+        let data = [];
+        let paginationData = null;
+        
+        if (response && typeof response === 'object' && !Array.isArray(response) && 'data' in response) {
+          data = Array.isArray(response.data) ? response.data : [];
+          paginationData = response.pagination || null;
+        } else if (Array.isArray(response)) {
+          // Fallback for non-paginated responses
+          data = response;
+        }
         
         if (insights && data.length > insights.length) {
           setShowUpdateNotification(true);
@@ -47,6 +63,7 @@ export default function InsightsPage() {
         
         setPreviousInsightCount(insights?.length || 0);
         setInsights(data);
+        setPagination(paginationData);
         setLastRefresh(new Date());
         setError(null);
       } catch (err) {
@@ -69,20 +86,25 @@ export default function InsightsPage() {
   };
 
   useEffect(() => {
-    loadInsights();
     loadThemes();
   }, [isAuthenticated, chistaApiToken]);
+
+  useEffect(() => {
+    if (isAuthenticated && chistaApiToken) {
+      loadInsights(currentPage);
+    }
+  }, [isAuthenticated, chistaApiToken, currentPage]);
 
   useEffect(() => {
     if (!autoRefresh || !isAuthenticated || !chistaApiToken) return;
 
     const interval = setInterval(() => {
       console.log('Auto refreshing insights...');
-      loadInsights();
+      loadInsights(currentPage);
     }, 30000);
 
     return () => clearInterval(interval);
-  }, [autoRefresh, isAuthenticated, chistaApiToken]);
+  }, [autoRefresh, isAuthenticated, chistaApiToken, currentPage]);
 
   const { shouldShowLoading, message, subtitle } = useLoadingState(
     isLoading,
@@ -95,10 +117,16 @@ export default function InsightsPage() {
     try {
       await uploadFile(file, description, chistaApiToken, onProgress, themeId);
       clearApiCache();
-      await loadInsights();
+      await loadInsights(currentPage);
     } catch (error) {
       throw error;
     }
+  };
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+    // Scroll to top when page changes
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const filteredInsights = insights?.filter((insight) => {
@@ -315,18 +343,29 @@ export default function InsightsPage() {
         
         {/* Resultados dos Filtros */}
         {(searchTerm || selectedTheme) && (
-          <div className="mb-4 text-sm text-gray-600">
+          <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
             {filteredInsights.length} de {insights?.length || 0} insight{filteredInsights.length !== 1 ? 's' : ''} encontrado{filteredInsights.length !== 1 ? 's' : ''}
             {(searchTerm || selectedTheme) && (
               <button
                 onClick={() => {
                   setSearchTerm('');
                   setSelectedTheme('');
+                  setCurrentPage(1); // Reset to first page when clearing filters
                 }}
-                className="ml-2 text-[#174A8B] hover:text-blue-700 font-medium"
+                className="ml-2 text-[#174A8B] hover:text-blue-700 font-medium dark:text-blue-400 dark:hover:text-blue-300"
               >
                 Limpar filtros
               </button>
+            )}
+          </div>
+        )}
+        
+        {/* Pagination info when not filtered */}
+        {!searchTerm && !selectedTheme && pagination && (
+          <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
+            Total: {pagination.total_count || 0} insight{(pagination.total_count || 0) !== 1 ? 's' : ''} 
+            {pagination.total_pages > 1 && (
+              <span> • Página {pagination.page || currentPage} de {pagination.total_pages}</span>
             )}
           </div>
         )}
@@ -542,6 +581,19 @@ export default function InsightsPage() {
                 </tbody>
               </table>
             </div>
+            
+            {/* Pagination */}
+            {pagination && !searchTerm && !selectedTheme && (
+              <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+                <Pagination
+                  currentPage={pagination.page || currentPage}
+                  totalPages={pagination.total_pages || 1}
+                  totalCount={pagination.total_count || 0}
+                  perPage={pagination.per_page || perPage}
+                  onPageChange={handlePageChange}
+                />
+              </div>
+            )}
           </div>
         ) : searchTerm && filteredInsights.length === 0 ? (
           <div className="text-center py-12">
